@@ -7,7 +7,7 @@
 hba_subregions_plot(gene)
 }
 \arguments{
-\item{gene}{Gene in the `hbadata::datHBA` data set; character sting}
+\item{gene}{Gene in the `hbadata::datHBA` data set; character string}
 }
 \value{
 Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`

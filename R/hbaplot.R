@@ -12,6 +12,11 @@
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
 hba_subregions_plot <- function(gene){
+    
+    if (!requireNamespace("hbadata", quietly = TRUE)){
+        stop("hbadata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
 
     ylim <- c(0, as.numeric(quantile(hbadata::datHBA$value, 0.995)))
     pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
