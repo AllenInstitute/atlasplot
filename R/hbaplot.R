@@ -7,20 +7,19 @@
 #' 
 #' @export
 #' 
-#' @import hbadata
 #' @param gene Gene in the `hbadata::datHBA` data set; character string
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`
 #' @examples
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
 hba_subregions_plot <- function(gene){
-    
+
     if (!requireNamespace("hbadata", quietly = TRUE)){
         stop("hbadata needed for this function to work. Please install it.",
              call. = FALSE)
     }
 
-    library(hbadata)  # technically breaking the rules
+    library("hbadata")  # technically breaking the rules
     
     if (!any(is.element(gene, genesHBA))){
         stop(paste(gene,"does not appear to be in the Human Brain Atlas"))
@@ -43,6 +42,9 @@ hba_subregions_plot <- function(gene){
         i <- i + 1
     }
     dev.off()
+
+    # unload hbadata to keep it from affecting global environment    
+    detach("package:hbadata", unload = TRUE)  
 }
 
 
