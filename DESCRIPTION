@@ -1,8 +1,8 @@
 Package: atlasplot
-Title: What the Package Does (one line, title case)
+Title: Easy Plottign of the Allen Brain Altases
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: c(person("Charles", "Edelson", email = "Charlese@alleninstitute.org", role = c("aut", "cre")),person("Jeremy", "Miller", email = "jeremym@alleninstitute.org", role = c("aut")))
+Description: This package makes plotting data from the Allen institutes brain atlas project simple for anyone. It works with an number of available data packages and creates publication quality graphics.
 Depends: R (>= 3.4.0)
 Suggests: hbadata
 License: What license is it under?

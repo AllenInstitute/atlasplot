@@ -1,4 +1,3 @@
-# TODO: FIGURE OUT `color=colsHBA`, re-aggregate by mean, and adjust
 
 #' hba_subregions_plot
 #' 
@@ -6,13 +5,14 @@
 #' requires the hbadata package (GITHUB GOES HERE), and is a thin wrapper
 #' around a modified version of WGCNA's verboseBarplot
 #' 
+#' @export
+#' 
 #' @import hbadata
 #' @param gene Gene in the `hbadata::datHBA` data set; character string
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`
 #' @examples
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
-
 hba_subregions_plot <- function(gene){
     
     if (!requireNamespace("hbadata", quietly = TRUE)){
@@ -20,6 +20,8 @@ hba_subregions_plot <- function(gene){
              call. = FALSE)
     }
 
+    library(hbadata)  # technically breaking the rules
+    
     if (!any(is.element(gene, genesHBA))){
         stop(paste(gene,"does not appear to be in the Human Brain Atlas"))
     }
@@ -35,7 +37,7 @@ hba_subregions_plot <- function(gene){
         brain <- get(d)
         bool_select <- (gene == brain$gene)
         .verboseBarplot2(brain$value[bool_select],
-                         brain$brain_structure[bool_select],
+                         factor(brain$brain_structure[bool_select],levels=subregionsHBA),
                          main=paste(gene,"- Brain:",i),las=2,
                          xlab="",ylab="",ylim=ylim, color=colsHBA)
         i <- i + 1
