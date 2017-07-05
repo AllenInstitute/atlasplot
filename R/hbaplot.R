@@ -6,11 +6,13 @@
 #' requires the hbadata package (GITHUB GOES HERE), and is a thin wrapper
 #' around a modified version of WGCNA's verboseBarplot
 #' 
+#' @import hbadata
 #' @param gene Gene in the `hbadata::datHBA` data set; character string
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`
 #' @examples
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
+
 hba_subregions_plot <- function(gene){
     
     if (!requireNamespace("hbadata", quietly = TRUE)){
@@ -18,17 +20,24 @@ hba_subregions_plot <- function(gene){
              call. = FALSE)
     }
 
-    ylim <- c(0, as.numeric(quantile(hbadata::datHBA$value, 0.995)))
+    if (!any(is.element(gene, genesHBA))){
+        stop(paste(gene,"does not appear to be in the Human Brain Atlas"))
+    }
+    
+    vlim <- sapply(donor_frames, function(x){as.numeric(quantile(get(x)$value))})
+    
+    ylim <- c(0, max(vlim))
     pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
     par(mfrow=c(6,1), mar=c(5,10,4,2))
-    
+
     i <- 1
-    for (d in hbadata::donorsHBA) {
-        bool_select <- (d == hbadata::datHBA$donorID) & (gene == hbadata::datHBA$gene)
-        .verboseBarplot2(hbadata::datHBA$value[bool_select],
-                         hbadata::datHBA$brain_structure[bool_select],
-                         main=paste(gene,"- Brain:",i),las=2, 
-                         xlab="",ylab="",ylim=ylim)
+    for (d in donor_frames) {
+        brain <- get(d)
+        bool_select <- (gene == brain$gene)
+        .verboseBarplot2(brain$value[bool_select],
+                         brain$brain_structure[bool_select],
+                         main=paste(gene,"- Brain:",i),las=2,
+                         xlab="",ylab="",ylim=ylim, color=colsHBA)
         i <- i + 1
     }
     dev.off()
