@@ -13,28 +13,38 @@
 #' hba_subregions_plot("FOXP2")
 hba_subregions_plot <- function(gene){
 
+    # ensure the user has hbadata installed; inform them to download it if not
     if (!requireNamespace("hbadata", quietly = TRUE)){
         stop("hbadata needed for this function to work. Please install it.",
              call. = FALSE)
     }
 
-    library("hbadata")  # technically breaking the rules
+    # check if hbadata is loaded; if not load it and note that
+    if ("package:hbadata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("hbadata")  # technically breaking the rules
+    }
     
+    # make sure the gene they're asking for is in the HBA
     if (!any(is.element(gene, genesHBA))){
         stop(paste(gene,"does not appear to be in the Human Brain Atlas"))
     }
     
+    # set a logical max y-lim for the gene we're looking at
     vlim <- sapply(donor_frames, function(x){
         brain <- get(x)
         bool_select <- (gene == brain$gene)
         as.numeric(quantile(brain$value[bool_select], 0.995))
         })
     
-    # FIX THIS HERE
+    # set ylim and create pdf for plotting    
     ylim <- c(0,2^max(vlim))
     pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
     par(mfrow=c(6,1), mar=c(5,10,4,2))
 
+    # iterate through the brains and plot the result for each of them
     i <- 1
     for (d in donor_frames) {
         brain <- get(d)
@@ -47,8 +57,10 @@ hba_subregions_plot <- function(gene){
     }
     dev.off()
 
-    # unload hbadata to keep it from affecting global environment    
-    detach("package:hbadata", unload = TRUE)  
+    # unload hbadata to keep it from affecting global environment
+    if (!loaded){
+        detach("package:hbadata", unload = TRUE)  
+    }
 }
 
 
