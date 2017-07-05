@@ -4,7 +4,8 @@ Simple Reproducible Plots for the Allen Institutes Brain Atlases
 This package aim to simplify the process of producing graphics for the expression data available in the Allen Institutes Brain Atlases. Additionally, it will be coupled with individual data packages, allowing anyone to easily access this vast data resource.
 
 ## Install
-The install the `atlasplot` package it is recommended to use the [`devtools`](https://github.com/hadley/devtools) package. This is a well trusted and reputable package from Hadley Wickham intended to streamline package development and installation.
+To install the `atlasplot` package it is recommended to use the 
+[`devtools`](https://github.com/hadley/devtools) package. This is a well trusted and reputable package from Hadley Wickham intended to streamline package development and installation.
 
 In the `R` command line perform the following commands
 ```
