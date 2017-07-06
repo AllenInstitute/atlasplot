@@ -1,14 +1,25 @@
 
+#' fet_subregions_plot
+#' 
+#' Plot gene expression values for each structure in each donor for the fetal human brain atlas. This function
+#' requires the fetdata package (GITHUB GOES HERE), and is a thin wrapper
+#' around a modified version of WGCNA's verboseBarplot
+#' 
+#' @export
+#' @param gene Gene in the `fetdata::datFET` data set; character string
+#' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_structureBarPlotAll.pdf`
+#' @examples
+#' # call on a given gene
+#' fet_subregions_plot("SHH")
 fet_subregions_plot <- function(gene){
-    
-    
+
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
         stop("fetdata needed for this function to work. Please install it.",
              call. = FALSE)
     }
     
-    # check if fetdata is loaded; if not load it and note that
+    # check if fetdata is loaded; if not load it and note loading
     if ("package:fetdata" %in% search()){
         loaded <- TRUE
     } else {
