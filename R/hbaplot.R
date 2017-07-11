@@ -41,22 +41,26 @@ hba_subregions_plot <- function(gene){
     
     # set ylim and create pdf for plotting    
     ylim <- c(0,2^max(vlim))
-    pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
-    par(mfrow=c(6,1), mar=c(5,10,4,2))
-
-    # iterate through the brains and plot the result for each of them
-    i <- 1
-    for (d in donor_framesHBA) {
-        brain <- get(d)
-        bool_select <- (gene == brain$gene)
-        .verboseBarplot2(2^brain$value[bool_select],
-                         factor(brain$brain_structure[bool_select],levels=subregionsHBA),
-                         main=paste(gene,"- Brain:",i),las=2,
-                         xlab="",ylab="",ylim=ylim, color=colsHBA)
-        i <- i + 1
-    }
-    dev.off()
-
+    
+    # tryCatch block to ensure the pdf is closed for unexpected errors
+    tryCatch({
+        pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
+        par(mfrow=c(6,1), mar=c(5,10,4,2))
+    
+        # iterate through the brains and plot the result for each of them
+        i <- 1
+        for (d in donor_framesHBA) {
+            brain <- get(d)
+            bool_select <- (gene == brain$gene)
+            .verboseBarplot2(2^brain$value[bool_select],
+                             factor(brain$brain_structure[bool_select],levels=subregionsHBA),
+                             main=paste(gene,"- Brain:",i),las=2,
+                             xlab="",ylab="",ylim=ylim, color=colsHBA)
+            i <- i + 1
+        }}, finally = {
+            dev.off()
+        })
+    
     # unload hbadata to keep it from affecting global environment
     if (!loaded){
         detach("package:hbadata", unload = TRUE)  

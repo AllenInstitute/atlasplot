@@ -39,24 +39,26 @@ fet_subregions_plot <- function(gene){
         as.numeric(quantile(brain$value[bool_select], 0.995))
     })
     
-    # set ylim and create pdf for plotting    
+    # set ylim and create pdf for plotting  
     ylim <- c(0,2^max(vlim))
-    pdf(paste(gene, "fetalHuman_structureBarPlotAll.pdf", sep="_"), height=10,width=50)
-    par(mfrow=c(4,1),mar=c(5,10,4,2))
     
-    # iterate through the brains and plot the result for each of them
-    i <- 1
-    for (d in donor_framesFET) {
-        brain <- get(d)
-        donorID <- as.character(brain$donorID[1])
-        bool_select <- (gene == brain$gene)
-        .verboseBarplot2(2^brain$value[bool_select],
-                         factor(brain$brain_structure[bool_select],levels=subregionsFET),
-                         main=paste(gene,"- Brain:",i, '-', donor_to_age[donorID]),las=2,
-                         xlab="",ylab="",ylim=ylim, color = colsFET)
-        i <- i + 1
-    }
-    dev.off()
+    # ensures the pdf is closed even after encountering an error
+    tryCatch({
+        pdf(paste(gene, "fetalHuman_structureBarPlotAll.pdf", sep="_"), height=10,width=50)
+        par(mfrow=c(4,1),mar=c(5,10,4,2))
+        
+        # iterate through the brains and plot the result for each of them
+        i <- 1
+        for (d in donor_framesFET) {
+            brain <- get(d)
+            donorID <- as.character(brain$donorID[1])
+            bool_select <- (gene == brain$gene)
+            .verboseBarplot2(2^brain$value[bool_select],
+                             factor(brain$brain_structure[bool_select],levels=subregionsFET),
+                             main=paste(gene,"- Brain:",i, '-', donor_to_age[donorID]),las=2,
+                             xlab="",ylab="",ylim=ylim, color = colsFET)
+            i <- i + 1
+        }}, finally = {dev.off()})
     
     # unload fetdata to keep it from affecting global environment
     if (!loaded){
