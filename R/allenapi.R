@@ -1,5 +1,5 @@
 # Helper functions for the allen institute API
-.safe_api_call <- function(URL, n_row = "1000000") {
+.safe_api_call <- function(URL, n_row = "4000") {
     # Call API with less boiler plate and ensure error handling
     tryCatch( {
         URL <- paste(URL, "&num_rows=", n_row, sep="")
@@ -16,7 +16,6 @@
     if (length(result$msg) == 0) {
         rows_left <- FALSE
     } 
-    
     
     return(result)
 }

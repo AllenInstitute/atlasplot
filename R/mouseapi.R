@@ -15,9 +15,9 @@ mouse_subregions_plot <- function(gene, experiment=NULL, struct_depth = 3) {
     # ensure struct_depth makes sense
     stopifnot(struct_depth > min(ontology$depth) & struct_depth < max(ontology$depth))
 
-    # get a factor variable with the names
-    struct_bool <- ontology$depth == struct_depth
-    struct_names <- ontology[c("name", "structure_id_path")][struct_bool,]
+    # # get a factor variable with the names
+    # struct_bool <- ontology$depth == struct_depth
+    # struct_names <- ontology[c("name", "structure_id_path")][struct_bool,]
 
     # select important variables and merge to create a new frame
     ont_c <- c("id", "name", "acronym",
@@ -30,22 +30,23 @@ mouse_subregions_plot <- function(gene, experiment=NULL, struct_depth = 3) {
         )
 
     # exlude objects above our granularity
-    include  <- onto_str$depth >= struct_depth
+    include  <- onto_str$depth == struct_depth
     onto_str <- onto_str[include,]
+# 
+#     # truncate the paths to merge with struct_names
+#     onto_str$structure_id_path <- sapply(onto_str$structure_id_path,
+#         function(x){
+#             splt_path <- strsplit(x, '/')[[1]]
+#             rtrn <- ""
+#             for (i in 2:(struct_depth+2)) {
+#                 rtrn <- paste(rtrn, splt_path[i], sep="/" )
+#             }
+#             paste(rtrn,"/", sep="")
+#         })
+# 
+#     # merge our structure names
+#     onto_str <- merge(onto_str, struct_names, by="structure_id_path")
 
-    # truncate the paths to merge with struct_names
-    onto_str$structure_id_path <- sapply(onto_str$structure_id_path,
-        function(x){
-            splt_path <- strsplit(x, '/')[[1]]
-            rtrn <- ""
-            for (i in 2:(struct_depth+2)) {
-                rtrn <- paste(rtrn, splt_path[i], sep="/" )
-            }
-            paste(rtrn,"/", sep="")
-        })
-
-    # merge our structure names
-    onto_str <- merge(onto_str, struct_names, by="structure_id_path")
     ylim <- c(0, quantile(onto_str$expression_energy, 0.995))
 
     # create pdf; tryCatch to ensure proper resource closing
@@ -56,12 +57,9 @@ mouse_subregions_plot <- function(gene, experiment=NULL, struct_depth = 3) {
         par(mfrow=c(2,1),mar=c(5,10,4,2))
         
         # plot the structures
-        .verboseBarplot2(onto_str$expression_energy, 
-                         factor(onto_str$name.y, struct_names$name), main=gene,
+        .verboseBarplot2(onto_str$expression_energy, onto_str$name, main=gene,
                          color=paste("#",onto_str$color_hex_triplet, sep=""),
                          las=2,xlab="",ylab="Mean Expression Energy",ylim=ylim)
-        
-        
         }, finally = {
             dev.off()
         })
@@ -116,7 +114,7 @@ mouse_subregions_plot <- function(gene, experiment=NULL, struct_depth = 3) {
     # ---------
     # exp_id -- id for an experiment with a gene; from fetch_mouse_experiments
     set <- "StructureUnionize"
-    query <- paste("query.json?criteria=[section_data_set_id$eq",exp_id,"]", sep="")
+    query <- paste("query.json?criteria=[section_data_set_id$eq",exp_id,"],structure[graph_id$eq1]", sep="")
     URL <- .construct_api_url(set, query)
     
     result <- .safe_api_call(URL)
