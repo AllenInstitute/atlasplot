@@ -32,20 +32,6 @@ mouse_subregions_plot <- function(gene, experiment=NULL, struct_depth = 3) {
     # exlude objects above our granularity
     include  <- onto_str$depth == struct_depth
     onto_str <- onto_str[include,]
-# 
-#     # truncate the paths to merge with struct_names
-#     onto_str$structure_id_path <- sapply(onto_str$structure_id_path,
-#         function(x){
-#             splt_path <- strsplit(x, '/')[[1]]
-#             rtrn <- ""
-#             for (i in 2:(struct_depth+2)) {
-#                 rtrn <- paste(rtrn, splt_path[i], sep="/" )
-#             }
-#             paste(rtrn,"/", sep="")
-#         })
-# 
-#     # merge our structure names
-#     onto_str <- merge(onto_str, struct_names, by="structure_id_path")
 
     ylim <- c(0, quantile(onto_str$expression_energy, 0.995))
 
