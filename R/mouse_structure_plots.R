@@ -112,7 +112,7 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3) 
     # eq right now, il for fuzzy searching or find table fo human mouse homology
     query <- paste("query.json?criteria=products[id$eq",atlas_id,"],genes[acronym$eq'",
                    gene,
-                   "'],section_images[failed$eqfalse]&include=genes,section_images",
+                   "'],section_images[failed$eqfalse]",
                    sep="")
     
     # pull URL and save locally; result is a bool if failed
@@ -195,6 +195,10 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3) 
     while (TRUE) {
         experiment <- readline("Please pick one -> ")
         
+        if (experiment == "quit") {
+            stop("User quit", call. = FALSE)
+        }
+        
         if (as.integer(experiment) %in% experiments$id) {
             return(experiment)
         } else {
@@ -202,3 +206,5 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3) 
         }
     }
 }
+
+important <- "http://api.brain-map.org/api/v2/data/query.json?criteria=model::StructureUnionize,rma::criteria,section_data_set[delegate$eqfalse](genes[acronym$eq%27Shh%27],specimen(donor(age[name$in%27E11.5%27,%27E13.5%27,%27E15.5%27,%27E18.5%27,%27P4%27,%27P14%27,%27P28%27]))),structure[graph_id$eq17]&include=section_data_set(specimen(donor(age)))"

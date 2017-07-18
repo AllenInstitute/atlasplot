@@ -60,6 +60,9 @@ brsp_subregions_plot <- function(gene, technique){
 
         brain_age <- paste(data$brain_structure, data$age)
 
+        # ontology for developing human brain
+        # http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$eq16],[acronym$eqA1C]
+        
         # plot organized by structure
         .verboseBarplot(2^data$value, brain_age, main=gene,
                         las=2,xlab="",ylab="Expression Level", ylim=c(0,ymax))
@@ -67,12 +70,13 @@ brsp_subregions_plot <- function(gene, technique){
 
         # assign sortable age for graphing; see .assign_value
         order_ages <- order(sapply(brain_age, .assign_value))
-
+        unq_ages <-unique(brain_age[order_ages])
+        color_map <- .create_age_colormap(unq_ages, heat.colors)
   
         # plot organized by age
-        .verboseBarplot(2^data$value, factor(brain_age, unique(brain_age[order_ages])),
-                    main=gene,las=2,xlab="",ylab="Expression Level", 
-                    ylim=c(0,ymax))
+        .verboseBarplot(2^data$value, factor(brain_age, unq_ages), main=gene,
+                    las=2,xlab="",ylab="Expression Level", 
+                    ylim=c(0,ymax), color = color_map)
         }, finally = { dev.off() })
 
     # unload brspdata to keep it from affecting global environment
@@ -96,22 +100,20 @@ brsp_subregions_plot <- function(gene, technique){
 }
 
 
-.create_colormap <- function(ages, cmap){
-    split_ages <- strsplit(gsub("([0-9]+) ", "\\1_", ages), " ")
-    age_id <- c()
-    for (age in split_ages){
-        age_id <- c(age_id, age[[2]])
+.create_age_colormap <- function(ages, cmap){
+    # creates colors for the age plot
+    cols <- cmap(length(ages))
+    col_list <- list()
+    for (i in 1:length(ages)) {
+        col_list[ages[i]] <- cols[i]
     }
-    age_id <- unique(age_id)
-    colormap <- list()
-    colors <- cmap(length(age_id))
-    i <- 1
-    for (age in age_id) {
-        colormap[age] = colors[i]
-        i <- i + 1
+    
+    colors <- c()
+    for (a in ages) {
+        colors <- c(colors, col_list[[a]])
     }
 
-    colormap
+    colors
 }
 
 
