@@ -2,11 +2,12 @@
 #' 
 #' 
 #' Plot subregion expression levels for the human brainspan atlas. Provides
-#' coloring by both age and ontology
+#' coloring by both age and ontology in a single plot.
 #' 
 #' @export
 #' @param gene Gene in the `brspdata` package
 #' @param technique Either `rna`, for RNAseq, or `array`, for MicroArray
+#' @param cmp R color-map function for ages; default heat.colors
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
@@ -130,6 +131,7 @@ brsp_subregions_plot <- function(gene, technique, cmp = heat.colors){
 
 
 .create_str_colormap <- function(ages, colors) {
+    # helper function to create color vector for ontology ordering
     brain_color <- unique(cbind(ages, colors))
     brain_color[,2]
 }

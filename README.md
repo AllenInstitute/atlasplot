@@ -19,3 +19,9 @@ devtools::install_github("edelsonc/atlasplot")
 ## Usage
 Here is a list of the current accompanying data packages:
 * [`hbadata`](https://github.com/edelsonc/hbadata)
+* [`fetdata`](https://github.com/edelsonc/fetdata)
+* [`brspdata`](https://github.com/edelsonc/brspdata)
+
+`atlasplot` additionally has an allen institute API wrapper for:
+* Adult Mouse Brain Atlas
+* Developing Mouse Brain Atlas

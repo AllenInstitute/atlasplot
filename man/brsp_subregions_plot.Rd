@@ -4,19 +4,21 @@
 \alias{brsp_subregions_plot}
 \title{brsp_subregions_plot}
 \usage{
-brsp_subregions_plot(gene, technique)
+brsp_subregions_plot(gene, technique, cmp = heat.colors)
 }
 \arguments{
 \item{gene}{Gene in the `brspdata` package}
 
 \item{technique}{Either `rna`, for RNAseq, or `array`, for MicroArray}
+
+\item{cmp}{R color-map function for ages; default heat.colors}
 }
 \value{
 Creates a new plot of the gene in the current working directory
 }
 \description{
 Plot subregion expression levels for the human brainspan atlas. Provides
-coloring by both age and ontology
+coloring by both age and ontology in a single plot.
 }
 \examples{
 # call on a given gene
