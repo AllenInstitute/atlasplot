@@ -11,7 +11,7 @@
 #' @examples
 #' # call on a given gene
 #' brsp_subregions_plot("SCARF1", "rna")
-brsp_subregions_plot <- function(gene, technique){
+brsp_subregions_plot <- function(gene, technique, cmp = heat.colors){
 
     # ensure the user has brspdata installed; if not inform them of the need
     if (!requireNamespace("brspdata", quietly = TRUE)){
@@ -51,7 +51,6 @@ brsp_subregions_plot <- function(gene, technique){
     bool_select <- data$gene == gene
     data <- data[bool_select,]
     
-    # http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$eq16]
     # download ontology for color and plotting order
     ont_c <- c("acronym", "color_hex_triplet", 'graph_order')
     onto <-  .fetch_mouse_ontology("16")[ont_c]
@@ -66,20 +65,25 @@ brsp_subregions_plot <- function(gene, technique){
         pdf( title, height=25, width=75)
         par(mfrow=c(4,1), mar=c(5,10,4,2))
         
+        # create plot order and change how things are added
         p_ord <- order(data$graph_order)
-        data <- data[p_ord,]
-        
+        data <- data[p_ord,]    
         brain_age <- paste(data$brain_structure, data$age)
+        
+        # create a color map according to the ontology
+        str_col <- paste("#", data$color_hex_triplet, sep="")
+        color_map <- .create_str_colormap(brain_age, str_col)
         
         # plot organized by structure
         .verboseBarplot(2^data$value, factor(brain_age, unique(brain_age)), main=gene,
-                        las=2,xlab="",ylab="Expression Level", ylim=c(0,ymax))
+                        las=2,xlab="",ylab="Expression Level", ylim=c(0,ymax),
+                        color = color_map)
         plot.new()
 
         # assign sortable age for graphing; see .assign_value
         order_ages <- order(sapply(brain_age, .assign_value))
         unq_ages <-unique(brain_age[order_ages])
-        color_map <- .create_age_colormap(unq_ages, heat.colors)
+        color_map <- .create_age_colormap(unq_ages, cmp)
   
         # plot organized by age
         .verboseBarplot(2^data$value, factor(brain_age, unq_ages), main=gene,
@@ -122,6 +126,12 @@ brsp_subregions_plot <- function(gene, technique){
     }
 
     colors
+}
+
+
+.create_str_colormap <- function(ages, colors) {
+    brain_color <- unique(cbind(ages, colors))
+    brain_color[,2]
 }
 
 
