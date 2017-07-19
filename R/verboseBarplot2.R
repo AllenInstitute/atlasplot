@@ -1,7 +1,7 @@
 
 #------------------------------HELPER FUNCTIONS--------------------------------#
 
-# Adapted from WGCNA verboseBarplot by Jeremy Miller<jemerym@alleninstitute.org>
+# Adapted from WGCNA verboseBarplot by Jeremy Miller<jeremym@alleninstitute.org>
 # creates a verbose barplot similar to the one at https://www.rdocumentation.org/packages/WGCNA/versions/1.51/topics/verboseBarplot
 .verboseBarplot2 <- function (x, g, main = "", xlab = NA, ylab = NA, cex = 1, cex.axis = 1.5,
                               cex.lab = 1.5, cex.main = 1.5, color = "grey", numberStandardErrors = 1,
