@@ -50,21 +50,29 @@ brsp_subregions_plot <- function(gene, technique){
     # reduce data down to the necessary elements, easier for plotting later
     bool_select <- data$gene == gene
     data <- data[bool_select,]
+    
+    # http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$eq16]
+    # download ontology for color and plotting order
+    ont_c <- c("acronym", "color_hex_triplet", 'graph_order')
+    onto <-  .fetch_mouse_ontology("16")[ont_c]
+    data <- merge(data, onto, by.x = "brain_structure", by.y = "acronym")
+    
+    # set some plot universal features
     ymax <- 2^quantile(data$value, 0.995)
-
     title <- .create_title(gene, group, technique)
 
+    # plot; tryCatch is to ensure proper closing of resources
     tryCatch({
         pdf( title, height=25, width=75)
         par(mfrow=c(4,1), mar=c(5,10,4,2))
-
+        
+        p_ord <- order(data$graph_order)
+        data <- data[p_ord,]
+        
         brain_age <- paste(data$brain_structure, data$age)
-
-        # ontology for developing human brain
-        # http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$eq16],[acronym$eqA1C]
         
         # plot organized by structure
-        .verboseBarplot(2^data$value, brain_age, main=gene,
+        .verboseBarplot(2^data$value, factor(brain_age, unique(brain_age)), main=gene,
                         las=2,xlab="",ylab="Expression Level", ylim=c(0,ymax))
         plot.new()
 
