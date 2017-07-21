@@ -54,7 +54,7 @@
         pdf(paste(gene, atlas, struct_depth, "brainRegionBarplot_ExpressionEnergies.pdf",
                 sep="_"),
             height=im_height,width=im_width)
-        par(mfrow=c(7,1),mar=c(5,10,4,2))
+        par(mfrow=c(8,1),mar=c(5,10,4,2))
         
         # plot the structures
         for (age in ages) {

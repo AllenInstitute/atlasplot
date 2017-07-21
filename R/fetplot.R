@@ -66,3 +66,109 @@ fet_subregions_plot <- function(gene){
     }
     
 }
+
+
+#' @export
+#'
+#'
+#'
+fet_expression2D_plot <- function(gene) {
+
+    # ensure the user has fetdata installed; inform them to download it if not
+    if (!requireNamespace("fetdata", quietly = TRUE)){
+        stop("fetdata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
+    
+    # check if fetdata is loaded; if not load it and note loading
+    if ("package:fetdata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("fetdata")  # technically breaking the rules
+    }
+    
+    # make sure the gene they're asking for is in the FET
+    if (!any(is.element(gene, genesFET))){
+        stop(paste(gene,"does not appear to be in the Fetal Human Brain Atlas"))
+    }
+    
+    # major lobes of the brain; used in subsetting
+    lobes <- c("f", "o", "p", "t")
+    ontology <- .fetch_mouse_ontology("16")  # graph_id 16 is devhuman
+    onto_c <- c("acronym", "graph_order")
+    # for each brain create the plot; tryCatch for safe resource allocation
+    tryCatch({
+        pdf(paste(gene,"fetalHuman_2DPlotInNeocortex.pdf",sep="_"),height=10,width=20)
+        par(mfrow=c(2,2))
+        
+        for (d in donor_framesFET) {
+            brain <- get(d)
+            brain <- merge(brain, ontology[onto_c],
+                          by.x="brain_structure", by.y="acronym")
+            brain <- brain[order(brain$graph_order),]
+            donorID <- as.character(brain$donorID[1])
+            
+            # title using age and brainID
+            title <- paste(gene," - BrainID", donorID, " - ", donor_to_age[donorID])
+            
+            # select the appropriate fields to plot and create plot regions
+            bool_select <- (gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes)
+            brain <- brain[bool_select,]
+            lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
+            .plotExpressionMap2D(brain$value, factor(lls[,1], levels=c("f","p","t","o")),
+                                 lls[,2], main=title, minIs0=TRUE, pch=22,
+                                 sampleLabel=lls[,3], bgPar="lightgrey", 
+                                 sizeRange=c(3,5), sizeText=1.5, sizeLabel=0.8)
+        }
+    }, finally = {dev.off()})
+}
+
+
+
+#------------------------------HELPER FUNCTIONS-----------------------------------------#
+.get_all_structs <- function() {
+    # debugging helper function
+     if (!requireNamespace("fetdata", quietly = TRUE)){
+        stop("fetdata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
+    
+    # check if fetdata is loaded; if not load it and note loading
+    if ("package:fetdata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("fetdata")  # technically breaking the rules
+    }
+    
+    structs <- c()
+    for (d in donor_framesFET) {
+        brain <- get(d)
+        structs <- c(structs, unique(brain$brain_structure))
+    }
+    unique(structs)
+}
+
+.format_group <- function(structures) {
+
+    # returns the lobes
+    layers_str_lobes <- sapply(structures, function(x) {
+        lobe <- substr(x,1,1)
+        layer <- substr(x,2,3)
+        c_last <- substr(x,nchar(x), nchar(x))
+
+        if (c_last %in% c("i", "o")) {
+            layer <- paste(layer, c_last, sep="")
+            substruc <- substr(x, 4,nchar(x)-1)
+        } else {
+            substruc <- substr(x, 4, nchar(x))
+        }
+        
+        if (substruc %in% c("dm", "mi")) {
+            substruc <- paste(substruc,lobe,sep="-")
+        }
+        c(lobe, layer, substruc)
+    })
+    t(layers_str_lobes)
+}
