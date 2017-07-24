@@ -116,7 +116,18 @@ fet_expression2D_plot <- function(gene) {
             bool_select <- (gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes)
             brain <- brain[bool_select,]
             lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
-            .plotExpressionMap2D(brain$value, factor(lls[,1], levels=c("f","p","t","o")),
+            
+            # remove some layers for comparibility
+            lls_keep <- !(lls[,2] %in% c("CP", "SZ"))
+            brain <- brain[lls_keep,]
+            lls <- lls[lls_keep,]
+            
+            # remove region for comparibility
+            lls_keep <- !(lls[,3] == 'z')
+            brain <- brain[lls_keep,]
+            lls <- lls[lls_keep,]
+
+            .plotExpressionMap2D(2^brain$value, factor(lls[,1], levels=c("f","p","t","o")),
                                  lls[,2], main=title, minIs0=TRUE, pch=22,
                                  sampleLabel=lls[,3], bgPar="lightgrey", 
                                  sizeRange=c(3,5), sizeText=1.5, sizeLabel=0.8)
@@ -167,6 +178,10 @@ fet_expression2D_plot <- function(gene) {
         
         if (substruc %in% c("dm", "mi")) {
             substruc <- paste(substruc,lobe,sep="-")
+        }
+        
+        if (layer %in% c("SGi", "SPi", "MZi")) {
+            layer <- substr(layer, 1,2)
         }
         c(lobe, layer, substruc)
     })
