@@ -61,13 +61,12 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     
     ########################################################################
     # get experiment number for a gene; can be multiple experiments per gene
-    
     if (atlas_id == "1") {
         ontology <- .fetch_ontology(graph_id)
     } else if (atlas_id == "3") {
-#        ontology <- jsonlite::fromJSON("http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$in1,17]&num_rows=all")$msg
         ontology <- .fetch_ontology("1,17")
     }
+
     # ensure struct_depth makes sense
     cond <- struct_depth > min(ontology$depth) & struct_depth <= max(ontology$depth)
     if (!cond) {

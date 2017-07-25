@@ -38,6 +38,7 @@
                                         im_height, im_width) {
     
     ages <- c('E11.5','E13.5','E15.5','E18.5','P4','P14','P28')
+
     
     # function to plot the mouse atals substructures
     ylim <- c(0, quantile(onto_str$expression_energy, 0.995))
