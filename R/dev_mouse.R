@@ -11,10 +11,11 @@
 .fetch_dev_mouse_unionize <- function(gene, graph_id) {
     set <- "StructureUnionize"
     query <- paste("query.json?criteria=rma::criteria,section_data_set[delegate$eqfalse](genes[acronym$eq'",
-                  gene, "'],specimen(donor(age[name$in'E11.5','E13.5','E15.5','E18.5','P4','P14','P28']))),structure[graph_id$eq17]&include=section_data_set(specimen(donor(age)))&num_rows=all", sep="")
+                  gene, "'],specimen(donor(age[name$in'E11.5','E13.5','E15.5','E18.5','P4','P14','P28']))),structure[graph_id$eq17]&include=section_data_set(specimen(donor(age)))", sep="")
     URL <- .construct_api_url(set, query)
     
-    result <- jsonlite::fromJSON(URL)
+    result <- .safe_api_call(URL)
+
     
     # check that experiment ID is valid
     if (is.logical(result)) {

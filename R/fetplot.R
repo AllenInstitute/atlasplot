@@ -95,7 +95,7 @@ fet_expression2D_plot <- function(gene) {
     
     # major lobes of the brain; used in subsetting
     lobes <- c("f", "o", "p", "t")
-    ontology <- .fetch_mouse_ontology("16")  # graph_id 16 is devhuman
+    ontology <- .fetch_ontology("16")  # graph_id 16 is devhuman
     onto_c <- c("acronym", "graph_order")
     # for each brain create the plot; tryCatch for safe resource allocation
     tryCatch({
@@ -116,14 +116,14 @@ fet_expression2D_plot <- function(gene) {
             bool_select <- (gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes)
             brain <- brain[bool_select,]
             lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
-            
+
             # remove some layers for comparibility
             lls_keep <- !(lls[,2] %in% c("CP", "SZ"))
             brain <- brain[lls_keep,]
             lls <- lls[lls_keep,]
             
             # remove region for comparibility
-            lls_keep <- !(lls[,3] == 'z')
+            lls_keep <- !(lls[,3] == 'Z')
             brain <- brain[lls_keep,]
             lls <- lls[lls_keep,]
 

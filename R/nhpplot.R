@@ -35,7 +35,7 @@ nhp_subregions_plot <- function(gene){
     
     # get plotting parameters
     num.timepoints <- length(table(nhpdata::exprl2$age))
-    pd <- position_dodge(width = 0.4)
+    pd <- ggplot2::position_dodge(width = 0.4)
     
     i <- match(gene, nhpdata::probes$macaque_genesymbol)
     if (is.na(i)) {
@@ -62,21 +62,21 @@ nhp_subregions_plot <- function(gene){
 
     suppressWarnings(
         p1 <- ggplot2::ggplot(data = exprl2.subset, 
-               aes(x = as.numeric(age), y = expr, 
+               ggplot2::aes(x = as.numeric(age), y = expr, 
                    color=area, fill=area, shape=area)) + 
     ggplot2::facet_grid(layer ~ .) + 
     ggplot2::stat_summary(fun.y = mean, geom = "line", position=pd) +
-    ggplot2::stat_summary(fun.data = mean_sdl, geom = "pointrange", mult=1, position=pd) +
+    ggplot2::stat_summary(fun.data = ggplot2::mean_sdl, geom = "pointrange", mult=1, position=pd) +
     ggplot2::xlab("Age") + 
     ggplot2::ylab("log2(Expression)") +
     ggplot2::ggtitle(m.gene.title) +
     ggplot2::scale_x_continuous(breaks = 1:num.timepoints, 
                      labels = levels(exprl2$age)) +
     ggplot2::scale_color_manual(values=c("#f8766d", "#00ba38", "#619cff")) +
-    ggplot2::theme_bw() + ggplot2::theme(axis.text.x = element_text(angle=45),
-                       axis.text = element_text(size=9),
-                       panel.grid.minor = element_blank())
+    ggplot2::theme_bw() + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=45),
+                       axis.text = ggplot2::element_text(size=9),
+                       panel.grid.minor = ggplot2::element_blank())
     )
 
-    ggsave(plot=p1, file = paste0(f.name, ".pdf"), width=4, height=12) 
+    ggplot2::ggsave(plot=p1, file = paste0(f.name, ".pdf"), width=4, height=12) 
 }

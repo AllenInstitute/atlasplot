@@ -63,10 +63,10 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     # get experiment number for a gene; can be multiple experiments per gene
     
     if (atlas_id == "1") {
-        ontology <- .fetch_mouse_ontology(graph_id)
+        ontology <- .fetch_ontology(graph_id)
     } else if (atlas_id == "3") {
-        ontology <- jsonlite::fromJSON("http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$in1,17]&num_rows=all")$msg
-#        ontology <- .fetch_mouse_ontology(graph_id)
+#        ontology <- jsonlite::fromJSON("http://api.brain-map.org/api/v2/data/Structure/query.json?criteria=[graph_id$in1,17]&num_rows=all")$msg
+        ontology <- .fetch_ontology("1,17")
     }
     # ensure struct_depth makes sense
     cond <- struct_depth > min(ontology$depth) & struct_depth <= max(ontology$depth)
@@ -98,18 +98,4 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     } else {
         stop("An Error Has Occured with Atlas ID's", call. = FALSE)
     }
-}
-
-#------------------------------HELPER FUNCTIONS--------------------------------#
-.fetch_mouse_ontology <- function(graph_id) {
-    set <- "Structure"
-    if (missing(graph_id)) {
-        query <- "query.json?criteria[graph_id$in 1, 17]"
-    } else {
-        query <- paste("query.json?criteria=[graph_id$eq", graph_id,"]", sep="")
-        }
-    URL <- .construct_api_url(set, query)
-    
-    result <- .safe_api_call(URL)
-    result$msg
 }

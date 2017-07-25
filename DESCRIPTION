@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(person("Charles", "Edelson", email = "Charlese@alleninstitute.org", role = c("aut", "cre")),person("Jeremy", "Miller", email = "jeremym@alleninstitute.org", role = c("aut")))
 Description: This package makes plotting data from the Allen institutes brain atlas project simple for anyone. It works with an number of available data packages and creates publication quality graphics.
 Depends: R (>= 3.4.0)
-Imports: jsonlite
+Imports: jsonlite, digest
 Suggests: hbadata, fetdata, nhpdata, brspdata, ggplot2
 License: What license is it under?
 Encoding: UTF-8

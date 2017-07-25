@@ -54,7 +54,7 @@ brsp_subregions_plot <- function(gene, technique, cmp = heat.colors){
     
     # download ontology for color and plotting order
     ont_c <- c("acronym", "color_hex_triplet", 'graph_order')
-    onto <-  .fetch_mouse_ontology("16")[ont_c]
+    onto <-  .fetch_ontology("16")[ont_c]
     data <- merge(data, onto, by.x = "brain_structure", by.y = "acronym")
     
     # set some plot universal features
