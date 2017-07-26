@@ -17,10 +17,6 @@
  }
 
 
-# verson of safe_api using cacheing; this is the function called in all scripts
-.safe_api_call <- .json_cache(.safe_api_call0)
-
-
 .construct_api_url <- function(set, query) {
     # pastes the url for query and ensures that the api base is the same for all
     # searches (only needs to be changed once if the site changes)
