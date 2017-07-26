@@ -19,8 +19,13 @@
 * .assign_value 
 
 #### atlasplot/R/cache_system.R
+* set_cache_size 
+* clear_cache 
 * .json_cache 
 * .cache_manager 
+* .cache_size 
+* .flush_cache
+* .remove_file 
 
 #### atlasplot/R/dev_mouse.R
 * .download_dev_mouse 
