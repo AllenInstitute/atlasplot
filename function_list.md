@@ -8,8 +8,6 @@
 
 #### atlasplot/R/allenapi.R
 * .safe_api_call0 
-* .json_cache 
-* .cache_manager 
 * .construct_api_url 
 * .fetch_ontology 
 
@@ -19,6 +17,10 @@
 * .create_age_colormap 
 * .create_str_colormap 
 * .assign_value 
+
+#### atlasplot/R/cache_system.R
+* .json_cache 
+* .cache_manager 
 
 #### atlasplot/R/dev_mouse.R
 * .download_dev_mouse 
