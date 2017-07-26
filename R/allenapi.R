@@ -27,7 +27,7 @@
         if (!( CACHE_HOME %in% list.dirs("~", recursive=FALSE))) {
             print("creating cache directory")
             dir.create(CACHE_HOME)
-            saveRDS(NULL, manager_file)
+            saveRDS(list("cache_size" = as.integer(2e9)), manager_file)
         }
 
         # hash input parameters to create unique file names
@@ -59,9 +59,6 @@
 .cache_manager <- function(f_hash, manager_file) {
     # .cache_manager function; responsible for keeping track of accesses
     manager <- readRDS(manager_file)
-    if (is.null(manager)) {
-        manager <- list()
-    }
 
     if (f_hash %in% names(manager)) {
         manager[f_hash] <- manager[[f_hash]] + 1
