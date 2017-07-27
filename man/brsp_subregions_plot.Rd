@@ -4,7 +4,7 @@
 \alias{brsp_subregions_plot}
 \title{brsp_subregions_plot}
 \usage{
-brsp_subregions_plot(gene, technique, cmp = heat.colors)
+brsp_subregions_plot(gene, technique = "array", cmp = heat.colors)
 }
 \arguments{
 \item{gene}{Gene in the `brspdata` package}
