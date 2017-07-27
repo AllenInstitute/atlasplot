@@ -21,7 +21,31 @@ Here is a list of the current accompanying data packages:
 * [`hbadata`](https://github.com/edelsonc/hbadata)
 * [`fetdata`](https://github.com/edelsonc/fetdata)
 * [`brspdata`](https://github.com/edelsonc/brspdata)
+* [`nhpdata`](https://github.com/edelsonc/nhpdata) 
 
 `atlasplot` additionally has an allen institute API wrapper for:
 * Adult Mouse Brain Atlas
 * Developing Mouse Brain Atlas
+
+#### Caching
+`atlasplot` makes use of a simple caching system to speed up access to commonly used resources.
+By caching common API calls locally, `atlasplot` can significatly reduce network communication time.
+Caching is initialized the first time you call a function that uses to web API. The cache
+file will always be located in `~/.json_cache`. Files are saved as `.rda` objects, and
+are compressed to decrease their footprint.
+
+There are two user functions associated with caching:
+* `set_cache_size`
+* `clear_cache`
+
+By default, `atlasplot` limits its cache to 2 Gb. `set_cache_size` can be used to change
+this default
+
+```
+> set_cache_size(10000) # change cache size to 10 kb
+```
+
+Additionally, caching can be turned off by selecting a size of `FALSE`.
+
+`clear_cache` deletes all current files in the users cache. It is called with no arguments
+and is only inteneded to be used when updated data has been added to the API.
