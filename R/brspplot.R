@@ -12,7 +12,7 @@
 #' @examples
 #' # call on a given gene
 #' brsp_subregions_plot("SCARF1", "rna")
-brsp_subregions_plot <- function(gene, technique, cmp = heat.colors){
+brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors){
 
     # ensure the user has brspdata installed; if not inform them of the need
     if (!requireNamespace("brspdata", quietly = TRUE)){

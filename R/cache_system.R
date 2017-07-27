@@ -1,18 +1,18 @@
 #--------------------------------USER OPTIONS-------------------------------------------#
 #' @export
 set_cache_size <- function(size) {
-    
+
     if (missing(size)) {
         stop("Please specify a size in bytes", call. = FALSE)
     }
-    
+
     if (is.numeric(size)) {
         size <- as.integer(size)
     }
-    
+
     CACHE_HOME <- path.expand("~/.json_cache")
     manager_file <- paste(CACHE_HOME, "manager.rda", sep="/")
-    
+
     # create home directoy and manager if it doesn't exist; otherwise edit manager
     if (!( CACHE_HOME %in% list.dirs("~", recursive=FALSE))) {
         print("creating cache directory")
@@ -26,6 +26,7 @@ set_cache_size <- function(size) {
 }
 
 
+#'@export
 clear_cache <- function() {
     # get system cache location and manager location
     CACHE_HOME <- path.expand("~/.json_cache")
@@ -36,7 +37,7 @@ clear_cache <- function() {
         msg <- paste("No cache in ", CACHE_HOME, sep="")
         stop(msg, call. = FALSE)
     }
-    
+
     # read manager file and delete all files (manager included)
     manager <- readRDS(manager_file)
     size <- manager[["cache_size"]]
@@ -45,9 +46,10 @@ clear_cache <- function() {
         rm_file <- paste(CACHE_HOME, "/", file, ".cache.rda", sep="")
         .remove_file(rm_file)
     }
-    
+
     saveRDS(list("cache_size" = as.integer(size)), manager_file)   
 }
+
 
 #------------------------------CACHE MANAGEMENT-----------------------------------------#
 .json_cache <- function(f) {
@@ -65,11 +67,11 @@ clear_cache <- function() {
 
         # hash input parameters to create unique file names
         f_hash <- digest::sha1(...)
-        
+
         # manage cache updating
         cache_status <- .cache_manager(f_hash, CACHE_HOME, manager_file)
-        
-        
+
+
         if (cache_status) {
             # create write to path
             cache_f <- paste(f_hash,".cache.rda", sep="")
@@ -88,7 +90,6 @@ clear_cache <- function() {
         } else {
             result <- f(...)
         }
-
         result
     }
 }
@@ -96,8 +97,8 @@ clear_cache <- function() {
 
 .cache_manager <- function(f_hash, CACHE_HOME, manager_file) {
     # .cache_manager function; responsible for keeping track of accesses
-    manager <- readRDS(manager_file)
-    
+    manager <- readRDS(manager_file) 
+
     if (manager[["cache_size"]] == FALSE) {
         return(FALSE)
     }
@@ -107,12 +108,14 @@ clear_cache <- function() {
     if (current_size > max_size) {
         manager <- .flush_cache(manager, CACHE_HOME, max_size)
     }
-
+    
+    t <- as.integer(as.POSIXct(Sys.time()))
     if (f_hash %in% names(manager)) {
-        manager[f_hash] <- manager[[f_hash]] + 1
+        manager[f_hash] <- t
     } else {
-        manager[f_hash] <- 1
+        manager[f_hash] <- t
     }
+
     
     saveRDS(manager, manager_file)
     return(TRUE)
@@ -125,7 +128,7 @@ clear_cache <- function() {
     if (length(files) == 0) {
         return(0)
     }
-    
+
     files <- paste(CACHE_HOME,"/", files, ".cache.rda", sep="")
     f_size <- file.size(files)
     sum(f_size, na.rm=TRUE)
@@ -142,22 +145,22 @@ clear_cache <- function() {
     # remove least used files until correct size or no files
     while (size > max_size & length(files) != 0) {
         rm_file <- paste(CACHE_HOME, "/", names(files)[[1]], ".cache.rda", sep="")
-        
+
         # remove the least used file
         .remove_file(rm_file)
-        
+
         # recompute file sizes
         files <- files[-1]
         size <- .cache_size(files, CACHE_HOME)
     }
-    
+
     # recreate manager without the removed files
     manager <- list("cache_size" = max_size)
     for (i in 1:length(files)) {
         key <- names(files)[i]
         manager[key] <- files[i]
     }
-    manager
+    manager[ !sapply(manager, is.na) ]
 }
 
 
@@ -167,13 +170,14 @@ clear_cache <- function() {
         msg <- paste("Cache file", rm_file, "does not exist")
         stop(msg, call. = FALSE)
     }
-    
+
     rm_bool <- file.remove(rm_file)
     if (!rm_bool) {
         msg <- "Cannot remove files"
         stop(msg, call. = FALSE)
     }
 }
+
 
 # cacheing version of .safe_api_call
 .safe_api_call <- .json_cache(.safe_api_call0)
