@@ -1,7 +1,8 @@
 .plotExpressionMap2D <- function(expr, xVar, yVar, transformation=NULL, bgPar="lightblue",
 sizeRange=c(0.4,6),sizeText=2,xlab=NULL,ylab=" ",pch=21,sizeLabel=1,
 minIs0=FALSE,sampleLabel=names(expr),textShift=0.3,isXSubVar=TRUE,
-ylines=TRUE,xlines=TRUE,colLine="grey",equalScale=TRUE,returnXY=FALSE,collapse=NULL,...){
+ylines=TRUE,xlines=TRUE,colLine="grey",equalScale=TRUE,returnXY=FALSE,collapse=NULL,
+colBox="red",...){
 # Function to get the XY coordinates, shapes, & sizes from yVar and xVar, then make a 2D plot. The 
 #  function assumes that samples are ordered within xVar/yVar in some biologically reasonable way.
 # "..." is for additional plotting parameters.  Use cex=___ for point size.
@@ -50,10 +51,6 @@ ylines=TRUE,xlines=TRUE,colLine="grey",equalScale=TRUE,returnXY=FALSE,collapse=N
     # set x and y pos to NULL and instantiate a counter
     xPos  <- yPos <- NULL
     count=0
-    
-    # load the WGCNA library
-    # library(WGCNA)
-    # detach("package:WGCNA")
     
     # places a position based on which of the catagories of yVars it fall in; 
     # Ex: If yVar[i] is the ninth factor in yVars it's `9` - yVars order set lines 32-44
@@ -136,7 +133,9 @@ ylines=TRUE,xlines=TRUE,colLine="grey",equalScale=TRUE,returnXY=FALSE,collapse=N
     sizes = sizes+sizeRange[1]
     
     # set exprcolors
-    exprColors = WGCNA::numbers2colors(expr,signed=FALSE)
+    rbPal <- colorRampPalette(c('white',colBox))
+    exprColors <- rbPal(length(expr))[as.numeric(cut(expr, breaks=length(expr)))]
+#    exprColors = WGCNA::numbers2colors(expr,signed=FALSE)
     
     par(bg=bgPar)
     

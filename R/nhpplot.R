@@ -80,3 +80,59 @@ nhp_subregions_plot <- function(gene){
 
     ggplot2::ggsave(plot=p1, file = paste0(f.name, ".pdf"), width=4, height=12) 
 }
+
+
+#'@export
+species_expression_time_series<- function(Gene, col_map=rainbow) {
+     # ensure the user has nhpdata installed; inform them to download it if not
+    if (!requireNamespace("nhpdata", quietly = TRUE)){
+        stop("nhpdata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
+
+    # check if ggplot2 is installed
+    if (!requireNamespace("ggplot2", quietly = TRUE)) {
+        msg <- "ggplot2 required for this function to work\n Install with `install.packages(\"ggplot2\")`"
+        stop(msg, call.=FALSE)
+    }
+
+    # check if nhpdata is loaded; if not load it and note loading
+    if ("package:nhpdata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("nhpdata")  # technically breaking the rules
+    }
+
+    # subset to the appropriate gene
+    dev.expr2.subset <- subset(dev.expr2, gene == Gene)
+
+    # Remove redundant species from plots
+    dev.expr2.subset <- subset(dev.expr2.subset, ! (gene == "LGALS1" & species == "mouse") &
+                                 ! (gene == "EMX2" & species == "human_bc") & 
+                                 ! (gene == "CNTN1" & species == "human_bc") &
+                                 ! (gene == "BMP3" & species == "human_bc") & 
+                                 ! (gene == "CNTN2" & species == "human_bc"))
+    dev.expr2.subset <- droplevels(dev.expr2.subset)
+
+    # Reorder levels to change panel arrangement
+    dev.expr2.subset$gene <- factor(dev.expr2.subset$gene, 
+                                    levels=c("EMX2", "BMP3", "LGALS1",
+                                             "CNTN1", "CNTN2", "LIN7A"))
+
+    pal1 <- col_map(5)[c(1, 5, 2:4)]
+
+    g3 <- ggplot2::ggplot(dev.expr2.subset, ggplot2::aes(x=escore, y=exprz, shape=species,
+                                       col=species, fill=species)) +
+      ggplot2::geom_point(alpha=0.5) +
+      ggplot2::geom_smooth(method="loess", se=FALSE, span=1, size=2) +
+      #   #   geom_point() + geom_line() +  # More clear legend
+      ggplot2::facet_wrap( ~ gene, ncol=3, scales="free_y") +
+     ggplot2:: theme_bw() +
+      ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
+      ggplot2::scale_color_manual(values = pal1) +
+      ggplot2::scale_fill_manual(values = pal1)
+
+    ggplot2::ggsave(g3, file= paste0(Gene,"_comparison_time_series.pdf"), width=10, 
+                    height=10)
+}

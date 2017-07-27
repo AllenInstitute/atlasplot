@@ -80,7 +80,7 @@ fet_subregions_plot <- function(gene){
 #' # call on a given gene
 #' fet_expression2D_plot("SHH")
 #'
-fet_expression2D_plot <- function(gene) {
+fet_expression2D_plot <- function(gene, colbox="red") {
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
@@ -138,7 +138,8 @@ fet_expression2D_plot <- function(gene) {
             .plotExpressionMap2D(2^brain$value, factor(lls[,1], levels=c("f","p","t","o")),
                                  lls[,2], main=title, minIs0=TRUE, pch=22,
                                  sampleLabel=lls[,3], bgPar="lightgrey", 
-                                 sizeRange=c(3,5), sizeText=1.5, sizeLabel=0.8)
+                                 sizeRange=c(3,5), sizeText=1.5, sizeLabel=0.8,
+                                 colBox=colbox)
         }
     }, finally = {dev.off()})
 }
