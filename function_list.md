@@ -46,6 +46,7 @@
 
 #### atlasplot/R/nhpplot.R
 * nhp_subregions_plot 
+* species_expression_time_series
 
 #### atlasplot/R/plotExpressionMap2D.R
 * .plotExpressionMap2D 
