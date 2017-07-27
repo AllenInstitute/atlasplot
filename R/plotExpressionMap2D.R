@@ -135,7 +135,6 @@ colBox="red",...){
     # set exprcolors
     rbPal <- colorRampPalette(c('white',colBox))
     exprColors <- rbPal(length(expr))[as.numeric(cut(expr, breaks=length(expr)))]
-#    exprColors = WGCNA::numbers2colors(expr,signed=FALSE)
     
     par(bg=bgPar)
     
