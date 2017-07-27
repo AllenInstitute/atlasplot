@@ -1,17 +1,17 @@
 
-#' nhp_subregions_plot
-#' 
-#' Plot gene expression values for each structure in each donor for the nhpal human brain atlas. This function
-#' requires the nhpdata package (GITHUB GOES HERE), and is a thin wrapper
-#' around a modified version of WGCNA's verboseBarplot
+#' nhp_cortex_series_plot
+#'
+#' Plot times series for a single gene in the non-human primate brain atlas from the Allen
+#' institute. This function relies on the nhpdata package, located at (GITHUB GOES HERE).
 #' 
 #' @export
-#' @param gene Gene in the `nhpdata::datnhp` data set; character string
-#' @return Creates a new plot of the gene in the current working directory; label as `GENE_nhpalHuman_structureBarPlotAll.pdf`
+#' @param gene Gene in the `nhpdata::exprl2` data set; character string
+#' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
-#' nhp_subregions_plot("SHH")
-nhp_subregions_plot <- function(gene){
+#' nhp_cortex_series_plot("MKI67")
+#'
+nhp_cortex_series_plot <- function(gene){
 
     # ensure the user has nhpdata installed; inform them to download it if not
     if (!requireNamespace("nhpdata", quietly = TRUE)){
@@ -82,7 +82,21 @@ nhp_subregions_plot <- function(gene){
 }
 
 
-#'@export
+
+#' species_expression_time_series
+#' 
+#' Plot gene expression values for a time series of ages for human, non-human primate, mouse,
+#' and rat. Will only include data that is present in plots. This function requires the
+#' nhpdata package (GITHUB GOES HERE)/
+#' 
+#' @export
+#' @param gene Gene in the `nhpdata::dev.expr2` data set; character string
+#' @param colormap Color pallete used to choose plot colors; default rainbow
+#' @return Creates a new plot of the gene in the current working directory
+#' @examples
+#' # call on a given gene
+#' species_expression_time_series("EMX2", colormap = heat.colors)
+#'
 species_expression_time_series<- function(Gene, col_map=rainbow) {
      # ensure the user has nhpdata installed; inform them to download it if not
     if (!requireNamespace("nhpdata", quietly = TRUE)){

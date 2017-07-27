@@ -4,7 +4,7 @@
 \alias{fet_expression2D_plot}
 \title{fet_expression_2D_plot}
 \usage{
-fet_expression2D_plot(gene)
+fet_expression2D_plot(gene, colbox = "red")
 }
 \arguments{
 \item{gene}{Gene in the `fetdata::datFET` data set; character string}
