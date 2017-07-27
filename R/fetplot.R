@@ -68,9 +68,17 @@ fet_subregions_plot <- function(gene){
 }
 
 
+#' fet_expression_2D_plot
+#'
+#' Plot a 2D heatmap for cortex layers and structures in each donor in the fetal human brain atlas. This function
+#' requires the fetdata package, available at (GITHUB GOES HERE).
+#' 
 #' @export
-#'
-#'
+#' @param gene Gene in the `fetdata::datFET` data set; character string
+#' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_2DPlotInNeocortex.pdf.pdf`
+#' @examples
+#' # call on a given gene
+#' fet_expression2D_plot("SHH")
 #'
 fet_expression2D_plot <- function(gene) {
 

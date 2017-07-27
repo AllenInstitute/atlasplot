@@ -1,5 +1,20 @@
 #--------------------------------USER OPTIONS-------------------------------------------#
+#' set_cache_size
+#' 
+#' set_cache_size is a atlasplot helper function that allows the user to decide the amount
+#' of storage they'd like to allocate to the on disk file cache. All of the functions
+#' using the Allen Institute API make use of the cache. If cache size is exceeded, the
+#' oldest item are removed.
+#' 
 #' @export
+#' @param size number of bytes allocated to the cache; default 2e9. size = FALSE disables cacheing
+#' @examples
+#' # set cache to 10 kilobyte
+#' set_cache_size(10000)
+#'
+#' # turn off cache
+#' set_cache_size(FALSE)
+#'
 set_cache_size <- function(size) {
 
     if (missing(size)) {
@@ -26,7 +41,17 @@ set_cache_size <- function(size) {
 }
 
 
-#'@export
+#' clear_cache
+#'
+#' Deletes all current files in the cache. This is implemented in the case that an item
+#' on the API updates. Clearing the cache will make it so the new item is downloaded at
+#' next run. Not necessary for short term use.
+#'
+#' @export
+#' @examples
+#' # delete cache items since a new ontology has been released!
+#' clear_cache()
+#'
 clear_cache <- function() {
     # get system cache location and manager location
     CACHE_HOME <- path.expand("~/.json_cache")
