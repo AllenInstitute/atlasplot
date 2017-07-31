@@ -138,15 +138,47 @@ species_expression_time_series<- function(Gene, col_map=rainbow) {
 
     g3 <- ggplot2::ggplot(dev.expr2.subset, ggplot2::aes(x=escore, y=exprz, shape=species,
                                        col=species, fill=species)) +
-      ggplot2::geom_point(alpha=0.5) +
-      ggplot2::geom_smooth(method="loess", se=FALSE, span=1, size=2) +
-      #   #   geom_point() + geom_line() +  # More clear legend
-      ggplot2::facet_wrap( ~ gene, ncol=3, scales="free_y") +
-     ggplot2:: theme_bw() +
-      ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
-      ggplot2::scale_color_manual(values = pal1) +
-      ggplot2::scale_fill_manual(values = pal1)
+        ggplot2::geom_point(alpha=0.5) +
+        ggplot2::geom_smooth(method="loess", se=FALSE, span=1, size=2) +
+        #   #   geom_point() + geom_line() +  # More clear legend
+        ggplot2::facet_wrap( ~ gene, ncol=3, scales="free_y") +
+        ggplot2:: theme_bw() +
+        ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
+        ggplot2::scale_color_manual(values = pal1) +
+        ggplot2::scale_fill_manual(values = pal1)
 
     ggplot2::ggsave(g3, file= paste0(Gene,"_comparison_time_series.pdf"), width=10, 
                     height=10)
+}
+
+
+#'
+#'
+#'@export
+nhp_cortex_2Dexpression <- function(gene) {
+    
+    if (!requireNamespace("nhpdata", quietly = TRUE)){
+        stop("nhpdata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
+    
+    # check if nhpdata is loaded; if not load it and note loading
+    if ("package:nhpdata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("nhpdata")  # technically breaking the rules
+    }
+    
+    geneDat <- datNHP[datNHP$gene == gene]
+    
+    # TODO add tryCatch
+    fn <- paste(gene, "NHP_2Dexpression.pdf", sep="")
+    pdf(fn, width=18, height=9)
+    .plotMacaqueCortex(geneDat$value, NULL, geneDat$layer, geneDat$subregions,
+                       geneDat$age, layerPositions, regionPotitions, ageOffsets, 
+                       paste(gene))
+    
+    
+    
 }
