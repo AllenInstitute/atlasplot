@@ -78,7 +78,11 @@ nhp_cortex_series_plot <- function(gene){
                        panel.grid.minor = ggplot2::element_blank())
     )
 
-    ggplot2::ggsave(plot=p1, file = paste0(f.name, ".pdf"), width=4, height=12) 
+    ggplot2::ggsave(plot=p1, file = paste0(f.name, ".pdf"), width=4, height=12)
+
+    if (!loaded){
+        detach("package:nhpdata", unload = TRUE)  
+    }
 }
 
 
@@ -149,13 +153,17 @@ species_expression_time_series<- function(Gene, col_map=rainbow) {
 
     ggplot2::ggsave(g3, file= paste0(Gene,"_comparison_time_series.pdf"), width=10, 
                     height=10)
+
+    if (!loaded){
+        detach("package:nhpdata", unload = TRUE)  
+    }
 }
 
 
 #'
 #'
 #'@export
-nhp_cortex_2Dexpression <- function(gene) {
+nhp_cortex_expression2D_plot<- function(gene) {
     
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -170,15 +178,76 @@ nhp_cortex_2Dexpression <- function(gene) {
         library("nhpdata")  # technically breaking the rules
     }
     
-    geneDat <- datNHP[datNHP$gene == gene]
+    # select the rows for the given gene
+    geneDat <- datNHP[datNHP$gene == gene,]
+    
+    # log the expression and create a named vector
+    expr_value <- log(geneDat$value,b=2)
+    names(expr_value) <- geneDat$id_string
+    
+    # convert layer, subregions, and age to character
+    age <- as.character(geneDat$age)
+    layer <- as.character(geneDat$layer)
+    subregions <- as.character(geneDat$subregion)
     
     # TODO add tryCatch
-    fn <- paste(gene, "NHP_2Dexpression.pdf", sep="")
-    pdf(fn, width=18, height=9)
-    .plotMacaqueCortex(geneDat$value, NULL, geneDat$layer, geneDat$subregions,
-                       geneDat$age, layerPositions, regionPotitions, ageOffsets, 
-                       paste(gene))
+    tryCatch({
+        fn <- paste(gene, "NHP_2Dexpression.pdf", sep="")
+        pdf(fn, width=18, height=9)
+        .plotMacaqueCortex(expr_value, NULL, layer, subregions, age, layerPositions, 
+                           regionPositions, ageOffsets, paste(gene), 
+                           quantileScale=c(0.1,0.95))},
+        finally = { dev.off() 
+    })
     
-    
-    
+    if (!loaded){
+        detach("package:nhpdata", unload = TRUE)  
+    }
 }
+
+
+#'
+#'
+#'@export
+nhp_cortex_expression2D_small_plot<- function(gene) {
+    
+    if (!requireNamespace("nhpdata", quietly = TRUE)){
+        stop("nhpdata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
+    
+    # check if nhpdata is loaded; if not load it and note loading
+    if ("package:nhpdata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("nhpdata")  # technically breaking the rules
+    }
+    
+    # select the rows for the given gene
+    geneDat <- datNHP[datNHP$gene == gene,]
+    
+    # log the expression and create a named vector
+    expr_value <- log(geneDat$value,b=2)
+    names(expr_value) <- geneDat$id_string
+    
+    # convert layer, subregions, and age to character
+    age <- as.character(geneDat$age)
+    layer <- as.character(geneDat$layer)
+    subregions <- as.character(geneDat$subregion)
+    
+    # TODO add tryCatch
+    tryCatch({
+        fn <- paste(gene, "NHP_2Dexpression.pdf", sep="")
+        pdf(fn, width=18, height=9)
+        .plotMacaqueCortexSmall(expr_value, NULL, layer, subregions, age, layerPositions, 
+                           regionPositions, ageOffsets, paste(gene), 
+                           quantileScale=c(0.1,0.95))},
+        finally = { dev.off() 
+    })
+    
+    if (!loaded){
+        detach("package:nhpdata", unload = TRUE)  
+    }
+}
+

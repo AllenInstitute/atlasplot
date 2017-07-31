@@ -1,10 +1,9 @@
 .plotMacaqueCortex <- function(inputPP,inputA,layer,region,age,layerPositions,regionPositions,ageOffsets,
-  plotTitle="CortexPlot",scaleA=FALSE,isLog2=TRUE,combineFn="medianNA",quantileScale = c(0,1),
+  plotTitle="CortexPlot",scaleA=FALSE,isLog2=TRUE,combineFn=".medianNA",quantileScale = c(0,1),
   linearOrLog="linear",suppressAge=FALSE, bgPar="white",naBoxFile=NA, naBoxCol="lightgrey",
   showAdultDLG = FALSE, medianVals=NA){
-  
+      
   ## Format and subset the data
-  
   inputPP  = as.numeric(inputPP);      inputA = as.numeric(inputA)
   layer    = as.character(layer);      layer[is.na(layer)]   = "none"
   age      = as.character(age);        age[is.na(age)]       = "none"
@@ -13,7 +12,8 @@
   region[substr(age,1,1)=="E"] = paste(region[substr(age,1,1)=="E"],"_prenatal",sep="")
   region[substr(age,nchar(age),nchar(age))=="M"] = paste(region[substr(age,nchar(age),nchar(age))=="M"],"_postnatal",sep="")
   region[age=="Adult"] = paste(region[age=="Adult"],"_adult",sep="")  
-  
+
+
   if(!showAdultDLG) {
    regionPositions = regionPositions[rownames(regionPositions)!="DLG_adult",] }
   
@@ -33,6 +33,7 @@
   }
   inputPPA = c(inputPP,inputA)
   
+ 
   kpLayer  = is.element(layer,rownames(layerPositions))
   kpRegion = is.element(region,rownames(regionPositions))
   kpAge    = is.element(age,rownames(ageOffsets))
@@ -41,13 +42,14 @@
   layer    = layer[kp]
   region   = region[kp]
   age      = age[kp]
-  
+    
+
   
   ## Compine all replicate samples (within each age/layer/region) using the input function
   
   ageLayReg  = paste(age,layer,region,sep="%")
   inputPPA   = cbind(inputPPA,inputPPA)
-  inputPPA2  = findFromGroups(inputPPA,ageLayReg, match.fun(combineFn))
+  inputPPA2  = .findFromGroups(inputPPA,ageLayReg, match.fun(combineFn))
   ageLayReg  = colnames(inputPPA2)
   ageLayReg2 = strsplit(ageLayReg,"%")
   inputPPA2  = as.numeric(inputPPA2[1,])
@@ -161,7 +163,7 @@
   yMean = max(rectBT)-sort((1:((max(rectBT)-min(rectBT))/yBin)*yBin))
   xMean = yMean*NA
   for (i in (2:length(yMean)))
-    xMean[i] = meanNA(inputPPA2[(rectB<yMean[i])&(rectT>=yMean[i])])
+    xMean[i] = .meanNA(inputPPA2[(rectB<yMean[i])&(rectT>=yMean[i])])
   xMean = xMean-min(0,min(xMean,na.rm=TRUE))
   xMean[is.na(xMean)] = 0
   xMean = ageOffsets["E40",1]-0.2-2*(xMean)/max(xMean,na.rm=TRUE)
@@ -207,12 +209,12 @@
   kpEp   = (substr(age2,1,1)=="E")&(!is.element(layer2,omitLay))&(!isGerm)
   kpEg   = (substr(age2,1,1)=="E")&(!is.element(layer2,omitLay))&(isGerm)
   kpA    = (substr(age2,nchar(age2),nchar(age2))=="M")&(!is.element(layer2,omitLay))
-  yMeanEp= findFromGroups(cbind(inputPPA2[kpEp],inputPPA2[kpEp]),regionPositions[region2[kpEp],1],meanNA)[1,regEp]
-  ySDEp  = findFromGroups(cbind(inputPPA2[kpEp],inputPPA2[kpEp]),regionPositions[region2[kpEp],1],sdNA)[1,regEp]
-  yMeanEg= findFromGroups(cbind(inputPPA2[kpEg],inputPPA2[kpEg]),regionPositions[region2[kpEg],1],meanNA)[1,regEg]
-  ySDEg  = findFromGroups(cbind(inputPPA2[kpEg],inputPPA2[kpEg]),regionPositions[region2[kpEg],1],sdNA)[1,regEg]
-  yMeanA = findFromGroups(cbind(inputPPA2[kpA],inputPPA2[kpA]),regionPositions[region2[kpA],1],meanNA)[1,regA]
-  ySDA   = findFromGroups(cbind(inputPPA2[kpA],inputPPA2[kpA]),regionPositions[region2[kpA],1],sdNA)[1,regA]
+  yMeanEp= .findFromGroups(cbind(inputPPA2[kpEp],inputPPA2[kpEp]),regionPositions[region2[kpEp],1],.meanNA)[1,regEp]
+  ySDEp  = .findFromGroups(cbind(inputPPA2[kpEp],inputPPA2[kpEp]),regionPositions[region2[kpEp],1],.sdNA)[1,regEp]
+  yMeanEg= .findFromGroups(cbind(inputPPA2[kpEg],inputPPA2[kpEg]),regionPositions[region2[kpEg],1],.meanNA)[1,regEg]
+  ySDEg  = .findFromGroups(cbind(inputPPA2[kpEg],inputPPA2[kpEg]),regionPositions[region2[kpEg],1],.sdNA)[1,regEg]
+  yMeanA = .findFromGroups(cbind(inputPPA2[kpA],inputPPA2[kpA]),regionPositions[region2[kpA],1],.meanNA)[1,regA]
+  ySDA   = .findFromGroups(cbind(inputPPA2[kpA],inputPPA2[kpA]),regionPositions[region2[kpA],1],.sdNA)[1,regA]
   #ySDEp  = ySDEp/sqrt(sum(kpEp));    ySDEg  = ySDEg/sqrt(sum(kpEg));    ySDA  = ySDA/sqrt(sum(kpA)); # To use SEM, uncomment line
   
   # halfRCtb = (minPlots+maxRCPlots)/2;    halfRClr = (midPlots+rtRCPlots)/2
@@ -224,10 +226,10 @@
   ## Add a side plot summarizing expression by AGE
   
   # agep   = rownames(ageOffsets);   agee = agep[1:6]
-  # yMeanEp= findFromGroups(cbind(inputPPA2[!isGerm],inputPPA2[!isGerm]),age2[!isGerm],meanNA)[1,agep]
-  # ySDEp  = findFromGroups(cbind(inputPPA2[!isGerm],inputPPA2[!isGerm]),age2[!isGerm],sdNA)[1,agep]
-  # yMeanEg= as.data.frame(findFromGroups(cbind(inputPPA2[isGerm],inputPPA2[isGerm]),age2[isGerm],meanNA))[1,agee]
-  # ySDEg  = as.data.frame(findFromGroups(cbind(inputPPA2[isGerm],inputPPA2[isGerm]),age2[isGerm],sdNA))[1,agee]
+  # yMeanEp= .findFromGroups(cbind(inputPPA2[!isGerm],inputPPA2[!isGerm]),age2[!isGerm],.meanNA)[1,agep]
+  # ySDEp  = .findFromGroups(cbind(inputPPA2[!isGerm],inputPPA2[!isGerm]),age2[!isGerm],.sdNA)[1,agep]
+  # yMeanEg= as.data.frame(.findFromGroups(cbind(inputPPA2[isGerm],inputPPA2[isGerm]),age2[isGerm],.meanNA))[1,agee]
+  # ySDEg  = as.data.frame(.findFromGroups(cbind(inputPPA2[isGerm],inputPPA2[isGerm]),age2[isGerm],.sdNA))[1,agee]
   # yMeanEg= c(as.numeric(yMeanEg),rep(0,length(agep)-length(agee)))
   # ySDEg  = c(as.numeric(ySDEg),rep(0,length(agep)-length(agee)))
   
@@ -250,7 +252,7 @@
 
 
 .plotMacaqueCortexSmall <- function(inputPP,layer,age,layerPositionsS,agePositionsS,
-  plotTitle="CortexPlot",isLog2=TRUE,combineFn="medianNA",quantileScale = c(0,1),
+  plotTitle="CortexPlot",isLog2=TRUE,combineFn=".medianNA",quantileScale = c(0,1),
   linearOrLog="linear",bgPar="white",displayLayers=FALSE,legendPos=NULL,outputDataOnly=FALSE){
   
   ## Format and subset the data
@@ -269,7 +271,7 @@
   ## Combine all replicate samples (within each age/layer/region) using the input function
   ageLayReg  = paste(age,layer,sep="%")
   inputPP    = cbind(inputPP,inputPP)
-  inputPP2   = findFromGroups(inputPP,ageLayReg, match.fun(combineFn))
+  inputPP2   = .findFromGroups(inputPP,ageLayReg, match.fun(combineFn))
   ageLayReg  = colnames(inputPP2)
   ageLayReg2 = strsplit(ageLayReg,"%")
   inputPP2   = as.numeric(inputPP2[1,])
@@ -295,3 +297,30 @@
   colorRange = qS, legendPos=legendPos, labelX=labelX, labelY=labelY, labelText = labelText,
    colVector = blueWhiteRed(100)[51:100],signed=FALSE, numDecimals=0)
 }
+
+
+.findFromGroups <- function(datExpr,groupVector,fn="mean"){
+# Performs a function at the group level (default is "mean") and returns a
+# matrix where the output ROWS are the same as the COLUMNS of datExpr (typically
+# genes or probes) and the output columns are the components of the group (i.e.,
+# regions of the brain). datExpr is expression data (genes = COLUMNS, 
+# samples = ROWS).  groupVector is a vector or factor corresponding to group 
+# with one element per sample
+
+  groups   = names(table(groupVector))
+  fn       = match.fun(fn)
+  datMeans = matrix(0,nrow=dim(datExpr)[2],ncol=length(groups))
+    
+  for (i in 1:length(groups)){
+    datIn = datExpr[groupVector==groups[i],]
+    if (is.null(dim(datIn)[1])) { datMeans[,i] = as.numeric(datIn)
+    } else { datMeans[,i] = as.numeric(apply(datIn,2,fn)) }
+  };    colnames(datMeans)  = groups;
+  rownames(datMeans) = colnames(datExpr)
+  return(datMeans)
+}
+
+
+.meanNA   = function(x) return(mean(x,na.rm=TRUE))     # FUNCTION FOR CALCULATING MEAN WITH NAs
+.sdNA     = function(x) return(sd(x,na.rm=TRUE))       # FUNCTION FOR CALCULATING SD WITH NAs
+.medianNA = function(x) return(median(x,na.rm=TRUE))   # FUNCTION FOR CALCULATING MEDIAN WITH NAs

@@ -142,6 +142,10 @@ fet_expression2D_plot <- function(gene, colbox="red") {
                                  colBox=colbox)
         }
     }, finally = {dev.off()})
+
+    if (!loaded){
+        detach("package:fetdata", unload = TRUE)  
+    }
 }
 
 
