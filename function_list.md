@@ -41,12 +41,21 @@
 #### atlasplot/R/hbaplot.R
 * hba_subregions_plot 
 
+#### atlasplot/R/macaqueplots.R
+* .plotMacaqueCortex 
+* .plotMacaqueCortexSmall 
+* .findFromGroups 
+* .plotRectangle 
+* .numbers_to_colors 
+
 #### atlasplot/R/mouse_structure_plots.R
 * mouse_structureplot 
 
 #### atlasplot/R/nhpplot.R
-* nhp_subregions_plot 
+* nhp_cortex_series_plot 
 * species_expression_time_series
+* nhp_cortex_expression2D_plot
+* nhp_cortex_expression2D_small_plot
 
 #### atlasplot/R/plotExpressionMap2D.R
 * .plotExpressionMap2D 
