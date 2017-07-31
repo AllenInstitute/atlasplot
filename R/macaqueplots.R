@@ -1,7 +1,7 @@
 .plotMacaqueCortex <- function(inputPP,inputA,layer,region,age,layerPositions,regionPositions,ageOffsets,
   plotTitle="CortexPlot",scaleA=FALSE,isLog2=TRUE,combineFn=".medianNA",quantileScale = c(0,1),
   linearOrLog="linear",suppressAge=FALSE, bgPar="white",naBoxFile=NA, naBoxCol="lightgrey",
-  showAdultDLG = FALSE, medianVals=NA){
+  showAdultDLG = FALSE, medianVals=NA, colVec){
       
   ## Format and subset the data
   inputPP  = as.numeric(inputPP);      inputA = as.numeric(inputA)
@@ -82,7 +82,8 @@
   if(suppressAge) for (a in unique(age2))
     inputPPA4[age2==a] = inputPPA4[age2==a]/max(inputPPA4[age2==a])
   
-  rectCol   = numbers2colors(inputPPA4,signed=FALSE,centered=TRUE)
+  rectCol <- .numbers_to_colors(inputPPA4, colVec)
+      
   
   
   ## The main plot
@@ -241,7 +242,7 @@
   ## Create a legend for plotting in the upper left corner
   
   legendVal = min(inputPPA4,na.rm=TRUE)+(0:5)*(max(inputPPA4,na.rm=TRUE)-min(inputPPA4,na.rm=TRUE))/5
-  legendCol = numbers2colors(legendVal,signed=FALSE,centered=TRUE)
+  legendCol <- .numbers_to_colors(legendVal, colVec)
   legendVal = round(legendVal)
   xOff = ageOffsets["E40",1]-2.5
   xOff = xOff+(0:(length(legendVal)-1)*(2.5/length(legendVal)))
@@ -253,7 +254,8 @@
 
 .plotMacaqueCortexSmall <- function(inputPP,layer,age,layerPositionsS,agePositionsS,
   plotTitle="CortexPlot",isLog2=TRUE,combineFn=".medianNA",quantileScale = c(0,1),
-  linearOrLog="linear",bgPar="white",displayLayers=FALSE,legendPos=NULL,outputDataOnly=FALSE){
+  linearOrLog="linear",bgPar="white",displayLayers=FALSE,legendPos=NULL,outputDataOnly=FALSE,
+                                   colVec){
   
   ## Format and subset the data
   inputPP  = as.numeric(inputPP);      
@@ -293,9 +295,9 @@
   ## Plot the expression levels in the appropriate positions on the plot
   par(bg=bgPar);
   qS      = as.numeric(quantile(inputPP2,quantileScale,na.rm=TRUE))
-  plotRectangle(inputPP2, textData, positions, quantileScale=quantileScale, main=plotTitle, 
+  .plotRectangle(inputPP2, textData, positions, quantileScale=quantileScale, main=plotTitle, 
   colorRange = qS, legendPos=legendPos, labelX=labelX, labelY=labelY, labelText = labelText,
-   colVector = blueWhiteRed(100)[51:100],signed=FALSE, numDecimals=0)
+  colVector = colVec,signed=FALSE, numDecimals=0)
 }
 
 
@@ -321,6 +323,45 @@
 }
 
 
+.plotRectangle <- function(colorData, textData, positions, quantileScale=c(0,1), main="plot", 
+  colorRange = range(colorData), legendPos = c(8.5,-13.5,-10), labelX=NULL, labelY=NULL,
+  labelText = NULL, colVector = c('white', 'red'),signed=FALSE,numDecimals=1,rectBorder="black") {
+
+  qS      = as.numeric(quantile(colorData,quantileScale,na.rm=TRUE))
+  colorData[colorData<qS[1]] = qS[1];    colorData[colorData>qS[2]] = qS[2]
+  rectB   = as.numeric(positions[,3]);   rectT  = as.numeric(positions[,4])
+  rectL   = as.numeric(positions[,1]);   rectR  = as.numeric(positions[,2])
+  textX   = (rectL+rectR)/2;             textY  = (rectB+rectT)/2
+  colTmp  = c(colorData,colorRange)
+  rectTmp = .numbers_to_colors(colTmp, cols=colVector)
+  rectCol = rectTmp[1:(length(rectTmp)-2)]
+  
+  ## The main plot
+  plot(0,0,col="white",xlim=range(rectL,rectR,labelX),ylim=range(rectT,rectB,labelY),
+    axes=FALSE,xlab="",ylab="",main=main)
+  rect(rectL,rectB,rectR,rectT,col=rectCol,border=rectBorder)
+  text(textX,textY,textData);
+  
+  ## Plot the legend?
+  if(!is.null(legendPos[1])){
+   legendVal = min(colTmp,na.rm=TRUE)+(0:5)*(max(colTmp,na.rm=TRUE)-min(colTmp,na.rm=TRUE))/5
+   legendCol = .numbers_to_colors(legendVal, cols=colVector)
+   legX      = rep(legendPos[1],6);
+   legY      = quantile(legendPos[2:3],probs=(0:5)/5)
+   points(legX,legY,pch=15,cex=4,col=legendCol)
+   text(legX,legY,round((10^numDecimals)*legendVal)/(10^numDecimals))
+  }
+  
+  ## Plot the labels
+  if (!is.null(labelX[1])) text(labelX,labelY,labelText)
+  
+}
+
+.numbers_to_colors <- function(x, cols) {
+    # replicates the behavior of WGCNA with a pallete specificed by cols
+    rbPal <- colorRampPalette(cols)
+    rbPal(length(x))[as.numeric(cut(x, breaks=length(x)))]
+}
 .meanNA   = function(x) return(mean(x,na.rm=TRUE))     # FUNCTION FOR CALCULATING MEAN WITH NAs
 .sdNA     = function(x) return(sd(x,na.rm=TRUE))       # FUNCTION FOR CALCULATING SD WITH NAs
 .medianNA = function(x) return(median(x,na.rm=TRUE))   # FUNCTION FOR CALCULATING MEDIAN WITH NAs

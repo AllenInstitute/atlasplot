@@ -163,7 +163,7 @@ species_expression_time_series<- function(Gene, col_map=rainbow) {
 #'
 #'
 #'@export
-nhp_cortex_expression2D_plot<- function(gene) {
+nhp_cortex_expression2D_plot<- function(gene, colVec=c("white", "red")) {
     
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -190,13 +190,17 @@ nhp_cortex_expression2D_plot<- function(gene) {
     layer <- as.character(geneDat$layer)
     subregions <- as.character(geneDat$subregion)
     
-    # TODO add tryCatch
+    # create label name
+    label_id <- strsplit(as.character(geneDat$id_string[[1]]), "_")[[1]][[3]]
+    
+    
+    # tryCatch to ensure proper resource handling
     tryCatch({
-        fn <- paste(gene, "NHP_2Dexpression.pdf", sep="")
+        fn <- paste(gene, "_NHP_2Dexpression.pdf", sep="")
         pdf(fn, width=18, height=9)
         .plotMacaqueCortex(expr_value, NULL, layer, subregions, age, layerPositions, 
-                           regionPositions, ageOffsets, paste(gene), 
-                           quantileScale=c(0.1,0.95))},
+                           regionPositions, ageOffsets, paste(gene,label_id, sep=" - "), 
+                           quantileScale=c(0.1,0.95), colVec=colVec)},
         finally = { dev.off() 
     })
     
@@ -209,7 +213,7 @@ nhp_cortex_expression2D_plot<- function(gene) {
 #'
 #'
 #'@export
-nhp_cortex_expression2D_small_plot<- function(gene) {
+nhp_cortex_expression2D_small_plot<- function(gene, colVec=c("white", "red")) {
     
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -224,11 +228,11 @@ nhp_cortex_expression2D_small_plot<- function(gene) {
         library("nhpdata")  # technically breaking the rules
     }
     
-    # select the rows for the given gene
-    geneDat <- datNHP[datNHP$gene == gene,]
-    
-    # log the expression and create a named vector
-    expr_value <- log(geneDat$value,b=2)
+    # select the rows for the given gene that are in the V1 subregion
+    geneDat <- datNHP[datNHP$gene == gene & datNHP$subregion == "V1",]
+        
+    # isolate the expression value and create a named vector
+    expr_value <- log(geneDat$value, b=2)
     names(expr_value) <- geneDat$id_string
     
     # convert layer, subregions, and age to character
@@ -236,16 +240,30 @@ nhp_cortex_expression2D_small_plot<- function(gene) {
     layer <- as.character(geneDat$layer)
     subregions <- as.character(geneDat$subregion)
     
-    # TODO add tryCatch
-    tryCatch({
-        fn <- paste(gene, "NHP_2Dexpression.pdf", sep="")
-        pdf(fn, width=18, height=9)
-        .plotMacaqueCortexSmall(expr_value, NULL, layer, subregions, age, layerPositions, 
-                           regionPositions, ageOffsets, paste(gene), 
-                           quantileScale=c(0.1,0.95))},
-        finally = { dev.off() 
-    })
+    # change layers to be correct for plotting
+    layer[layer == "L2-3"] <- "CPo"
+    layer[is.element(layer,c("L4Cb","L4Ca","L4B","L4A"))] <- "L4"
     
+    
+    # create id
+    label_id <- strsplit(as.character(geneDat$id_string[[1]]), "_")[[1]][[3]]
+    
+    # tryCatch to ensure proper resource handling
+    tryCatch({
+        fn <- paste(gene,"_NHP_small_expression2D_cortex.pdf", sep="")
+        legendPos  = c(8,-11.5,-8.5)
+        pdf(fn,width=7,height=7)
+        .plotMacaqueCortexSmall(expr_value, layer, age, layerPositionsS, agePositionsS,
+                            paste(gene, label_id, sep=" - "), isLog2=TRUE,
+                            combineFn=".meanNA", quantileScale=c(0.1,0.95),
+                            linearOrLog="linear", bgPar="grey95", displayLayers=FALSE,
+                            legendPos=legendPos, colVec=colVec)
+        abline(v=c(0,6,10),lwd=2)
+        abline(h=c(0,-8,-12),lwd=2)
+    },
+            finally={ dev.off()
+    })
+
     if (!loaded){
         detach("package:nhpdata", unload = TRUE)  
     }
