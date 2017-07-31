@@ -160,10 +160,20 @@ species_expression_time_series<- function(Gene, col_map=rainbow) {
 }
 
 
+#' nhp_cortex_expression2D_plot
 #'
+#' Creates a boxed heatmap of the expression values for a single gene in the non-human
+#' primate atlas. 
+#' 
+#' @export
+#' @param gene Gene in the `nhpdata::datNHP` data set; character string
+#' @param colVec List of colors to create linear color map; c("white", "red") default
+#' @return Creates a new plot of the gene in the current working directory
+#' @examples
+#' # call on a given gene
+#' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-#'@export
-nhp_cortex_expression2D_plot<- function(gene, colVec=c("white", "red")) {
+nhp_cortex_expression2D_plot <- function(gene, colVec=c("white", "red")) {
     
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -176,6 +186,12 @@ nhp_cortex_expression2D_plot<- function(gene, colVec=c("white", "red")) {
     } else {
         loaded <- FALSE
         library("nhpdata")  # technically breaking the rules
+    }
+    
+    # ensure gene is in datNHP data set; keeps from having weird messages
+    if (!any(gene == datNHP$gene)) {
+        msg <- paste(gene, "not found in datNHP; check spelling and capitalization")
+        stop(msg, call.=FALSE)
     }
     
     # select the rows for the given gene
@@ -210,9 +226,19 @@ nhp_cortex_expression2D_plot<- function(gene, colVec=c("white", "red")) {
 }
 
 
+#' nhp_cortex_expression2D_small_plot
 #'
+#' Creates a boxed heatmap of the expression values for a single gene in the non-human
+#' primate atlas. This plot is limited to only the V1 region.
+#' 
+#' @export
+#' @param gene Gene in the `nhpdata::datNHP` data set; character string
+#' @param colVec List of colors to create linear color map; c("white", "red") default
+#' @return Creates a new plot of the gene in the current working directory
+#' @examples
+#' # call on a given gene
+#' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-#'@export
 nhp_cortex_expression2D_small_plot<- function(gene, colVec=c("white", "red")) {
     
     if (!requireNamespace("nhpdata", quietly = TRUE)){
@@ -228,6 +254,12 @@ nhp_cortex_expression2D_small_plot<- function(gene, colVec=c("white", "red")) {
         library("nhpdata")  # technically breaking the rules
     }
     
+    # ensure gene is in the datNHP data set; keeps from having weird error messages
+    if (!any(gene == datNHP$gene)) {
+        msg <- paste(gene, "not found in datNHP; check spelling and capitalization")
+        stop(msg, call.=FALSE)
+    }
+
     # select the rows for the given gene that are in the V1 subregion
     geneDat <- datNHP[datNHP$gene == gene & datNHP$subregion == "V1",]
         

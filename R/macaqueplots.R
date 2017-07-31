@@ -1,3 +1,8 @@
+# This file contains a number of legacy functions from the DevRhesusLMD project
+# The original function are located at https://github.com/AllenBrainAtlas/DevRhesusLMD
+# Most are from src/functionsForMacaqueAnalysis.r
+# .numbers_to_colors is an alternate implementation of WGCNA numbers2colors; this avoids
+# adding an additional dependancy
 .plotMacaqueCortex <- function(inputPP,inputA,layer,region,age,layerPositions,regionPositions,ageOffsets,
   plotTitle="CortexPlot",scaleA=FALSE,isLog2=TRUE,combineFn=".medianNA",quantileScale = c(0,1),
   linearOrLog="linear",suppressAge=FALSE, bgPar="white",naBoxFile=NA, naBoxCol="lightgrey",
@@ -358,10 +363,11 @@
 }
 
 .numbers_to_colors <- function(x, cols) {
-    # replicates the behavior of WGCNA with a pallete specificed by cols
+    # replicates the behavior of WGCNA's with a pallete specificed by cols
     rbPal <- colorRampPalette(cols)
     rbPal(length(x))[as.numeric(cut(x, breaks=length(x)))]
 }
+
 .meanNA   = function(x) return(mean(x,na.rm=TRUE))     # FUNCTION FOR CALCULATING MEAN WITH NAs
 .sdNA     = function(x) return(sd(x,na.rm=TRUE))       # FUNCTION FOR CALCULATING SD WITH NAs
 .medianNA = function(x) return(median(x,na.rm=TRUE))   # FUNCTION FOR CALCULATING MEDIAN WITH NAs
