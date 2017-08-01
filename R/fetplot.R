@@ -149,6 +149,100 @@ fet_expression2D_plot <- function(gene, colbox="red") {
 }
 
 
+#'
+#'
+#' @export
+fetplot_brain_location_expression_plot <- function(gene) {
+    
+    # ensure the user has fetdata installed; inform them to download it if not
+    if (!requireNamespace("fetdata", quietly = TRUE)) {
+        stop("fetdata needed for this function to work. Please install it.",
+             call. = FALSE)
+    }
+
+
+    # check that the pixmap requirement is satistified
+    if (!requireNamespace("pixmap", quietly = TRUE)) {
+        msg <- "pixmap is required for this function to work; Pleate install it with `install.packages(\"pixmap\")`"
+        stop(msg, call. = FALSE)
+    }
+
+    # check if fetdata is loaded; if not load it and note loading
+    if ("package:fetdata" %in% search()){
+        loaded <- TRUE
+    } else {
+        loaded <- FALSE
+        library("fetdata")  # technically breaking the rules
+    }
+
+    # make sure the gene they're asking for is in the FET
+    if (!any(is.element(gene, genesFET))){
+        stop(paste(gene,"does not appear to be in the Fetal Human Brain Atlas"))
+    }
+
+    lobes <- c("f", "o", "p", "t")
+    tryCatch({
+        pdf(paste(gene,"fetalHuman_BrainLocationExpressionPlotsForEachLayer.pdf",sep="_")
+            ,width=20,height=30,version= "1.4")
+        par(cex=1.5,mar = rep(2, 4),las = 1)
+        op <- par(mar = rep(0, 4)) # we want it to fill the file
+#        x <- pixmap::read.pnm("brain_templates_alldata.pnm")
+        x <- .construct_image()
+        pixmap::plot(x)
+        lays = c("MZ","CPo","CPi","SP","IZ","SZo","SZi","VZ")
+        par(mfrow=c(8,4), new=TRUE)
+        
+        i <- 0  # i will give the row position for the brain
+        for (lay in lays) {
+            i <- i + 1  # increment i to get 1 indexed row position
+            j <- 0  # j will give the correct column for the brain
+            for (d in donor_framesFET) {
+                j <- j + 1 # increment j to get 1 indexed position
+                brain <- get(d)
+                donorID <- as.character(brain$donorID[1])
+
+                # select the appropriate fields to plot and create plot regions
+                bool_select <- (
+                    gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes
+                )
+                brain <- brain[bool_select,]
+                lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
+
+                # remove some layers for comparibility
+                lls_keep <- !(lls[,2] %in% c("CP", "SZ"))
+                brain <- brain[lls_keep,]
+                lls <- lls[lls_keep,]
+
+                # remove region for comparibility
+                lls_keep <- !(lls[,3] == 'Z')
+                brain <- brain[lls_keep,]
+                lls <- lls[lls_keep,]
+
+                # keep the layers that match lay
+                lls_keep <- lls[,2] == lay
+                brain <- brain[lls_keep,]
+                lls <- lls[lls_keep,]
+                                
+                # get position of layer
+                par(cex=0.5,mar = rep(2, 4),las = 1,mfg=c(i,j),new=TRUE)
+                m <- paste(gene,"-", lay," - BrainID", donorID, " - ", donor_to_age[donorID])
+                
+                # select colors and positions for each of the subregions
+                col <- yzcFET[lls[,3],4]
+                y <- yzcFET[lls[,3], 2]
+                z <- yzcFET[lls[,3],3]
+                
+                .plotExpressionCoordinates2Db(2^brain$value, z, y, lls[,3], textCol=col,
+                                            main=m, bgPar="white", xlim=c(-38,30),
+                                            ylim=c(-25,20), minIs0=FALSE)
+            }
+        }
+    }, finally = {dev.off()})
+
+    if (!loaded){
+        detach("package:fetdata", unload = TRUE)  
+    }
+}
 
 #------------------------------HELPER FUNCTIONS-----------------------------------------#
 .get_all_structs <- function() {
@@ -199,4 +293,17 @@ fet_expression2D_plot <- function(gene, colbox="red") {
         c(lobe, layer, substruc)
     })
     t(layers_str_lobes)
+}
+
+
+.construct_image <- function() {    
+    red.matrix <- .make_cmatrix(im_comp$red)
+    green.matrix <- .make_cmatrix(im_comp$green)
+    blue.matrix <- .make_cmatrix(im_comp$blue)
+   pixmap::pixmapRGB(c(red.matrix, green.matrix, blue.matrix), nrow=900, ncol=593)
+}
+
+
+.make_cmatrix <- function(clist) {
+    clist$u %*% diag(clist$d) %*% t(clist$v)
 }
