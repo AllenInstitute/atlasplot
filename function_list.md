@@ -32,11 +32,17 @@
 * .fetch_dev_mouse_unionize 
 * .plot_devmouse_substructures 
 
+#### atlasplot/R/expressionCoordinate.R
+* .plotExpressionCoordinates2Db 
+
 #### atlasplot/R/fetplot.R
 * fet_subregions_plot 
 * fet_expression2D_plot 
+* fetplot_brain_location_expression_plot 
 * .get_all_structs 
 * .format_group 
+* .construct_image 
+* .make_cmatrix 
 
 #### atlasplot/R/hbaplot.R
 * hba_subregions_plot 
@@ -54,7 +60,7 @@
 #### atlasplot/R/nhpplot.R
 * nhp_cortex_series_plot 
 * species_expression_time_series
-* nhp_cortex_expression2D_plot
+* nhp_cortex_expression2D_plot 
 * nhp_cortex_expression2D_small_plot
 
 #### atlasplot/R/plotExpressionMap2D.R

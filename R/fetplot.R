@@ -296,6 +296,7 @@ fetplot_brain_location_expression_plot <- function(gene) {
 }
 
 
+# the following two functions reconstruct the image for the brain plots
 .construct_image <- function() {    
     red.matrix <- .make_cmatrix(im_comp$red)
     green.matrix <- .make_cmatrix(im_comp$green)
@@ -305,5 +306,6 @@ fetplot_brain_location_expression_plot <- function(gene) {
 
 
 .make_cmatrix <- function(clist) {
+    # undoes the svd decomp
     clist$u %*% diag(clist$d) %*% t(clist$v)
 }
