@@ -6,7 +6,7 @@
  sizes = expr;   if(!minIs0) sizes = sizes-min(sizes);  sizeText = sizes
  sizes = sizes*(sizeRange[2]-sizeRange[1])/max(sizes);  sizes = sizes+sizeRange[1]
  sizeText = sizeText*(textRange[2]-textRange[1])/max(sizeText);  sizeText = sizeText+textRange[1]
- exprColors = WGCNA::numbers2colors(expr,signed=FALSE)
+ exprColors = .numbers_to_colors(expr, c("white", "red"))
  plot(xCoor,yCoor,col=bgPar,xlab=xlab,ylab=ylab,...)
  for (i in 1:length(expr))
   points(xCoor[i],yCoor[i],col=exprColors[i],bg=exprColors[i],pch=pch,cex=sizes[i])

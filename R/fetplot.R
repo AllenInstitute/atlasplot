@@ -1,4 +1,3 @@
-
 #' fet_subregions_plot
 #' 
 #' Plot gene expression values for each structure in each donor for the fetal human brain atlas. This function
@@ -149,11 +148,20 @@ fet_expression2D_plot <- function(gene, colbox="red") {
 }
 
 
+#' fetplot_brain_location_expression_plot
 #'
+#' Creates a matrix of brain images. Each column corresponds to a brain in the fetal human
+#' brain atlas, while each row is a specific brain layer.
 #'
 #' @export
+#' @param gene Gene in the `fetdata::datFET` data set; character string
+#' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_BrainLocationExpressionPlotsForEachLayer.pdf`
+#' @examples
+#' # call on a given gene
+#' fet_expression2D_plot("SHH")
+#'
 fetplot_brain_location_expression_plot <- function(gene) {
-    
+
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)) {
         stop("fetdata needed for this function to work. Please install it.",
@@ -186,7 +194,6 @@ fetplot_brain_location_expression_plot <- function(gene) {
             ,width=20,height=30,version= "1.4")
         par(cex=1.5,mar = rep(2, 4),las = 1)
         op <- par(mar = rep(0, 4)) # we want it to fill the file
-#        x <- pixmap::read.pnm("brain_templates_alldata.pnm")
         x <- .construct_image()
         pixmap::plot(x)
         lays = c("MZ","CPo","CPi","SP","IZ","SZo","SZi","VZ")
