@@ -168,10 +168,9 @@ fetplot_brain_location_expression_plot <- function(gene) {
              call. = FALSE)
     }
 
-
     # check that the pixmap requirement is satistified
     if (!requireNamespace("pixmap", quietly = TRUE)) {
-        msg <- "pixmap is required for this function to work; Pleate install it with `install.packages(\"pixmap\")`"
+        msg <- "pixmap is required for this function to work; Please install it with `install.packages(\"pixmap\")`"
         stop(msg, call. = FALSE)
     }
 
@@ -198,48 +197,49 @@ fetplot_brain_location_expression_plot <- function(gene) {
         pixmap::plot(x)
         lays = c("MZ","CPo","CPi","SP","IZ","SZo","SZi","VZ")
         par(mfrow=c(8,4), new=TRUE)
-        
-        i <- 0  # i will give the row position for the brain
-        for (lay in lays) {
-            i <- i + 1  # increment i to get 1 indexed row position
-            j <- 0  # j will give the correct column for the brain
-            for (d in donor_framesFET) {
-                j <- j + 1 # increment j to get 1 indexed position
-                brain <- get(d)
-                donorID <- as.character(brain$donorID[1])
 
-                # select the appropriate fields to plot and create plot regions
-                bool_select <- (
-                    gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes
-                )
-                brain <- brain[bool_select,]
-                lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
+        i <- 0  # i gives column for the brain
+        for (d in donor_framesFET) {
+            i <- i + 1  # increment i to get 1 indexed column position
+            brain <- get(d)
+            donorID <- as.character(brain$donorID[1])
 
-                # remove some layers for comparibility
-                lls_keep <- !(lls[,2] %in% c("CP", "SZ"))
-                brain <- brain[lls_keep,]
-                lls <- lls[lls_keep,]
+            # select the appropriate fields to plot and create plot regions
+            bool_select <- (
+                gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes
+            )
+            brain <- brain[bool_select,]
+            lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
 
-                # remove region for comparibility
-                lls_keep <- !(lls[,3] == 'Z')
-                brain <- brain[lls_keep,]
-                lls <- lls[lls_keep,]
+            # remove some layers for comparibility
+            lls_keep <- !(lls[,2] %in% c("CP", "SZ"))
+            brain <- brain[lls_keep,]
+            lls <- lls[lls_keep,]
+
+            # remove region for comparibility
+            lls_keep <- !(lls[,3] == 'Z')
+            brain <- brain[lls_keep,]
+            lls <- lls[lls_keep,]
+
+            j <- 0  # j will give the correct row for the brain
+            for (lay in  lays) {
+                j <- j + 1 # increment j to get 1 indexed row position
 
                 # keep the layers that match lay
                 lls_keep <- lls[,2] == lay
-                brain <- brain[lls_keep,]
-                lls <- lls[lls_keep,]
-                                
+                brain_lay <- brain[lls_keep,]  # keep the full data frame from overwrite
+                lls_lay <- lls[lls_keep,]  # see above
+
                 # get position of layer
-                par(cex=0.5,mar = rep(2, 4),las = 1,mfg=c(i,j),new=TRUE)
+                par(cex=0.5,mar = rep(2, 4),las = 1,mfg=c(j,i),new=TRUE)
                 m <- paste(gene,"-", lay," - BrainID", donorID, " - ", donor_to_age[donorID])
-                
+
                 # select colors and positions for each of the subregions
-                col <- yzcFET[lls[,3],4]
-                y <- yzcFET[lls[,3], 2]
-                z <- yzcFET[lls[,3],3]
-                
-                .plotExpressionCoordinates2Db(2^brain$value, z, y, lls[,3], textCol=col,
+                col <- yzcFET[lls_lay[,3],4]
+                y <- yzcFET[lls_lay[,3], 2]
+                z <- yzcFET[lls_lay[,3],3]
+
+                .plotExpressionCoordinates2Db(2^brain_lay$value, z, y, lls_lay[,3], textCol=col,
                                             main=m, bgPar="white", xlim=c(-38,30),
                                             ylim=c(-25,20), minIs0=FALSE)
             }
@@ -274,6 +274,7 @@ fetplot_brain_location_expression_plot <- function(gene) {
     }
     unique(structs)
 }
+
 
 .format_group <- function(structures) {
 
