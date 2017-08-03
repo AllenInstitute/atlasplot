@@ -1,3 +1,19 @@
+#    Copyright (C) 2017 Allen Institute
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License along
+#    with this program; if not, write to the Free Software Foundation, Inc.,
+#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
 .plotExpressionMap2D <- function(expr, xVar, yVar, transformation=NULL, bgPar="lightblue",
 sizeRange=c(0.4,6),sizeText=2,xlab=NULL,ylab=" ",pch=21,sizeLabel=1,
 minIs0=FALSE,sampleLabel=names(expr),textShift=0.3,isXSubVar=TRUE,
