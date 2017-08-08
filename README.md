@@ -1,7 +1,7 @@
 # atlasplot
 Simple Reproducible Plots for the Allen Institutes Brain Atlases
 
-This package aim to simplify the process of producing graphics for the expression data available in the Allen Institutes Brain Atlases. Additionally, it will be coupled with individual data packages, allowing anyone to easily access this vast data resource.
+This package aims to simplify the process of producing graphics for the expression data available in the Allen Institutes Brain Atlases. Additionally, it will be coupled with individual data packages, allowing anyone to easily access this vast data resource.
 
 ## Install
 To install the `atlasplot` package it is recommended to use the 
