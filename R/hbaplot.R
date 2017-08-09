@@ -22,11 +22,12 @@
 #' 
 #' @export
 #' @param gene Gene in the `hbadata::datHBA` data set; character string
+#' @param save_pdf Output pdf or plot object
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`
 #' @examples
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
-hba_subregions_plot <- function(gene){
+hba_subregions_plot <- function(gene, save_pdf=TRUE){
 
     # ensure the user has hbadata installed; inform them to download it if not
     if (!requireNamespace("hbadata", quietly = TRUE)){
@@ -59,8 +60,14 @@ hba_subregions_plot <- function(gene){
     
     # tryCatch block to ensure the pdf is closed for unexpected errors
     tryCatch({
-        pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
-        par(mfrow=c(6,1), mar=c(5,10,4,2))
+        
+        mar <- c(1,1,1,1)
+        if (save_pdf) {
+            pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
+            mar <- c(5,10,4,2)
+        }
+        
+        par(mfrow=c(6,1), mar=mar)
     
         # iterate through the brains and plot the result for each of them
         i <- 1
@@ -73,7 +80,9 @@ hba_subregions_plot <- function(gene){
                              xlab="",ylab="",ylim=ylim, color=colsHBA)
             i <- i + 1
         }}, finally = {
-            dev.off()
+            if (save_pdf) {
+                dev.off()
+            }
         })
     
     # unload hbadata to keep it from affecting global environment
