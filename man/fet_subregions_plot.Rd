@@ -4,10 +4,12 @@
 \alias{fet_subregions_plot}
 \title{fet_subregions_plot}
 \usage{
-fet_subregions_plot(gene)
+fet_subregions_plot(gene, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `fetdata::datFET` data set; character string}
+
+\item{save_pdf}{Save to disk or output to console}
 }
 \value{
 Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_structureBarPlotAll.pdf`

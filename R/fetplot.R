@@ -22,11 +22,12 @@
 #' 
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
+#' @param save_pdf Save to disk or output to console
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_structureBarPlotAll.pdf`
 #' @examples
 #' # call on a given gene
 #' fet_subregions_plot("SHH")
-fet_subregions_plot <- function(gene){
+fet_subregions_plot <- function(gene, save_pdf=TRUE){
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
@@ -59,9 +60,14 @@ fet_subregions_plot <- function(gene){
     
     # ensures the pdf is closed even after encountering an error
     tryCatch({
-        pdf(paste(gene, "fetalHuman_structureBarPlotAll.pdf", sep="_"), height=10,width=50)
-        par(mfrow=c(4,1),mar=c(5,10,4,2))
-        
+
+        mar <- c(1,1,1,1)
+        if (save_pdf) {
+            pdf(paste(gene, "fetalHuman_structureBarPlotAll.pdf", sep="_"), height=10,width=50)
+            mar <- c(5,10,4,2)
+        }
+        par(mfrow=c(4,1), mar=mar)
+
         # iterate through the brains and plot the result for each of them
         i <- 1
         for (d in donor_framesFET) {
@@ -73,7 +79,11 @@ fet_subregions_plot <- function(gene){
                              main=paste(gene,"- Brain:",i, '-', donor_to_age[donorID]),las=2,
                              xlab="",ylab="",ylim=ylim, color = colsFET)
             i <- i + 1
-        }}, finally = {dev.off()})
+        }}, finally = {
+            if (save_pdf) {
+                dev.off()
+            }
+        })
     
     # unload fetdata to keep it from affecting global environment
     if (!loaded){
@@ -90,12 +100,14 @@ fet_subregions_plot <- function(gene){
 #' 
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
+#' @param save_pdf Save to disk or output to console
+#' @param colbox Heatmap box color; default red
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_2DPlotInNeocortex.pdf.pdf`
 #' @examples
 #' # call on a given gene
 #' fet_expression2D_plot("SHH")
 #'
-fet_expression2D_plot <- function(gene, colbox="red") {
+fet_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
@@ -122,8 +134,12 @@ fet_expression2D_plot <- function(gene, colbox="red") {
     onto_c <- c("acronym", "graph_order")
     # for each brain create the plot; tryCatch for safe resource allocation
     tryCatch({
-        pdf(paste(gene,"fetalHuman_2DPlotInNeocortex.pdf",sep="_"),height=10,width=20)
-        par(mfrow=c(2,2))
+        
+        # mar <- c(1,1,1,1)
+        if (save_pdf) {
+            pdf(paste(gene,"fetalHuman_2DPlotInNeocortex.pdf",sep="_"),height=10,width=20)
+        }
+        par(mfrow=c(2,2))#, mar=mar)
         
         for (d in donor_framesFET) {
             brain <- get(d)
@@ -156,7 +172,11 @@ fet_expression2D_plot <- function(gene, colbox="red") {
                                  sizeRange=c(3,5), sizeText=1.5, sizeLabel=0.8,
                                  colBox=colbox)
         }
-    }, finally = {dev.off()})
+    }, finally = {
+        if (save_pdf) {
+            dev.off()
+        }
+    })
 
     if (!loaded){
         detach("package:fetdata", unload = TRUE)  
@@ -164,7 +184,7 @@ fet_expression2D_plot <- function(gene, colbox="red") {
 }
 
 
-#' fetplot_brain_location_expression_plot
+#' fet_brain_location_expression_plot
 #'
 #' Creates a matrix of brain images. Each column corresponds to a brain in the fetal human
 #' brain atlas, while each row is a specific brain layer.
@@ -176,7 +196,7 @@ fet_expression2D_plot <- function(gene, colbox="red") {
 #' # call on a given gene
 #' fet_expression2D_plot("SHH")
 #'
-fetplot_brain_location_expression_plot <- function(gene) {
+fet_brain_location_expression_plot <- function(gene) {
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)) {
@@ -204,12 +224,18 @@ fetplot_brain_location_expression_plot <- function(gene) {
     }
 
     lobes <- c("f", "o", "p", "t")
+    save_pdf <- TRUE  # incase this can be changed later
     tryCatch({
-        pdf(paste(gene,"fetalHuman_BrainLocationExpressionPlotsForEachLayer.pdf",sep="_")
-            ,width=20,height=30,version= "1.4")
-        par(cex=1.5,mar = rep(2, 4),las = 1)
+        
+        mar <- c(2,2,2,2)
+        if (save_pdf) {
+            pdf(paste(gene,"fetalHuman_BrainLocationExpressionPlotsForEachLayer.pdf",sep="_")
+                ,width=20,height=30,version= "1.4")
+            mar <- rep(2,4)
+        }
+        par(cex=1.5,mar = mar,las = 1)
         op <- par(mar = rep(0, 4)) # we want it to fill the file
-        x <- .construct_image()
+        suppressWarnings( x <- .construct_image() )
         pixmap::plot(x)
         lays = c("MZ","CPo","CPi","SP","IZ","SZo","SZi","VZ")
         par(mfrow=c(8,4), new=TRUE)
@@ -260,7 +286,11 @@ fetplot_brain_location_expression_plot <- function(gene) {
                                             ylim=c(-25,20), minIs0=FALSE)
             }
         }
-    }, finally = {dev.off()})
+    }, finally = {
+        if (save_pdf) {
+            dev.off() 
+        }
+    })
 
     if (!loaded){
         detach("package:fetdata", unload = TRUE)  

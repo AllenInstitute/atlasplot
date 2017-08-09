@@ -4,10 +4,12 @@
 \alias{hba_subregions_plot}
 \title{hba_subregions_plot}
 \usage{
-hba_subregions_plot(gene)
+hba_subregions_plot(gene, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `hbadata::datHBA` data set; character string}
+
+\item{save_pdf}{Output pdf or plot object}
 }
 \value{
 Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`

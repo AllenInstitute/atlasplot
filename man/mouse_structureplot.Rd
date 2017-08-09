@@ -5,7 +5,7 @@
 \title{mouse_structureplot}
 \usage{
 mouse_structureplot(gene, atlas, experiment = NULL, struct_depth = 3,
-  im_width = NULL, im_height = NULL)
+  im_width = NULL, im_height = NULL, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the Allen Mouse or Developing Mouse atlas; character string}
@@ -19,6 +19,8 @@ mouse_structureplot(gene, atlas, experiment = NULL, struct_depth = 3,
 \item{im_width}{Output image width; optional}
 
 \item{im_height}{Output image height; optional}
+
+\item{save_pdf}{Save plot to disk as pdf or return to console}
 }
 \value{
 Creates a new plot of the gene in the current working directory

@@ -4,10 +4,14 @@
 \alias{fet_expression2D_plot}
 \title{fet_expression_2D_plot}
 \usage{
-fet_expression2D_plot(gene, colbox = "red")
+fet_expression2D_plot(gene, colbox = "red", save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `fetdata::datFET` data set; character string}
+
+\item{colbox}{Heatmap box color; default red}
+
+\item{save_pdf}{Save to disk or output to console}
 }
 \value{
 Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_2DPlotInNeocortex.pdf.pdf`
