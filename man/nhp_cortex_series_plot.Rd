@@ -4,10 +4,12 @@
 \alias{nhp_cortex_series_plot}
 \title{nhp_cortex_series_plot}
 \usage{
-nhp_cortex_series_plot(gene)
+nhp_cortex_series_plot(gene, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `nhpdata::exprl2` data set; character string}
+
+\item{save_pdf}{Save to disk or return to console}
 }
 \value{
 Creates a new plot of the gene in the current working directory

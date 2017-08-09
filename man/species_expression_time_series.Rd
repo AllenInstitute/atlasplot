@@ -4,9 +4,11 @@
 \alias{species_expression_time_series}
 \title{species_expression_time_series}
 \usage{
-species_expression_time_series(Gene, col_map = rainbow)
+species_expression_time_series(Gene, col_map = rainbow, save_pdf = TRUE)
 }
 \arguments{
+\item{save_pdf}{Save to disk or return to console}
+
 \item{gene}{Gene in the `nhpdata::dev.expr2` data set; character string}
 
 \item{colormap}{Color pallete used to choose plot colors; default rainbow}

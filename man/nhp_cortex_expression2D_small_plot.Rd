@@ -4,12 +4,15 @@
 \alias{nhp_cortex_expression2D_small_plot}
 \title{nhp_cortex_expression2D_small_plot}
 \usage{
-nhp_cortex_expression2D_small_plot(gene, colVec = c("white", "red"))
+nhp_cortex_expression2D_small_plot(gene, colVec = c("white", "red"),
+  save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `nhpdata::datNHP` data set; character string}
 
 \item{colVec}{List of colors to create linear color map; c("white", "red") default}
+
+\item{save_pdf}{Save to disk or return to console}
 }
 \value{
 Creates a new plot of the gene in the current working directory
