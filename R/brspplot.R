@@ -28,7 +28,8 @@
 #' @examples
 #' # call on a given gene
 #' brsp_subregions_plot("SCARF1", "rna")
-brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors){
+brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors, 
+                                 save_pdf=TRUE) {
 
     # ensure the user has brspdata installed; if not inform them of the need
     if (!requireNamespace("brspdata", quietly = TRUE)){
@@ -79,8 +80,12 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors){
 
     # plot; tryCatch is to ensure proper closing of resources
     tryCatch({
-        pdf( title, height=25, width=75)
-        par(mfrow=c(4,1), mar=c(5,10,4,2))
+        mar <- c(1,1,1,1)
+        if (save_pdf) {
+            pdf( title, height=25, width=75)
+            mar <- c(5,10,4,2)
+        }
+        par(mfrow=c(4,1), mar=mar)
         
         # create plot order and change how things are added
         p_ord <- order(data$graph_order)
@@ -106,7 +111,11 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors){
         .verboseBarplot(2^data$value, factor(brain_age, unq_ages), main=gene,
                     las=2,xlab="",ylab="Expression Level", 
                     ylim=c(0,ymax), color = color_map)
-        }, finally = { dev.off() })
+        }, finally = { 
+            if (save_pdf) {
+                dev.off()
+            }
+    })
 
     # unload brspdata to keep it from affecting global environment
     if (!loaded){
