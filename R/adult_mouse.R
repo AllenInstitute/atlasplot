@@ -125,7 +125,7 @@
 
 #------------------------------PLOT FUNCTIONS-------------------------------------------#
 .plot_mouse_substructures <- function(onto_str, atlas, atlas_id, gene, struct_depth, 
-                                      im_height, im_width) {
+                                      im_height, im_width, save_pdf) {
     # function to plot the mouse atals substructures
     ylim <- c(0, quantile(onto_str$expression_energy, 0.995))
     p_ord <- order(onto_str$graph_order)
@@ -140,10 +140,16 @@
     
     # create pdf; tryCatch to ensure proper resource closing
     tryCatch({
-         pdf(paste(gene, atlas, struct_depth, "brainRegionBarplot_ExpressionEnergies.pdf",
+        
+        mar <- c(1,1,1,1)
+        if (save_pdf) {
+                pdf(paste(gene, atlas, struct_depth, "brainRegionBarplot_ExpressionEnergies.pdf",
                 sep="_"),
             height=im_height,width=im_width)
-        par(mfrow=c(2,1),mar=c(5,10,4,2))
+            mar <- c(5,10,4,2)
+        }
+        
+        par(mfrow=c(2,1),mar=mar)
         
         # plot the structures
         .verboseBarplot2(onto_str$expression_energy[p_ord], factor(onto_str$name[p_ord],
@@ -152,6 +158,8 @@
                         xlab="",ylab="Mean Expression Energy",ylim=ylim, 
                         KruskalTest = FALSE)
     }, finally = {
-        dev.off()
+        if (save_pdf) {
+            dev.off()
+        }
     })
 }

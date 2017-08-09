@@ -29,6 +29,7 @@
 #' @param struct_depth ontology structure depth; default of 3
 #' @param im_width Output image width; optional
 #' @param im_height Output image height; optional
+#' @param save_pdf Save plot to disk as pdf or return to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
@@ -37,7 +38,7 @@
 #' # call a given gene with a specific experiment
 #' mouse_structureplot("Shh", atlas="DevMouse", struct_depth = 4, im_width = 25)
 mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3, 
-                                im_width = NULL, im_height = NULL) {
+                                im_width = NULL, im_height = NULL, save_pdf=TRUE) {
     # current choices
     atlases <- list(
         "Mouse" = "1",
@@ -106,10 +107,10 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
         
     if (atlas_id == "1") {
         .plot_mouse_substructures(onto_str, atlas, altas_id, gene, struct_depth,
-                                  im_height, im_width)
+                                  im_height, im_width, save_pdf)
     } else if (atlas_id == "3") {
         .plot_devmouse_substructures(onto_str, atlas, atlas_id, gene, struct_depth,
-                                    im_height, im_width)
+                                    im_height, im_width, save_pdf)
     } else {
         stop("An Error Has Occured with Atlas ID's", call. = FALSE)
     }

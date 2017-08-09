@@ -51,7 +51,7 @@
 
 #-------------------------------PLOT FUNCTIONS------------------------------------------#
 .plot_devmouse_substructures <- function(onto_str, atlas, atlas_id, gene, struct_depth,
-                                        im_height, im_width) {
+                                        im_height, im_width, save_pdf) {
     
     ages <- c('E11.5','E13.5','E15.5','E18.5','P4','P14','P28')
 
@@ -69,10 +69,14 @@
     
     # create pdf; tryCatch to ensure proper resource closing
     tryCatch({
-        pdf(paste(gene, atlas, struct_depth, "brainRegionBarplot_ExpressionEnergies.pdf",
-                sep="_"),
-            height=im_height,width=im_width)
-        par(mfrow=c(8,1),mar=c(5,10,4,2))
+        mar <- c(1,1,1,1)
+        if (save_pdf) {
+            pdf(paste(gene, atlas, struct_depth, "brainRegionBarplot_ExpressionEnergies.pdf",
+                    sep="_"),
+                height=im_height,width=im_width)
+            mar <- c(5,10,4,2)
+        }
+        par(mfrow=c(8,1),mar=mar)
         
         # plot the structures
         for (age in ages) {
@@ -87,6 +91,8 @@
                             KruskalTest = FALSE)
         }
     }, finally = {
-        dev.off()
+        if (save_pdf) {
+            dev.off()
+        }
     })
 }
