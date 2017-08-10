@@ -242,10 +242,13 @@ nhp_cortex_expression2D_plot <- function(gene, colVec=c("white", "red"), save_pd
         }
         .plotMacaqueCortex(expr_value, NULL, layer, subregions, age, layerPositions, 
                            regionPositions, ageOffsets, paste(gene,label_id, sep=" - "), 
-                           quantileScale=c(0.1,0.95), colVec=colVec)},
-        finally = { if (save_pdf) { dev.off() }
+                           quantileScale=c(0.1,0.95), colVec=colVec)
+    }, finally = { 
+        if (save_pdf) {
+            dev.off()
+        }
     })
-    
+
     if (!loaded){
         detach("package:nhpdata", unload = TRUE)  
     }
@@ -313,7 +316,7 @@ nhp_cortex_expression2D_small_plot<- function(gene, colVec=c("white", "red"), sa
         legendPos  = c(8,-11.5,-8.5)
         if (save_pdf) {
             pdf(fn,width=7,height=7)
-        }
+        } 
         .plotMacaqueCortexSmall(expr_value, layer, age, layerPositionsS, agePositionsS,
                             paste(gene, label_id, sep=" - "), isLog2=TRUE,
                             combineFn=".meanNA", quantileScale=c(0.1,0.95),
@@ -321,8 +324,10 @@ nhp_cortex_expression2D_small_plot<- function(gene, colVec=c("white", "red"), sa
                             legendPos=legendPos, colVec=colVec)
         abline(v=c(0,6,10),lwd=2)
         abline(h=c(0,-8,-12),lwd=2)
-    },
-            finally={ if (save_pdf) {dev.off()}
+    }, finally = { 
+        if (save_pdf) {
+            dev.off()
+        }
     })
 
     if (!loaded){
