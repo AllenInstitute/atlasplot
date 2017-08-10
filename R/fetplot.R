@@ -135,15 +135,15 @@ fet_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
     # for each brain create the plot; tryCatch for safe resource allocation
     tryCatch({
         
-        # mar <- c(1,1,1,1)
         if (save_pdf) {
             pdf(paste(gene,"fetalHuman_2DPlotInNeocortex.pdf",sep="_"),height=10,width=20)
         }
-        par(mfrow=c(2,2))#, mar=mar)
+        par(mfrow=c(2,2))
         
         for (d in donor_framesFET) {
             brain <- get(d)
-            brain <- merge(brain, ontology[onto_c],
+            brain_c <- brain$gene == gene  # subsetting before merge gives speed boost
+            brain <- merge(brain[brain_c,], ontology[onto_c],
                           by.x="brain_structure", by.y="acronym")
             brain <- brain[order(brain$graph_order),]
             donorID <- as.character(brain$donorID[1])
@@ -152,7 +152,7 @@ fet_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
             title <- paste(gene," - BrainID", donorID, " - ", donor_to_age[donorID])
             
             # select the appropriate fields to plot and create plot regions
-            bool_select <- (gene==brain$gene & substr(brain$brain_structure,1,1) %in% lobes)
+            bool_select <- (substr(brain$brain_structure,1,1) %in% lobes)
             brain <- brain[bool_select,]
             lls <- .format_group(brain$brain_structure) # lls for lobe_layer_str
 
@@ -165,7 +165,7 @@ fet_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
             lls_keep <- !(lls[,3] == 'Z')
             brain <- brain[lls_keep,]
             lls <- lls[lls_keep,]
-
+            
             .plotExpressionMap2D(2^brain$value, factor(lls[,1], levels=c("f","p","t","o")),
                                  lls[,2], main=title, minIs0=TRUE, pch=22,
                                  sampleLabel=lls[,3], bgPar="lightgrey", 
