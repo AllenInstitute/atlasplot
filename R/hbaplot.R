@@ -49,7 +49,7 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
     }
     
     # save old par
-    opar <- par()
+    opar <- par(no.readonly = TRUE)
     
     # set a logical max y-lim for the gene we're looking at
     vlim <- sapply(donor_framesHBA, function(x){

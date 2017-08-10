@@ -46,7 +46,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     }
     
     # save old par
-    opar <- par()
+    opar <- par(no.readonly = TRUE)
 
     # get the correct data file and ensure that the user chooses a real option
     group <- "gene"

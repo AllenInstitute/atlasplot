@@ -60,7 +60,7 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     }
 
     # save old par
-    opar <- par()
+    opar <- par(no.readonly = TRUE)
 
     # check atlas is in the list; if not stop the execution
     if (atlas %in% names(atlases)) {

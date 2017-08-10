@@ -246,6 +246,8 @@ nhp_cortex_expression2D_plot <- function(gene, colVec=c("white", "red"), save_pd
     }, finally = { 
         if (save_pdf) {
             dev.off()
+        } else {
+            print("Recommended saving dimensions: 2200 x 1444")
         }
     })
 
