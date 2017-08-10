@@ -44,12 +44,12 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
         "Mouse" = "1",
         "DevMouse" = "3"
     )
-    
+
     graphs <- list(
         "Mouse" = "1",
         "DevMouse" = "17"
     )
-    
+
     # ensure an atlas is picked before executing code
     if (missing(atlas)) {
         msg <- "Please supply an atlas to query:\n"
@@ -58,7 +58,10 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
         }
         stop(msg, call. = FALSE)
     }
-    
+
+    # save old par
+    opar <- par()
+
     # check atlas is in the list; if not stop the execution
     if (atlas %in% names(atlases)) {
         atlas_id <- atlases[[atlas]]
@@ -66,7 +69,7 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     } else {
         stop("Not A Valid Atlas", call. = FALSE)
     }
-    
+
     # format data frame for the correct mouse call
     if (atlas_id == "1") {
         structure_unionize <- .download_adult_mouse(gene, atlas_id, graph_id, experiment)
@@ -75,8 +78,7 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     } else {
         stop("An Error Has Occured with Altas ID's", call. = FALSE)
     }
-    
-    ########################################################################
+
     # get experiment number for a gene; can be multiple experiments per gene
     if (atlas_id == "1") {
         ontology <- .fetch_ontology(graph_id)
@@ -91,7 +93,6 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
         stop(msg, call. = FALSE)
     }
 
-    
     # select important variables and merge to create a new frame
     ont_c <- c("id", "name", "acronym",
                "color_hex_triplet", "depth", "structure_id_path", 'graph_order')
@@ -100,11 +101,11 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
         structure_unionize, 
         by.x="id", by.y="structure_id"
     )
-    
+
     # exlude objects that are not at our structure depth
     include  <- onto_str$depth == struct_depth
     onto_str <- onto_str[include,]
-        
+
     if (atlas_id == "1") {
         .plot_mouse_substructures(onto_str, atlas, altas_id, gene, struct_depth,
                                   im_height, im_width, save_pdf)
@@ -114,4 +115,7 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     } else {
         stop("An Error Has Occured with Atlas ID's", call. = FALSE)
     }
+
+    # restore par settings
+    suppressWarnings(par(opar))
 }

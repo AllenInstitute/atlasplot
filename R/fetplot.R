@@ -48,6 +48,9 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
         stop(paste(gene,"does not appear to be in the Fetal Human Brain Atlas"))
     }
     
+    # save old par setting to reset after 
+    opar <- par() 
+
     # set a logical max y-lim for the gene we're looking at
     vlim <- sapply(donor_framesFET, function(x){
         brain <- get(x)
@@ -90,6 +93,8 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
         detach("package:fetdata", unload = TRUE)  
     }
     
+    # restore par settings
+    suppressWarnings(par(opar))
 }
 
 
@@ -127,6 +132,9 @@ fet_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
     if (!any(is.element(gene, genesFET))){
         stop(paste(gene,"does not appear to be in the Fetal Human Brain Atlas"))
     }
+    
+    # record old par
+    opar <- par()
     
     # major lobes of the brain; used in subsetting
     lobes <- c("f", "o", "p", "t")
@@ -181,6 +189,9 @@ fet_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
     if (!loaded){
         detach("package:fetdata", unload = TRUE)  
     }
+    
+    # restore par settings
+    suppressWarnings(par(opar))
 }
 
 
@@ -222,6 +233,9 @@ fet_brain_location_expression_plot <- function(gene) {
     if (!any(is.element(gene, genesFET))){
         stop(paste(gene,"does not appear to be in the Fetal Human Brain Atlas"))
     }
+    
+    # record old par
+    opar <- par()
 
     lobes <- c("f", "o", "p", "t")
     save_pdf <- TRUE  # incase this can be changed later
@@ -295,6 +309,9 @@ fet_brain_location_expression_plot <- function(gene) {
     if (!loaded){
         detach("package:fetdata", unload = TRUE)  
     }
+
+    # restore par settings
+    suppressWarnings(par(opar))
 }
 
 #------------------------------HELPER FUNCTIONS-----------------------------------------#

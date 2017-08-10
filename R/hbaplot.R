@@ -48,6 +48,9 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
         stop(paste(gene,"does not appear to be in the Human Brain Atlas"))
     }
     
+    # save old par
+    opar <- par()
+    
     # set a logical max y-lim for the gene we're looking at
     vlim <- sapply(donor_framesHBA, function(x){
         brain <- get(x)
@@ -89,4 +92,7 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
     if (!loaded){
         detach("package:hbadata", unload = TRUE)  
     }
+    
+    # restore par settings
+    suppressWarnings(par(opar))
 }

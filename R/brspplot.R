@@ -44,6 +44,9 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
         loaded <- FALSE
         library("brspdata") # this is cheating
     }
+    
+    # save old par
+    opar <- par()
 
     # get the correct data file and ensure that the user chooses a real option
     group <- "gene"
@@ -121,6 +124,9 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     if (!loaded){
         detach("package:brspdata", unload = TRUE)
     }
+    
+    # restore par settings
+    suppressWarnings(par(opar))
 }
 
 

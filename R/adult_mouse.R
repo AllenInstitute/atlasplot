@@ -148,7 +148,7 @@
             height=im_height,width=im_width)
             mar <- c(5,10,4,2)
         }
-        
+        # save old par settings
         par(mfrow=c(2,1),mar=mar)
         
         # plot the structures
