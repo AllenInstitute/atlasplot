@@ -24,7 +24,7 @@
 * .json_cache 
 * .cache_manager 
 * .cache_size 
-* .flush_cache
+* .flush_cache 
 * .remove_file 
 
 #### atlasplot/R/dev_mouse.R
@@ -39,7 +39,6 @@
 * fet_subregions_plot 
 * fet_cortex_expression2D_plot 
 * fet_brain_location_expression_plot 
-* .get_all_structs 
 * .format_group 
 * .construct_image 
 * .make_cmatrix 
@@ -54,14 +53,14 @@
 * .plotRectangle 
 * .numbers_to_colors 
 
-#### atlasplot/R/mouse_structure_plots.R
+#### atlasplot/R/mouseplot.R
 * mouse_subregions_plot 
 
 #### atlasplot/R/nhpplot.R
 * nhp_cortex_series_plot 
 * species_expression_series_plot 
 * nhp_cortex_expression2D_plot 
-* nhp_cortex_expression2D_small_plot
+* nhp_cortex_expression2D_small_plot 
 
 #### atlasplot/R/plotExpressionMap2D.R
 * .plotExpressionMap2D 
