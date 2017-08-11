@@ -37,8 +37,8 @@
 
 #### atlasplot/R/fetplot.R
 * fet_subregions_plot 
-* fet_expression2D_plot 
-* fetplot_brain_location_expression_plot 
+* fet_cortex_expression2D_plot 
+* fet_brain_location_expression_plot 
 * .get_all_structs 
 * .format_group 
 * .construct_image 
@@ -55,11 +55,11 @@
 * .numbers_to_colors 
 
 #### atlasplot/R/mouse_structure_plots.R
-* mouse_structureplot 
+* mouse_subregions_plot 
 
 #### atlasplot/R/nhpplot.R
 * nhp_cortex_series_plot 
-* species_expression_time_series
+* species_expression_series_plot 
 * nhp_cortex_expression2D_plot 
 * nhp_cortex_expression2D_small_plot
 

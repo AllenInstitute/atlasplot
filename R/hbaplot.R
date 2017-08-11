@@ -42,57 +42,59 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
         loaded <- FALSE
         library("hbadata")  # technically breaking the rules
     }
-    
+
     # make sure the gene they're asking for is in the HBA
     if (!any(is.element(gene, genesHBA))){
-        stop(paste(gene,"does not appear to be in the Human Brain Atlas"))
+        stop(paste(gene, "does not appear to be in the Human Brain Atlas"))
     }
-    
+
     # save old par
     opar <- par(no.readonly = TRUE)
-    
+
     # set a logical max y-lim for the gene we're looking at
     vlim <- sapply(donor_framesHBA, function(x){
         brain <- get(x)
         bool_select <- (gene == brain$gene)
         as.numeric(quantile(brain$value[bool_select], 0.995))
         })
-    
-    # set ylim and create pdf for plotting    
-    ylim <- c(0,2^max(vlim))
-    
+
+    # set ylim and create pdf for plotting
+    ylim <- c(0, 2 ^ max(vlim))
+
     # tryCatch block to ensure the pdf is closed for unexpected errors
     tryCatch({
-        
-        mar <- c(1,1,1,1)
+
+        mar <- c(1, 1, 1, 1)
         if (save_pdf) {
-            pdf(paste(gene, "HBA_subregionsPlot.pdf", sep="_"), height=20, width=32)
-            mar <- c(5,10,4,2)
+            pdf(paste(gene, "HBA_subregionsPlot.pdf", sep = "_"),
+                height = 20, width = 32)
+            mar <- c(5, 10, 4, 2)
         }
-        
-        par(mfrow=c(6,1), mar=mar)
-    
+
+        par(mfrow = c(6, 1), mar = mar)
+
         # iterate through the brains and plot the result for each of them
         i <- 1
         for (d in donor_framesHBA) {
             brain <- get(d)
             bool_select <- (gene == brain$gene)
-            .verboseBarplot2(2^brain$value[bool_select],
-                             factor(brain$brain_structure[bool_select],levels=subregionsHBA),
-                             main=paste(gene,"- Brain:",i),las=2,
-                             xlab="",ylab="",ylim=ylim, color=colsHBA)
+            .verboseBarplot2(2 ^ brain$value[bool_select],
+                            factor(brain$brain_structure[bool_select],
+                            levels = subregionsHBA),
+                            main = paste(gene, "- Brain:", i), las = 2,
+                            xlab = "", ylab = "", ylim = ylim, color = colsHBA)
             i <- i + 1
         }}, finally = {
             if (save_pdf) {
                 dev.off()
             }
         })
-    
+
     # unload hbadata to keep it from affecting global environment
     if (!loaded){
-        detach("package:hbadata", unload = TRUE)  
+        detach("package:hbadata", unload = TRUE)
     }
-    
+
     # restore par settings
     suppressWarnings(par(opar))
 }

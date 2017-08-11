@@ -18,17 +18,17 @@
 .safe_api_call0 <- function(URL) {
      # Call API with less boiler plate and ensure error handling
      tryCatch( {
-         URL <- paste(URL, "&num_rows=all", sep="")
+         URL <- paste(URL, "&num_rows=all", sep = "")
          result <- jsonlite::fromJSON(URL)
      }, error = function(e) {
          msg <- paste("API URL not available or changed\nJSON error:", e)
-         stop(msg, call.=FALSE )
+         stop(msg, call. = FALSE )
      })
-     
+
      if (!result$success) {
          return(FALSE)
-     } 
-     
+     }
+
      return(result)
  }
 
@@ -37,7 +37,7 @@
     # pastes the url for query and ensures that the api base is the same for all
     # searches (only needs to be changed once if the site changes)
     api_url <- "http://api.brain-map.org/api/v2/data"
-    URL <- paste(api_url,set,query, sep="/")
+    URL <- paste(api_url, set, query, sep = "/")
     URL
 }
 
@@ -45,12 +45,11 @@
 .fetch_ontology <- function(graph_id) {
     # smaller helper function to fetch ontology via graph ID
     set <- "Structure"
-    query <- paste("query.json?criteria=[graph_id$in", graph_id,"]", sep="")
+    query <- paste("query.json?criteria=[graph_id$in", graph_id, "]", sep = "")
     URL <- .construct_api_url(set, query)
     result <- .safe_api_call(URL)
     result$msg
 }
-
 
 #-----------------------------------LEGACY-------------------------------------#
 ## Helper functions for the allen institute API

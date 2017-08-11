@@ -28,7 +28,7 @@
 #' @examples
 #' # call on a given gene
 #' brsp_subregions_plot("SCARF1", "rna")
-brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors, 
+brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
                                  save_pdf=TRUE) {
 
     # ensure the user has brspdata installed; if not inform them of the need
@@ -44,7 +44,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
         loaded <- FALSE
         library("brspdata") # this is cheating
     }
-    
+
     # save old par
     opar <- par(no.readonly = TRUE)
 
@@ -52,9 +52,9 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     group <- "gene"
     techniques <- c("rna", "array")
     if (technique %in% techniques) {
-        data_id <- paste("datBRSP", group, technique, sep=".")
+        data_id <- paste("datBRSP", group, technique, sep = ".")
     } else {
-        message <- paste("Technique is not a valid selection\n","techniques:")
+        message <- paste("Technique is not a valid selection\n", "techniques:")
         for (t in techniques) {
             message <- paste(message, t)
         }
@@ -64,57 +64,59 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     data <- get(data_id)
 
     # ensure that the gene is a valid selection
-    if(!any(is.element(gene, data$gene))) {
+    if (!any(is.element(gene, data$gene))) {
         stop(paste(gene, "does not appear to be in", data_id))
     }
 
     # reduce data down to the necessary elements, easier for plotting later
     bool_select <- data$gene == gene
-    data <- data[bool_select,]
-    
+    data <- data[bool_select, ]
+
     # download ontology for color and plotting order
-    ont_c <- c("acronym", "color_hex_triplet", 'graph_order')
+    ont_c <- c("acronym", "color_hex_triplet", "graph_order")
     onto <-  .fetch_ontology("16")[ont_c]
     data <- merge(data, onto, by.x = "brain_structure", by.y = "acronym")
-    
+
     # set some plot universal features
-    ymax <- 2^quantile(data$value, 0.995)
+    ymax <- 2 ^ quantile(data$value, 0.995)
     title <- .create_title(gene, group, technique)
 
     # plot; tryCatch is to ensure proper closing of resources
     tryCatch({
-        mar <- c(1,1,1,1)
+        mar <- c(1, 1, 1, 1)
         if (save_pdf) {
-            pdf( title, height=25, width=75)
-            mar <- c(5,10,4,2)
+            pdf( title, height = 25, width = 75)
+            mar <- c(5, 10, 4, 2)
         }
-        par(mfrow=c(4,1), mar=mar)
-        
+        par(mfrow = c(4, 1), mar = mar)
+
         # create plot order and change how things are added
         p_ord <- order(data$graph_order)
-        data <- data[p_ord,]    
+        data <- data[p_ord, ]
         brain_age <- paste(data$brain_structure, data$age)
-        
+
         # create a color map according to the ontology
-        str_col <- paste("#", data$color_hex_triplet, sep="")
+        str_col <- paste("#", data$color_hex_triplet, sep = "")
         color_map <- .create_str_colormap(brain_age, str_col)
-        
+
         # plot organized by structure
-        .verboseBarplot(2^data$value, factor(brain_age, unique(brain_age)), main=gene,
-                        las=2,xlab="",ylab="Expression Level", ylim=c(0,ymax),
+        .verboseBarplot(2 ^ data$value, factor(brain_age, unique(brain_age)),
+                        main = gene, las = 2, xlab = "",
+                        ylab = "Expression Level", ylim = c(0, ymax),
                         color = color_map)
         plot.new()
 
         # assign sortable age for graphing; see .assign_value
         order_ages <- order(sapply(brain_age, .assign_value))
-        unq_ages <-unique(brain_age[order_ages])
+        unq_ages <- unique(brain_age[order_ages])
         color_map <- .create_age_colormap(unq_ages, cmp)
-  
+
         # plot organized by age
-        .verboseBarplot(2^data$value, factor(brain_age, unq_ages), main=gene,
-                    las=2,xlab="",ylab="Expression Level", 
-                    ylim=c(0,ymax), color = color_map)
-        }, finally = { 
+        .verboseBarplot(2 ^ data$value, factor(brain_age, unq_ages),
+                        main = gene, las = 2, xlab = "",
+                        ylab = "Expression Level", ylim = c(0, ymax),
+                        color = color_map)
+        }, finally = {
             if (save_pdf) {
                 dev.off()
             }
@@ -124,7 +126,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     if (!loaded){
         detach("package:brspdata", unload = TRUE)
     }
-    
+
     # restore par settings
     suppressWarnings(par(opar))
 }
@@ -139,8 +141,9 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     } else {
         type <- paste(group, "Microarray", sep = "")
     }
-    
-    return(paste(gene, "BrainSpan", type, "brainRegionaAndAgeBarplot.pdf", sep = "_"))
+
+    return(paste(gene, "BrainSpan", type, "brainRegionaAndAgeBarplot.pdf",
+                 sep = "_"))
 }
 
 
@@ -151,7 +154,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     for (i in 1:length(ages)) {
         col_list[ages[i]] <- cols[i]
     }
-    
+
     colors <- c()
     for (a in ages) {
         colors <- c(colors, col_list[[a]])
@@ -164,7 +167,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
 .create_str_colormap <- function(ages, colors) {
     # helper function to create color vector for ontology ordering
     brain_color <- unique(cbind(ages, colors))
-    brain_color[,2]
+    brain_color[, 2]
 }
 
 
@@ -175,10 +178,10 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
 
     # ensure is a string and remove the second part
     astring <- as.character(astring)
-    astring <- strsplit(astring, ' ')[[1]][[2]]
-    
+    astring <- strsplit(astring, " ")[[1]][[2]]
+
     # split on '_' to get the age code and the number of that unit
-    splt_str <- strsplit(astring, '_')[[1]]
+    splt_str <- strsplit(astring, "_")[[1]]
     age_value <- as.integer(splt_str[[1]])
     unit_code <- state_to_id[[splt_str[[2]]]]
     age_value + unit_code

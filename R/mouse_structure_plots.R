@@ -14,7 +14,7 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#' mouse_structureplot
+#' mouse_subreginos_plot
 #' 
 #' 
 #' Plot gene expression values for strucutures at a given ontology depth for
@@ -37,8 +37,9 @@
 #' 
 #' # call a given gene with a specific experiment
 #' mouse_structureplot("Shh", atlas="DevMouse", struct_depth = 4, im_width = 25)
-mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3, 
-                                im_width = NULL, im_height = NULL, save_pdf=TRUE) {
+mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
+                                  struct_depth = 3, im_width = NULL,
+                                  im_height = NULL, save_pdf=TRUE) {
     # current choices
     atlases <- list(
         "Mouse" = "1",
@@ -54,7 +55,7 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     if (missing(atlas)) {
         msg <- "Please supply an atlas to query:\n"
         for (n in names(atlases)) {
-            msg <- paste(msg,"\t* ", n, "\n", sep="")   
+            msg <- paste(msg, "\t* ", n, "\n", sep = "")
         }
         stop(msg, call. = FALSE)
     }
@@ -72,9 +73,11 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
 
     # format data frame for the correct mouse call
     if (atlas_id == "1") {
-        structure_unionize <- .download_adult_mouse(gene, atlas_id, graph_id, experiment)
+        structure_unionize <- .download_adult_mouse(gene, atlas_id, graph_id,
+                                                    experiment)
     } else if (atlas_id == "3") {
-        structure_unionize <- .download_dev_mouse(gene, atlas_id, graph_id, experiment)
+        structure_unionize <- .download_dev_mouse(gene, atlas_id, graph_id,
+                                                  experiment)
     } else {
         stop("An Error Has Occured with Altas ID's", call. = FALSE)
     }
@@ -89,29 +92,29 @@ mouse_structureplot <- function(gene, atlas, experiment=NULL, struct_depth = 3,
     # ensure struct_depth makes sense
     cond <- struct_depth > min(ontology$depth) & struct_depth <= max(ontology$depth)
     if (!cond) {
-        msg <- "Structure depth is too deep or too shallow; default of 3" 
+        msg <- "Structure depth is too deep or too shallow; default of 3"
         stop(msg, call. = FALSE)
     }
 
     # select important variables and merge to create a new frame
     ont_c <- c("id", "name", "acronym",
-               "color_hex_triplet", "depth", "structure_id_path", 'graph_order')
+               "color_hex_triplet", "depth", "structure_id_path", "graph_order")
     onto_str <- merge(
-        ontology[ont_c], 
-        structure_unionize, 
-        by.x="id", by.y="structure_id"
+        ontology[ont_c],
+        structure_unionize,
+        by.x = "id", by.y = "structure_id"
     )
 
     # exlude objects that are not at our structure depth
     include  <- onto_str$depth == struct_depth
-    onto_str <- onto_str[include,]
+    onto_str <- onto_str[include, ]
 
     if (atlas_id == "1") {
         .plot_mouse_substructures(onto_str, atlas, altas_id, gene, struct_depth,
                                   im_height, im_width, save_pdf)
     } else if (atlas_id == "3") {
-        .plot_devmouse_substructures(onto_str, atlas, atlas_id, gene, struct_depth,
-                                    im_height, im_width, save_pdf)
+        .plot_devmouse_substructures(onto_str, atlas, atlas_id, gene,
+                                    struct_depth, im_height, im_width, save_pdf)
     } else {
         stop("An Error Has Occured with Atlas ID's", call. = FALSE)
     }
