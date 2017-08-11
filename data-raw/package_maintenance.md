@@ -36,6 +36,12 @@ The basic workflow of `atlasplot` is as follows
 > devtools::document()
 ```
 
+5) Finally, run create_function_list.sh to update `function_list.md`. This file will be
+located in `data-raw`. To run, open a `bash` and go to the directory above `atlasplot`. Then run
+```
+$ bash create_function_list.sh atlasplot
+```
+
 This is the basic process of updating `atlasplot`. Additionally, I highly suggest commiting
 early and often. For a good resource on using `git` see [Pro Git](https://git-scm.com/book/en/v2).
 

@@ -76,7 +76,7 @@ mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
         structure_unionize <- .download_adult_mouse(gene, atlas_id, graph_id,
                                                     experiment)
     } else if (atlas_id == "3") {
-        warning("DevMouse data appears to be incorrectly queried or sorted. We are aware of this issue and working to fix it.")
+        warning("Different ages have slightly different ontology depths. Be aware of this while considering plots.")
         structure_unionize <- .download_dev_mouse(gene, atlas_id, graph_id,
                                                   experiment)
     } else {

@@ -26,13 +26,10 @@
 #--------------------------------API FUNCTIONS------------------------------------------#
 .fetch_dev_mouse_unionize <- function(gene, graph_id) {
     set <- "StructureUnionize"
-#    query <- paste("query.json?criteria=rma::criteria,section_data_set[delegate$eqfalse](genes[acronym$eq'",
-#                  gene, "'],specimen(donor(age[name$in'E11.5','E13.5','E15.5','E18.5','P4','P14','P28']))),structure[graph_id$eq17]&include=section_data_set(specimen(donor(age)))",
-#                  sep = "")
     query <- paste("query.json?criteria=section_data_set(genes[acronym$eq'",
                   gene, "']),structure[graph_id$in4,13,17]&include=section_data_set(specimen(donor(age)))",
                   sep = "")
-    
+
     URL <- .construct_api_url(set, query)
 
     result <- .safe_api_call(URL)
@@ -87,7 +84,6 @@
             i_age <- onto_str$ages == age
             onto_str_i <- onto_str[i_age, ]
             p_ord <- order(onto_str_i$graph_order)
-#            p_ord <- 1:nrow(onto_str_i)
             .verboseBarplot2(onto_str$expression_energy[p_ord],
                             factor(onto_str$name[p_ord],
                             unique(onto_str$name[p_ord])), main = paste(gene,
