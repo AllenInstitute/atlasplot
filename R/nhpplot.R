@@ -95,15 +95,16 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
                        panel.grid.minor = ggplot2::element_blank())
     )
 
-    if (save_pdf) {
-        ggplot2::ggsave(plot = p1, file = paste0(f.name, ".pdf"), width = 4,
-                        height = 12)
-    }
-
     if (!loaded){
         detach("package:nhpdata", unload = TRUE)
     }
-    p1
+
+    if (save_pdf) {
+        ggplot2::ggsave(plot = p1, file = paste0(f.name, ".pdf"), width = 4,
+                        height = 12)
+    } else {
+        p1   
+    }
 }
 
 
@@ -121,7 +122,10 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
-#' species_expression_time_series("EMX2", colormap = heat.colors)
+#' species_expression_series_plot("EMX2")
+#' 
+#' # call on new gene with a different color map
+#' species_expression_series_plot("DAD1", col_map = heat.colors))
 #'
 species_expression_series_plot <- function(Gene, col_map = rainbow,
                                            save_pdf = TRUE) {
@@ -169,15 +173,16 @@ species_expression_series_plot <- function(Gene, col_map = rainbow,
         ggplot2::scale_color_manual(values = pal1) +
         ggplot2::scale_fill_manual(values = pal1)
 
-    if (save_pdf) {
-        ggplot2::ggsave(g3, file = paste0(Gene, "_comparison_time_series.pdf"),
-                        width = 10, height = 10)
-    }
-
     if (!loaded){
         detach("package:nhpdata", unload = TRUE)
     }
-    g3
+    
+    if (save_pdf) {
+        ggplot2::ggsave(g3, file = paste0(Gene, "_comparison_time_series.pdf"),
+                        width = 10, height = 10)
+    } else {
+        g3        
+    }
 }
 
 

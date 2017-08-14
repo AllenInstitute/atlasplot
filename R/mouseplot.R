@@ -76,7 +76,7 @@ mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
         structure_unionize <- .download_adult_mouse(gene, atlas_id, graph_id,
                                                     experiment)
     } else if (atlas_id == "3") {
-        warning("Different ages have slightly different ontology depths. Be aware of this while considering plots.")
+        warning("Different ages have different ontology depths")
         structure_unionize <- .download_dev_mouse(gene, atlas_id, graph_id,
                                                   experiment)
     } else {
@@ -87,7 +87,7 @@ mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
     if (atlas_id == "1") {
         ontology <- .fetch_ontology(graph_id)
     } else if (atlas_id == "3") {
-        ontology <- .fetch_ontology("1,4,13,17")
+        ontology <- .fetch_ontology("17")
     }
 
     # ensure struct_depth makes sense

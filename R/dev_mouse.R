@@ -83,12 +83,21 @@
         for (age in ages) {
             i_age <- onto_str$ages == age
             onto_str_i <- onto_str[i_age, ]
+            
+            n_structs <- length(unique(onto_str_i$name))
+            if (n_structs <= 1) {
+                msg <- paste("Structure Depth", struct_depth, "not available for", age)
+                print(msg)
+                next
+            }
+                        
             p_ord <- order(onto_str_i$graph_order)
-            .verboseBarplot2(onto_str$expression_energy[p_ord],
-                            factor(onto_str$name[p_ord],
-                            unique(onto_str$name[p_ord])), main = paste(gene,
+            print(length(unique(onto_str_i$name)))
+            .verboseBarplot2(onto_str_i$expression_energy[p_ord],
+                            factor(onto_str_i$name[p_ord],
+                            unique(onto_str_i$name[p_ord])), main = paste(gene,
                             age, sep = " - "), color = paste("#",
-                            onto_str$color_hex_triplet, sep = ""), las = 2,
+                            onto_str_i$color_hex_triplet[p_ord], sep = ""), las = 2,
                             xlab = "", ylab = "Mean Expression Energy",
                             ylim = ylim, KruskalTest = FALSE)
         }
