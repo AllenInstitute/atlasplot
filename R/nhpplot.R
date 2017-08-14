@@ -144,23 +144,19 @@ species_expression_series_plot <- function(Gene, col_map = rainbow,
         loaded <- FALSE
         library("nhpdata")  # technically breaking the rules
     }
+    
+    if ( !(Gene %in% dev.expr2$gene) ) {
+        msg <- paste(Gene, "is not available for more than one species or has not analog in other species")
+        stop(msg, call. = FALSE)
+    }
 
     # subset to the appropriate gene
     dev.expr2.subset <- subset(dev.expr2, gene == Gene)
 
     # Remove redundant species from plots
-    dev.expr2.subset <- subset(dev.expr2.subset, ! (gene == "LGALS1" & species == "mouse") &
-                                 ! (gene == "EMX2" & species == "human_bc") &
-                                 ! (gene == "CNTN1" & species == "human_bc") &
-                                 ! (gene == "BMP3" & species == "human_bc") &
-                                 ! (gene == "CNTN2" & species == "human_bc"))
     dev.expr2.subset <- droplevels(dev.expr2.subset)
 
     # Reorder levels to change panel arrangement
-    dev.expr2.subset$gene <- factor(dev.expr2.subset$gene,
-                                    levels = c("EMX2", "BMP3", "LGALS1",
-                                             "CNTN1", "CNTN2", "LIN7A"))
-
     pal1 <- col_map(5)[c(1, 5, 2:4)]
 
     g3 <- ggplot2::ggplot(dev.expr2.subset, ggplot2::aes(x = escore, y = exprz,
