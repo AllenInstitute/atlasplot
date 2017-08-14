@@ -14,6 +14,7 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+#--------------------------------API FUNCTIONS------------------------------------------#
 .download_dev_mouse <- function(gene, atlas_id, graph_id, experiment) {
     if (!is.null(experiment)) {
         msg <- "Experiment IDs are not used to search the Developing Mouse Atlas and as such will be ignored"
@@ -23,7 +24,7 @@
     .fetch_dev_mouse_unionize(gene, graph_id)
 }
 
-#--------------------------------API FUNCTIONS------------------------------------------#
+
 .fetch_dev_mouse_unionize <- function(gene, graph_id) {
     set <- "StructureUnionize"
     query <- paste("query.json?criteria=section_data_set(genes[acronym$eq'",

@@ -24,7 +24,7 @@ do
     if [[  "${i#*.}" = "R" ]] || [[ "${i#*.}" = "r" ]]
     then
         echo "#### $r_pkg/$i" >> "$func_list"
-        funcs=$( grep "<- function" "$r_pkg/$i" | sed "s/<-.*$//g" | sed '/^#/d' | sed 's/^/* /g' )
+        funcs=$( grep "<-\s*function" "$r_pkg/$i" | sed "s/<-.*$//g" | sed '/^#/d' | sed 's/^/* /g' )
         for f in "$funcs"
         do
             echo "$f" >> "$func_list"
