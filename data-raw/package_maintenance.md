@@ -11,7 +11,7 @@ The package contains a few important components
 * `man` directory -- help documentation directory; maintained via `devtools::document()`
 * `atlasplot.Rproj`, `NAMESPACE` -- package text files maintained via `devtools::document()`
 * `LICENSE` -- license file; not to be changed without legal consultation
-* `README.md` -- dirctory README file; first thing people see
+* `README.md` -- project README file; first thing people see
 * `function_list.md` -- useful `.md` file that lists functions by location
 
 ## Workflow
@@ -29,6 +29,10 @@ The basic workflow of `atlasplot` is as follows
 > # example of testing new cool_plots function
 > devtools::load_all()
 > cool_plots()  # A REALLY COOL PLOT APPEARS
+> # after adding a new parameter `cool_factor`
+> devtools::load_all()
+> cool_plots(cool_factor = ">9000")
+
 ```
 
 4) Once satisfied with your new addition, add [ROxygen2](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) docstrings in front of user functions. Then document with devtools
@@ -36,8 +40,8 @@ The basic workflow of `atlasplot` is as follows
 > devtools::document()
 ```
 
-5) Finally, run create_function_list.sh to update `function_list.md`. This file will be
-located in `data-raw`. To run, open a `bash` and go to the directory above `atlasplot`. Then run
+5) Finally, run `create_function_list.sh` to update `function_list.md`. This file will be
+located in `data-raw`. To run, open a `bash` shell and go to the directory above `atlasplot`. Then run
 ```
 $ bash create_function_list.sh atlasplot
 ```
@@ -61,7 +65,7 @@ In general, user functions should be snake_case and package functions should beg
 
 Eg. 
 ```
-# func_function.R
+# file fun_function.R
 
 #' fun_function
 #' 
@@ -78,7 +82,7 @@ fun_function <- function(name) {
 
 ```
 `fun_function` will be exported and user accessible in the final package while
-`.my_hidden_function` will only be internal.
+`.my_hidden_function` will only be internal accessible.
 
 #### `sysdata.rda` for small internal objects
 `sysdata.rda` is located in the `R` directory and hold important local pieces of data.
