@@ -49,7 +49,7 @@
         exp_input <- as.integer(experiment)
         if (exp_input %in% experiments$id) {
             return(exp_input)
-        } else if !is.na(exp_input) & exp_input <= nrow(experiments) {
+        } else if (!is.na(exp_input) & exp_input <= nrow(experiments)) {
             print("Please use experiment id *not* row number")
         } else {
             print("NOT A VALID SELECTION")

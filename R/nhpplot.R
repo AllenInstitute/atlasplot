@@ -127,8 +127,8 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
 #' # call on new gene with a different color map
 #' species_expression_series_plot("DAD1", col_map = heat.colors))
 #'
-species_expression_series_plot <- function(Gene, col_map = rainbow,
-                                           save_pdf = TRUE) {
+species_expression_series_plot <- function(Gene, col_map = rainbow, save_pdf = TRUE,
+                                            im_height = 10, im_width = 10) {
      # ensure the user has nhpdata installed; inform them to download it if not
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -162,7 +162,7 @@ species_expression_series_plot <- function(Gene, col_map = rainbow,
 
     # Reorder levels to change panel arrangement
     pal1 <- col_map(5)[c(1, 5, 2:4)]
-
+    
     g3 <- ggplot2::ggplot(dev.expr2.subset, ggplot2::aes(x = escore, y = exprz,
                         shape = species, col = species, fill = species)) +
         ggplot2::geom_point(alpha = 0.5) +
@@ -179,7 +179,7 @@ species_expression_series_plot <- function(Gene, col_map = rainbow,
     
     if (save_pdf) {
         ggplot2::ggsave(g3, file = paste0(Gene, "_comparison_time_series.pdf"),
-                        width = 10, height = 10)
+                        width = im_height, height = im_width)
     } else {
         g3        
     }
@@ -200,8 +200,9 @@ species_expression_series_plot <- function(Gene, col_map = rainbow,
 #' # call on a given gene
 #' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-nhp_cortex_expression2D_plot <- function(gene, colVec=c("white", "red"),
-                                         save_pdf=TRUE) {
+nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_pdf=TRUE,
+                                        im_height = 9, im_width = 18, 
+                                        log_transform = FALSE) {
 
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -238,11 +239,15 @@ nhp_cortex_expression2D_plot <- function(gene, colVec=c("white", "red"),
     # create label name
     label_id <- strsplit(as.character(geneDat$id_string[[1]]), "_")[[1]][[3]]
 
+    if (!log_transform) {
+        expr_value <- log(expr_value, base = 2)
+    }
+    
     # tryCatch to ensure proper resource handling
     tryCatch({
         fn <- paste(gene, "_NHP_2Dexpression.pdf", sep = "")
         if (save_pdf) {
-            pdf(fn, width = 18, height = 9)
+            pdf(fn, width = im_width, height = im_height)
         }
         .plotMacaqueCortex(expr_value, NULL, layer, subregions, age,
                            layerPositions, regionPositions, ageOffsets,

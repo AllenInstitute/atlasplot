@@ -23,11 +23,15 @@
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
 #' @param save_pdf Save to disk or output to console
+#' @param im_height PDF image height
+#' @param im_width PDF image width
+#' @param log_transform Boolean for plotting of linear or log data
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_structureBarPlotAll.pdf`
 #' @examples
 #' # call on a given gene
 #' fet_subregions_plot("SHH")
-fet_subregions_plot <- function(gene, save_pdf=TRUE){
+fet_subregions_plot <- function(gene, save_pdf = TRUE, im_height = 10, im_width = 50,
+                                log_transform = FALSE){
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
@@ -61,7 +65,12 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
     })
 
     # set ylim and create pdf for plotting
-    ylim <- c(0, 2 ^ max(vlim))
+    
+    if (!log_transform) {
+        ylim <- c(0, 2 ^ max(vlim))
+    } else {
+        ylim <- c(0, max(vlim))
+    }
 
     # ensures the pdf is closed even after encountering an error
     tryCatch({
@@ -69,7 +78,7 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
         mar <- c(1, 1, 1, 1)
         if (save_pdf) {
             pdf(paste(gene, "fetalHuman_structureBarPlotAll.pdf", sep = "_"),
-                height = 10, width = 50)
+                height = im_height, width = im_width)
             mar <- c(5, 10, 4, 2)
         }
         par(mfrow = c(4, 1), mar = mar)
@@ -77,10 +86,16 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
         # iterate through the brains and plot the result for each of them
         i <- 1
         for (d in donor_framesFET) {
+            
             brain <- get(d)
+
+            if (!log_transform) {
+                brain$value <- 2 ^ brain$value
+            }
+            
             donorID <- as.character(brain$donorID[1])
             bool_select <- (gene == brain$gene)
-            .verboseBarplot2(2 ^ brain$value[bool_select],
+            .verboseBarplot2(brain$value[bool_select],
                             factor(brain$brain_structure[bool_select],
                             levels = subregionsFET),
                             main = paste(gene, "- Brain:", i, "_",
@@ -99,7 +114,7 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
     }
 
     # restore par settings
-    suppressWarnings(par(opar))
+    par(opar)
 }
 
 
@@ -111,13 +126,17 @@ fet_subregions_plot <- function(gene, save_pdf=TRUE){
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
 #' @param save_pdf Save to disk or output to console
-#' @param colbox Heatmap box color; default red
+#' @param colbox Heatmap box color; default red#' @param im_height PDF image height
+#' @param im_width PDF image width
+#' @param log_transform Boolean for plotting of linear or log data
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_2DPlotInNeocortex.pdf.pdf`
 #' @examples
 #' # call on a given gene
 #' fet_expression2D_plot("SHH")
 #'
-fet_cortex_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
+fet_cortex_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE,
+                                        im_height = 10, im_width = 20,
+                                        log_transform = FALSE) {
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
@@ -152,7 +171,7 @@ fet_cortex_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
 
         if (save_pdf) {
             pdf(paste(gene, "fetalHuman_2DPlotInNeocortex.pdf", sep = "_"),
-                height = 10, width = 20)
+                height = im_height, width = im_width)
         }
         par(mfrow = c(2, 2))
 
@@ -183,7 +202,11 @@ fet_cortex_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
             brain <- brain[lls_keep, ]
             lls <- lls[lls_keep, ]
 
-            .plotExpressionMap2D(2 ^ brain$value, factor(lls[, 1],
+            if (!log_transform) {
+                brain$value <- 2 ^ brain$value
+            }
+            
+            .plotExpressionMap2D(brain$value, factor(lls[, 1],
                                 levels = c("f", "p", "t", "o")), lls[, 2],
                                 main = title, minIs0 = TRUE, pch = 22,
                                 sampleLabel = lls[, 3], bgPar = "lightgrey",
@@ -203,7 +226,7 @@ fet_cortex_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE) {
     }
 
     # restore par settings
-    suppressWarnings(par(opar))
+    par(opar)
 }
 
 
@@ -328,7 +351,7 @@ fet_brain_location_expression_plot <- function(gene) {
     }
 
     # restore par settings
-    suppressWarnings(par(opar))
+    par(opar)
 }
 
 #------------------------------HELPER FUNCTIONS-----------------------------------------#

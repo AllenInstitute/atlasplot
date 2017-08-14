@@ -24,12 +24,16 @@
 #' @param gene Gene in the `brspdata` package
 #' @param technique Either `rna`, for RNAseq, or `array`, for MicroArray
 #' @param cmp R color-map function for ages; default heat.colors
+#' @param im_height PDF image height
+#' @param im_width PDF image width
+#' @param log_transform Boolean for plotting of linear or log data
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
 #' brsp_subregions_plot("SCARF1", "rna")
 brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
-                                 save_pdf=TRUE) {
+                                 save_pdf=TRUE, im_height = 25, im_width = 75,
+                                 log_transform = FALSE) {
 
     # ensure the user has brspdata installed; if not inform them of the need
     if (!requireNamespace("brspdata", quietly = TRUE)){
@@ -78,14 +82,20 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     data <- merge(data, onto, by.x = "brain_structure", by.y = "acronym")
 
     # set some plot universal features
-    ymax <- 2 ^ quantile(data$value, 0.995)
+    ymax <- quantile(data$value, 0.995)
     title <- .create_title(gene, group, technique)
+    
+    # data is log transformed so restore to linear scale if needed
+    if (!log_transform) {
+        data$value <- 2 ^ data$value
+        ymax <- 2 ^ ymax
+    }
 
     # plot; tryCatch is to ensure proper closing of resources
     tryCatch({
         mar <- c(1, 1, 1, 1)
         if (save_pdf) {
-            pdf( title, height = 25, width = 75)
+            pdf( title, height = im_height, width = im_width)
             mar <- c(5, 10, 4, 2)
         }
         par(mfrow = c(4, 1), mar = mar)
@@ -100,7 +110,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
         color_map <- .create_str_colormap(brain_age, str_col)
 
         # plot organized by structure
-        .verboseBarplot(2 ^ data$value, factor(brain_age, unique(brain_age)),
+        .verboseBarplot(data$value, factor(brain_age, unique(brain_age)),
                         main = gene, las = 2, xlab = "",
                         ylab = "Expression Level", ylim = c(0, ymax),
                         color = color_map)
@@ -112,7 +122,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
         color_map <- .create_age_colormap(unq_ages, cmp)
 
         # plot organized by age
-        .verboseBarplot(2 ^ data$value, factor(brain_age, unq_ages),
+        .verboseBarplot(data$value, factor(brain_age, unq_ages),
                         main = gene, las = 2, xlab = "",
                         ylab = "Expression Level", ylim = c(0, ymax),
                         color = color_map)
@@ -128,7 +138,7 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     }
 
     # restore par settings
-    suppressWarnings(par(opar))
+    par(opar)
 }
 
 

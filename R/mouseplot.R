@@ -39,7 +39,8 @@
 #' mouse_structureplot("Shh", atlas="DevMouse", struct_depth = 4, im_width = 25)
 mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
                                   struct_depth = 3, im_width = NULL,
-                                  im_height = NULL, save_pdf=TRUE) {
+                                  im_height = NULL, save_pdf=TRUE,
+                                  log_transform = FALSE) {
     # current choices
     atlases <- list(
         "Mouse" = "1",
@@ -109,6 +110,10 @@ mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
     # exlude objects that are not at our structure depth
     include  <- onto_str$depth == struct_depth
     onto_str <- onto_str[include, ]
+    
+    if (log_transform) {
+        onto_str$expression_energy <- log(onto_str$expression_energy, base = 2)
+    }
 
     if (atlas_id == "1") {
         .plot_mouse_substructures(onto_str, atlas, altas_id, gene, struct_depth,
@@ -121,5 +126,5 @@ mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
     }
 
     # restore par settings
-    suppressWarnings(par(opar))
+    par(opar)
 }

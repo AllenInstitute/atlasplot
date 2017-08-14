@@ -27,7 +27,8 @@
 #' @examples
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
-hba_subregions_plot <- function(gene, save_pdf=TRUE){
+hba_subregions_plot <- function(gene, save_pdf=TRUE, im_height = 20, im_width = 32,
+                               log_transform = FALSE){
 
     # ensure the user has hbadata installed; inform them to download it if not
     if (!requireNamespace("hbadata", quietly = TRUE)){
@@ -59,7 +60,11 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
         })
 
     # set ylim and create pdf for plotting
-    ylim <- c(0, 2 ^ max(vlim))
+    if (!log_transform) {
+        ylim <- c(0, 2 ^ max(vlim))
+    } else {
+        ylim <- c(0, max(vlim))        
+    }
 
     # tryCatch block to ensure the pdf is closed for unexpected errors
     tryCatch({
@@ -67,7 +72,7 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
         mar <- c(1, 1, 1, 1)
         if (save_pdf) {
             pdf(paste(gene, "HBA_subregionsPlot.pdf", sep = "_"),
-                height = 20, width = 32)
+                height = im_height, width = im_width)
             mar <- c(5, 10, 4, 2)
         }
 
@@ -77,8 +82,13 @@ hba_subregions_plot <- function(gene, save_pdf=TRUE){
         i <- 1
         for (d in donor_framesHBA) {
             brain <- get(d)
+            
+            if (!log_transform) {
+                brain$value <- 2 ^ brain$value
+            }
+            
             bool_select <- (gene == brain$gene)
-            .verboseBarplot2(2 ^ brain$value[bool_select],
+            .verboseBarplot2(brain$value[bool_select],
                             factor(brain$brain_structure[bool_select],
                             levels = subregionsHBA),
                             main = paste(gene, "- Brain:", i), las = 2,
