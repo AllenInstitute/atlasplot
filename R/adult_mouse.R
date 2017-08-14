@@ -39,14 +39,18 @@
 
     # loop until user has valid selection
     while (TRUE) {
-        experiment <- readline("Please pick one -> ")
+        experiment <- readline("Please an experiment id -> ")
 
         if (experiment == "quit") {
             stop("User quit", call. = FALSE)
         }
 
-        if (as.integer(experiment) %in% experiments$id) {
-            return(experiment)
+        # change sting to integer and check that it is valid
+        exp_input <- as.integer(experiment)
+        if (exp_input %in% experiments$id) {
+            return(exp_input)
+#        } else if  & !is.na(exp_input) {
+           
         } else {
             print("NOT A VALID SELECTION")
         }

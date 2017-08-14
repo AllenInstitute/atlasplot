@@ -92,7 +92,6 @@
             }
                         
             p_ord <- order(onto_str_i$graph_order)
-            print(length(unique(onto_str_i$name)))
             .verboseBarplot2(onto_str_i$expression_energy[p_ord],
                             factor(onto_str_i$name[p_ord],
                             unique(onto_str_i$name[p_ord])), main = paste(gene,
