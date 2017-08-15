@@ -4,9 +4,14 @@
 \alias{species_expression_series_plot}
 \title{species_expression_series_plot}
 \usage{
-species_expression_series_plot(Gene, col_map = rainbow, save_pdf = TRUE)
+species_expression_series_plot(Gene, col_map = rainbow, im_width = 10,
+  im_height = 10, save_pdf = TRUE)
 }
 \arguments{
+\item{im_width}{PDF image width}
+
+\item{im_height}{PDF image height}
+
 \item{save_pdf}{Save to disk or return to console}
 
 \item{gene}{Gene in the `nhpdata::dev.expr2` data set; character string}
@@ -23,6 +28,9 @@ nhpdata package (GITHUB GOES HERE)/
 }
 \examples{
 # call on a given gene
-species_expression_time_series("EMX2", colormap = heat.colors)
+species_expression_series_plot("EMX2")
+
+# call on new gene with a different color map
+species_expression_series_plot("DAD1", col_map = heat.colors))
 
 }

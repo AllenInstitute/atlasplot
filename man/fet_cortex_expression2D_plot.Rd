@@ -4,12 +4,19 @@
 \alias{fet_cortex_expression2D_plot}
 \title{fet_cortex_expression_2D_plot}
 \usage{
-fet_cortex_expression2D_plot(gene, colbox = "red", save_pdf = TRUE)
+fet_cortex_expression2D_plot(gene, colbox = "red", log_transform = FALSE,
+  im_height = 10, im_width = 20, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `fetdata::datFET` data set; character string}
 
-\item{colbox}{Heatmap box color; default red}
+\item{colbox}{Heatmap box color; default red#' @param im_height PDF image height}
+
+\item{log_transform}{Boolean for plotting of linear or log data}
+
+\item{im_height}{PDF image height}
+
+\item{im_width}{PDF image width}
 
 \item{save_pdf}{Save to disk or output to console}
 }

@@ -4,10 +4,15 @@
 \alias{nhp_cortex_series_plot}
 \title{nhp_cortex_series_plot}
 \usage{
-nhp_cortex_series_plot(gene, save_pdf = TRUE)
+nhp_cortex_series_plot(gene, log_transform = FALSE, im_height = 12,
+  im_width = 4, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `nhpdata::exprl2` data set; character string}
+
+\item{im_height}{PDF image height}
+
+\item{im_width}{PDF image width}
 
 \item{save_pdf}{Save to disk or return to console}
 }

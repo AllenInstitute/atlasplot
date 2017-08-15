@@ -22,16 +22,16 @@
 #' 
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
-#' @param save_pdf Save to disk or output to console
+#' @param log_transform Boolean for plotting of linear or log data
 #' @param im_height PDF image height
 #' @param im_width PDF image width
-#' @param log_transform Boolean for plotting of linear or log data
+#' @param save_pdf Save to disk or output to console
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_structureBarPlotAll.pdf`
 #' @examples
 #' # call on a given gene
 #' fet_subregions_plot("SHH")
-fet_subregions_plot <- function(gene, save_pdf = TRUE, im_height = 10, im_width = 50,
-                                log_transform = FALSE){
+fet_subregions_plot <- function(gene, log_transform = FALSE, im_height = 10,
+                                im_width = 50, save_pdf = TRUE){
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){
@@ -125,18 +125,19 @@ fet_subregions_plot <- function(gene, save_pdf = TRUE, im_height = 10, im_width 
 #' 
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
-#' @param save_pdf Save to disk or output to console
 #' @param colbox Heatmap box color; default red#' @param im_height PDF image height
-#' @param im_width PDF image width
 #' @param log_transform Boolean for plotting of linear or log data
+#' @param im_width PDF image width
+#' @param im_height PDF image height
+#' @param save_pdf Save to disk or output to console
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_2DPlotInNeocortex.pdf.pdf`
 #' @examples
 #' # call on a given gene
 #' fet_expression2D_plot("SHH")
 #'
-fet_cortex_expression2D_plot <- function(gene, colbox="red", save_pdf=TRUE,
+fet_cortex_expression2D_plot <- function(gene, colbox="red", log_transform = FALSE,
                                         im_height = 10, im_width = 20,
-                                        log_transform = FALSE) {
+                                        save_pdf = TRUE) {
 
     # ensure the user has fetdata installed; inform them to download it if not
     if (!requireNamespace("fetdata", quietly = TRUE)){

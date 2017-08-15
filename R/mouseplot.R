@@ -25,6 +25,7 @@
 #' @export
 #' @param gene Gene in the Allen Mouse or Developing Mouse atlas; character string
 #' @param atlas Atlas to plot the gene for; either "DevMouse" or "Mouse"
+#' @param log_transform Boolean for log vs linear data
 #' @param experiment Experiment ID string; Experiment ID for the adult mouse atlas. The devmouse uses all experiments, so the ID is ignored. If not ID is provided, the program will ask you to choose one from a list.
 #' @param struct_depth ontology structure depth; default of 3
 #' @param im_width Output image width; optional
@@ -37,10 +38,9 @@
 #' 
 #' # call a given gene with a specific experiment
 #' mouse_structureplot("Shh", atlas="DevMouse", struct_depth = 4, im_width = 25)
-mouse_subregions_plot <- function(gene, atlas, experiment=NULL,
+mouse_subregions_plot <- function(gene, atlas, log_transform = FALSE, experiment=NULL,
                                   struct_depth = 3, im_width = NULL,
-                                  im_height = NULL, save_pdf=TRUE,
-                                  log_transform = FALSE) {
+                                  im_height = NULL, save_pdf=TRUE) {
     # current choices
     atlases <- list(
         "Mouse" = "1",

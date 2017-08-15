@@ -4,13 +4,15 @@
 \alias{mouse_subregions_plot}
 \title{mouse_subreginos_plot}
 \usage{
-mouse_subregions_plot(gene, atlas, experiment = NULL, struct_depth = 3,
-  im_width = NULL, im_height = NULL, save_pdf = TRUE)
+mouse_subregions_plot(gene, atlas, log_transform = FALSE, experiment = NULL,
+  struct_depth = 3, im_width = NULL, im_height = NULL, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the Allen Mouse or Developing Mouse atlas; character string}
 
 \item{atlas}{Atlas to plot the gene for; either "DevMouse" or "Mouse"}
+
+\item{log_transform}{Boolean for log vs linear data}
 
 \item{experiment}{Experiment ID string; Experiment ID for the adult mouse atlas. The devmouse uses all experiments, so the ID is ignored. If not ID is provided, the program will ask you to choose one from a list.}
 

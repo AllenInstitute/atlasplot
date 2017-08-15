@@ -5,7 +5,7 @@
 \title{brsp_subregions_plot}
 \usage{
 brsp_subregions_plot(gene, technique = "array", cmp = heat.colors,
-  save_pdf = TRUE)
+  log_transform = FALSE, im_height = 25, im_width = 75, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `brspdata` package}
@@ -13,6 +13,14 @@ brsp_subregions_plot(gene, technique = "array", cmp = heat.colors,
 \item{technique}{Either `rna`, for RNAseq, or `array`, for MicroArray}
 
 \item{cmp}{R color-map function for ages; default heat.colors}
+
+\item{log_transform}{Boolean for plotting of linear or log data}
+
+\item{im_height}{PDF image height}
+
+\item{im_width}{PDF image width}
+
+\item{save_pdf}{Save PDF or output to console}
 }
 \value{
 Creates a new plot of the gene in the current working directory

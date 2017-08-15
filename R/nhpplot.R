@@ -21,13 +21,16 @@
 #' 
 #' @export
 #' @param gene Gene in the `nhpdata::exprl2` data set; character string
+#' @param im_height PDF image height
+#' @param im_width PDF image width
 #' @param save_pdf Save to disk or return to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
 #' nhp_cortex_series_plot("MKI67")
 #'
-nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
+nhp_cortex_series_plot <- function(gene, log_transform = FALSE, im_height = 12,
+                                   im_width = 4, save_pdf=TRUE){
 
     # ensure the user has nhpdata installed; inform them to download it if not
     if (!requireNamespace("nhpdata", quietly = TRUE)){
@@ -75,6 +78,10 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
     exprl2.subset <- droplevels(exprl2.subset)
 
     f.name <- paste(m.gene, m.ortho, m.id, m.probe, sep = "_")
+    
+    if (log_transform) {
+        exprl2.subset$expr <- log(exprl2.subset$expr, b = 2)
+    }
 
     suppressWarnings(
         p1 <- ggplot2::ggplot(data = exprl2.subset,
@@ -100,8 +107,8 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
     }
 
     if (save_pdf) {
-        ggplot2::ggsave(plot = p1, file = paste0(f.name, ".pdf"), width = 4,
-                        height = 12)
+        ggplot2::ggsave(plot = p1, file = paste0(f.name, ".pdf"), width = im_width,
+                        height = im_height)
     } else {
         p1   
     }
@@ -118,9 +125,9 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
 #' @export
 #' @param gene Gene in the `nhpdata::dev.expr2` data set; character string
 #' @param colormap Color pallete used to choose plot colors; default rainbow
-#' @param save_pdf Save to disk or return to console
 #' @param im_height PDF image height
 #' @param im_width PDF image width
+#' @param save_pdf Save to disk or return to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
@@ -129,8 +136,8 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
 #' # call on new gene with a different color map
 #' species_expression_series_plot("DAD1", col_map = heat.colors))
 #'
-species_expression_series_plot <- function(Gene, col_map = rainbow, save_pdf = TRUE,
-                                            im_height = 10, im_width = 10) {
+species_expression_series_plot <- function(Gene, col_map = rainbow, im_width = 10,
+                                            im_height = 10, save_pdf = TRUE) {
      # ensure the user has nhpdata installed; inform them to download it if not
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -195,16 +202,19 @@ species_expression_series_plot <- function(Gene, col_map = rainbow, save_pdf = T
 #' 
 #' @export
 #' @param gene Gene in the `nhpdata::datNHP` data set; character string
-#' @param colVec List of colors to create linear color map; c("white", "red") default
+#' @param col_vec List of colors to create linear color map; c("white", "red") default
+#' @param log_transform Boolean for plotting log vs linear
+#' @param im_height PDF image height
+#' @param im_width PDF image width
 #' @param save_pdf Save to disk or return to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
 #' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_pdf=TRUE,
-                                        im_height = 9, im_width = 18, 
-                                        log_transform = FALSE) {
+nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
+                                        log_transform = FALSE, im_height = 9,
+                                        im_width = 18, save_pdf = TRUE) {
 
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -232,6 +242,8 @@ nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_
     # log the expression and create a named vector
     if (log_transform) {
         expr_value <- log(geneDat$value, b = 2)    
+    } else {
+        expr_value <- geneDat$value
     }
     names(expr_value) <- geneDat$id_string
 
@@ -252,7 +264,11 @@ nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_
         .plotMacaqueCortex(expr_value, NULL, layer, subregions, age,
                            layerPositions, regionPositions, ageOffsets,
                            paste(gene, label_id, sep = " - "),
-                           quantileScale = c(0.1, 0.95), colVec = colVec)
+                           quantileScale = c(0.1, 0.95), colVec = col_vec)
+    
+    }, error = function(e) {
+        msg <- "Overflow error. Please plot this gene on log scale (log_transform = TRUE)"
+        stop(msg, call. = FALSE)
     }, finally = {
         if (save_pdf) {
             dev.off()
@@ -274,16 +290,19 @@ nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_
 #' 
 #' @export
 #' @param gene Gene in the `nhpdata::datNHP` data set; character string
-#' @param colVec List of colors to create linear color map; c("white", "red") default
+#' @param col_vec List of colors to create linear color map; c("white", "red") default
+#' @param log_transform Boolean to plot data log vs linear
+#' @param im_height PDF image height
+#' @param im_width PDF image width
 #' @param save_pdf Save to disk or return to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
 #' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-nhp_cortex_expression2D_small_plot <- function(gene, colVec = c("white", "red"), 
-                                               save_pdf = TRUE, im_height = 7,
-                                               im_width = 7, log_transform = FALSE) {
+nhp_cortex_expression2D_small_plot <- function(gene, col_vec = c("white", "red"), 
+                                                log_transform = FALSE, im_height = 7,
+                                                im_width = 7, save_pdf = TRUE) {
 
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -339,7 +358,7 @@ nhp_cortex_expression2D_small_plot <- function(gene, colVec = c("white", "red"),
                             quantileScale = c(0.1, 0.95),
                             linearOrLog = "linear", bgPar = "grey95",
                             displayLayers = FALSE, legendPos = legendPos,
-                            colVec = colVec)
+                            colVec = col_vec)
         abline(v = c(0, 6, 10), lwd = 2)
         abline(h = c(0, -8, -12), lwd = 2)
     }, finally = {

@@ -24,16 +24,17 @@
 #' @param gene Gene in the `brspdata` package
 #' @param technique Either `rna`, for RNAseq, or `array`, for MicroArray
 #' @param cmp R color-map function for ages; default heat.colors
+#' @param log_transform Boolean for plotting of linear or log data
 #' @param im_height PDF image height
 #' @param im_width PDF image width
-#' @param log_transform Boolean for plotting of linear or log data
+#' @param save_pdf Save PDF or output to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
 #' brsp_subregions_plot("SCARF1", "rna")
 brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
-                                 save_pdf=TRUE, im_height = 25, im_width = 75,
-                                 log_transform = FALSE) {
+                                log_transform = FALSE, im_height = 25, im_width = 75,
+                                save_pdf=TRUE) {
 
     # ensure the user has brspdata installed; if not inform them of the need
     if (!requireNamespace("brspdata", quietly = TRUE)){

@@ -4,10 +4,17 @@
 \alias{hba_subregions_plot}
 \title{hba_subregions_plot}
 \usage{
-hba_subregions_plot(gene, save_pdf = TRUE)
+hba_subregions_plot(gene, log_transform = FALSE, im_height = 20,
+  im_width = 32, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `hbadata::datHBA` data set; character string}
+
+\item{log_transform}{Boolean for plotting of linear or log data}
+
+\item{im_height}{PDF image height}
+
+\item{im_width}{PDF image width}
 
 \item{save_pdf}{Output pdf or plot object}
 }

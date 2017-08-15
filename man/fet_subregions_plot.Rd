@@ -4,10 +4,17 @@
 \alias{fet_subregions_plot}
 \title{fet_subregions_plot}
 \usage{
-fet_subregions_plot(gene, save_pdf = TRUE)
+fet_subregions_plot(gene, log_transform = FALSE, im_height = 10,
+  im_width = 50, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `fetdata::datFET` data set; character string}
+
+\item{log_transform}{Boolean for plotting of linear or log data}
+
+\item{im_height}{PDF image height}
+
+\item{im_width}{PDF image width}
 
 \item{save_pdf}{Save to disk or output to console}
 }

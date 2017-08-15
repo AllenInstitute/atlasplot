@@ -4,13 +4,19 @@
 \alias{nhp_cortex_expression2D_plot}
 \title{nhp_cortex_expression2D_plot}
 \usage{
-nhp_cortex_expression2D_plot(gene, colVec = c("white", "red"),
-  save_pdf = TRUE)
+nhp_cortex_expression2D_plot(gene, col_vec = c("white", "red"),
+  log_transform = FALSE, im_height = 9, im_width = 18, save_pdf = TRUE)
 }
 \arguments{
 \item{gene}{Gene in the `nhpdata::datNHP` data set; character string}
 
-\item{colVec}{List of colors to create linear color map; c("white", "red") default}
+\item{col_vec}{List of colors to create linear color map; c("white", "red") default}
+
+\item{log_transform}{Boolean for plotting log vs linear}
+
+\item{im_height}{PDF image height}
+
+\item{im_width}{PDF image width}
 
 \item{save_pdf}{Save to disk or return to console}
 }

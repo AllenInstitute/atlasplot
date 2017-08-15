@@ -22,13 +22,16 @@
 #' 
 #' @export
 #' @param gene Gene in the `hbadata::datHBA` data set; character string
+#' @param log_transform Boolean for plotting of linear or log data
+#' @param im_height PDF image height
+#' @param im_width PDF image width
 #' @param save_pdf Output pdf or plot object
 #' @return Creates a new plot of the gene in the current working directory; label as `GENE_HBA_subregionsPlot.pdf`
 #' @examples
 #' # call on a given gene
 #' hba_subregions_plot("FOXP2")
-hba_subregions_plot <- function(gene, save_pdf=TRUE, im_height = 20, im_width = 32,
-                               log_transform = FALSE){
+hba_subregions_plot <- function(gene, log_transform = FALSE, im_height = 20,
+                                im_width = 32, save_pdf=TRUE){
 
     # ensure the user has hbadata installed; inform them to download it if not
     if (!requireNamespace("hbadata", quietly = TRUE)){
