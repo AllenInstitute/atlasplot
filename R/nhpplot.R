@@ -119,6 +119,8 @@ nhp_cortex_series_plot <- function(gene, save_pdf=TRUE){
 #' @param gene Gene in the `nhpdata::dev.expr2` data set; character string
 #' @param colormap Color pallete used to choose plot colors; default rainbow
 #' @param save_pdf Save to disk or return to console
+#' @param im_height PDF image height
+#' @param im_width PDF image width
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
@@ -228,7 +230,9 @@ nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_
     geneDat <- datNHP[datNHP$gene == gene, ]
 
     # log the expression and create a named vector
-    expr_value <- log(geneDat$value, b = 2)
+    if (log_transform) {
+        expr_value <- log(geneDat$value, b = 2)    
+    }
     names(expr_value) <- geneDat$id_string
 
     # convert layer, subregions, and age to character
@@ -238,10 +242,6 @@ nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_
 
     # create label name
     label_id <- strsplit(as.character(geneDat$id_string[[1]]), "_")[[1]][[3]]
-
-    if (!log_transform) {
-        expr_value <- log(expr_value, base = 2)
-    }
     
     # tryCatch to ensure proper resource handling
     tryCatch({
@@ -281,8 +281,9 @@ nhp_cortex_expression2D_plot <- function(gene, colVec = c("white", "red"), save_
 #' # call on a given gene
 #' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-nhp_cortex_expression2D_small_plot <- function(gene, colVec=c("white", "red"),
-                                              save_pdf=TRUE) {
+nhp_cortex_expression2D_small_plot <- function(gene, colVec = c("white", "red"), 
+                                               save_pdf = TRUE, im_height = 7,
+                                               im_width = 7, log_transform = FALSE) {
 
     if (!requireNamespace("nhpdata", quietly = TRUE)){
         stop("nhpdata needed for this function to work. Please install it.",
@@ -308,7 +309,9 @@ nhp_cortex_expression2D_small_plot <- function(gene, colVec=c("white", "red"),
     geneDat <- datNHP[datNHP$gene == gene & datNHP$subregion == "V1", ]
 
     # isolate the expression value and create a named vector
-    expr_value <- log(geneDat$value, b = 2)
+    if (log_transform) {
+        expr_value <- log(geneDat$value, b = 2)
+    }
     names(expr_value) <- geneDat$id_string
 
     # convert layer, subregions, and age to character
@@ -328,7 +331,7 @@ nhp_cortex_expression2D_small_plot <- function(gene, colVec=c("white", "red"),
         fn <- paste(gene, "_NHP_small_expression2D_cortex.pdf", sep = "")
         legendPos  <- c(8, -11.5, -8.5)
         if (save_pdf) {
-            pdf(fn, width = 7, height = 7)
+            pdf(fn, width = im_width, height = im_height)
         }
         .plotMacaqueCortexSmall(expr_value, layer, age, layerPositionsS,
                             agePositionsS, paste(gene, label_id, sep = " - "),
