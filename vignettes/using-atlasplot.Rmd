@@ -1,0 +1,21 @@
+---
+title: "Using atlasplot"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using atlasplot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(atlasplot)
+```
+
+# TEST

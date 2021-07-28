@@ -5,8 +5,17 @@ Authors@R: c(person("Charles", "Edelson", email = "Charlese@alleninstitute.org",
 Description: This package makes plotting data from the Allen institutes brain atlas project simple for anyone. It works with an number of available data packages and creates publication quality graphics.
 Depends: R (>= 3.4.0)
 Imports: jsonlite, digest
-Suggests: hbadata, fetdata, nhpdata, brspdata, ggplot2, pixmap
+Suggests: 
+    hbadata,
+    fetdata,
+    nhpdata,
+    brspdata,
+    ggplot2,
+    pixmap,
+    knitr,
+    rmarkdown
 License: GPL2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr
