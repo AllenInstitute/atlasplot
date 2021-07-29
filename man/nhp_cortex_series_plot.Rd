@@ -4,8 +4,13 @@
 \alias{nhp_cortex_series_plot}
 \title{nhp_cortex_series_plot}
 \usage{
-nhp_cortex_series_plot(gene, log_transform = FALSE, im_height = 12,
-  im_width = 4, save_pdf = TRUE)
+nhp_cortex_series_plot(
+  gene,
+  log_transform = FALSE,
+  im_height = 12,
+  im_width = 4,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{gene}{Gene in the `nhpdata::exprl2` data set; character string}

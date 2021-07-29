@@ -4,8 +4,14 @@
 \alias{nhp_cortex_expression2D_plot}
 \title{nhp_cortex_expression2D_plot}
 \usage{
-nhp_cortex_expression2D_plot(gene, col_vec = c("white", "red"),
-  log_transform = FALSE, im_height = 9, im_width = 18, save_pdf = TRUE)
+nhp_cortex_expression2D_plot(
+  gene,
+  col_vec = c("white", "red"),
+  log_transform = FALSE,
+  im_height = 9,
+  im_width = 18,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{gene}{Gene in the `nhpdata::datNHP` data set; character string}

@@ -4,8 +4,16 @@
 \alias{mouse_subregions_plot}
 \title{mouse_subreginos_plot}
 \usage{
-mouse_subregions_plot(gene, atlas, log_transform = FALSE, experiment = NULL,
-  struct_depth = 3, im_width = NULL, im_height = NULL, save_pdf = TRUE)
+mouse_subregions_plot(
+  gene,
+  atlas,
+  log_transform = FALSE,
+  experiment = NULL,
+  struct_depth = 3,
+  im_width = NULL,
+  im_height = NULL,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{gene}{Gene in the Allen Mouse or Developing Mouse atlas; character string}

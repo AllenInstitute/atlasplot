@@ -15,11 +15,11 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #' fet_subregions_plot
-#' 
+#'
 #' Plot gene expression values for each structure in each donor for the fetal human brain atlas. This function
 #' requires the fetdata package (GITHUB GOES HERE), and is a thin wrapper
 #' around a modified version of WGCNA's verboseBarplot
-#' 
+#'
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
 #' @param log_transform Boolean for plotting of linear or log data
@@ -65,7 +65,7 @@ fet_subregions_plot <- function(gene, log_transform = FALSE, im_height = 10,
     })
 
     # set ylim and create pdf for plotting
-    
+
     if (!log_transform) {
         ylim <- c(0, 2 ^ max(vlim))
     } else {
@@ -86,13 +86,13 @@ fet_subregions_plot <- function(gene, log_transform = FALSE, im_height = 10,
         # iterate through the brains and plot the result for each of them
         i <- 1
         for (d in donor_framesFET) {
-            
+
             brain <- get(d)
 
             if (!log_transform) {
                 brain$value <- 2 ^ brain$value
             }
-            
+
             donorID <- as.character(brain$donorID[1])
             bool_select <- (gene == brain$gene)
             .verboseBarplot2(brain$value[bool_select],
@@ -122,10 +122,11 @@ fet_subregions_plot <- function(gene, log_transform = FALSE, im_height = 10,
 #'
 #' Plot a 2D heatmap for cortex layers and structures in each donor in the fetal human brain atlas. This function
 #' requires the fetdata package, available at (GITHUB GOES HERE).
-#' 
+#'
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
-#' @param colbox Heatmap box color; default red#' @param im_height PDF image height
+#' @param colbox Heatmap box color; default red
+#' @param im_height PDF image height
 #' @param log_transform Boolean for plotting of linear or log data
 #' @param im_width PDF image width
 #' @param im_height PDF image height
@@ -206,7 +207,7 @@ fet_cortex_expression2D_plot <- function(gene, colbox="red", log_transform = FAL
             if (!log_transform) {
                 brain$value <- 2 ^ brain$value
             }
-            
+
             .plotExpressionMap2D(brain$value, factor(lls[, 1],
                                 levels = c("f", "p", "t", "o")), lls[, 2],
                                 main = title, minIs0 = TRUE, pch = 22,

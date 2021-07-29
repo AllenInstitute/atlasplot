@@ -4,8 +4,13 @@
 \alias{hba_subregions_plot}
 \title{hba_subregions_plot}
 \usage{
-hba_subregions_plot(gene, log_transform = FALSE, im_height = 20,
-  im_width = 32, save_pdf = TRUE)
+hba_subregions_plot(
+  gene,
+  log_transform = FALSE,
+  im_height = 20,
+  im_width = 32,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{gene}{Gene in the `hbadata::datHBA` data set; character string}

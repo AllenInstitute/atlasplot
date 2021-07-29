@@ -4,8 +4,13 @@
 \alias{fet_subregions_plot}
 \title{fet_subregions_plot}
 \usage{
-fet_subregions_plot(gene, log_transform = FALSE, im_height = 10,
-  im_width = 50, save_pdf = TRUE)
+fet_subregions_plot(
+  gene,
+  log_transform = FALSE,
+  im_height = 10,
+  im_width = 50,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{gene}{Gene in the `fetdata::datFET` data set; character string}

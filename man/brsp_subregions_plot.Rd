@@ -4,8 +4,15 @@
 \alias{brsp_subregions_plot}
 \title{brsp_subregions_plot}
 \usage{
-brsp_subregions_plot(gene, technique = "array", cmp = heat.colors,
-  log_transform = FALSE, im_height = 25, im_width = 75, save_pdf = TRUE)
+brsp_subregions_plot(
+  gene,
+  technique = "array",
+  cmp = heat.colors,
+  log_transform = FALSE,
+  im_height = 25,
+  im_width = 75,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{gene}{Gene in the `brspdata` package}

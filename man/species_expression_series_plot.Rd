@@ -4,8 +4,13 @@
 \alias{species_expression_series_plot}
 \title{species_expression_series_plot}
 \usage{
-species_expression_series_plot(Gene, col_map = rainbow, im_width = 10,
-  im_height = 10, save_pdf = TRUE)
+species_expression_series_plot(
+  Gene,
+  col_map = rainbow,
+  im_width = 10,
+  im_height = 10,
+  save_pdf = TRUE
+)
 }
 \arguments{
 \item{im_width}{PDF image width}

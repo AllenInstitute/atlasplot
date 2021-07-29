@@ -14,8 +14,75 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+# Overview
+  
+This package aims to simplify the process of producing graphics for the expression data available at the [Allen Brain Map](https://portal.brain-map.org/). Specifically, it provides functions for plotting gene expression from six atlases:
+  
+1. [Allen Human Brain Atlas](https://human.brain-map.org/) - `atlasplot` generates bar plots of gene expression for each brain structure, as shown in [Hawrylycz, et al 2012](https://www.nature.com/articles/nature11405) and [Hawrylycz, et al 2015](https://www.nature.com/articles/nn.4171). Data is stored in the companion R package [`hbadata`](https://github.com/AllenInstitute/hbadata).  
+2. BrainSpan: [Prenatal LMD microarray](https://www.brainspan.org/lcm/search/index.html) - `atlasplot` generates several plots showing gene expression in prenatal (15-21 PCW) human brain, as shown in [Miller et al 2014](https://www.nature.com/articles/nature13185).  Data is stored in [`fetdata`](https://github.com/AllenInstitute/fetdata).  
+3. BrainSpan: [Developmental Transcriptome](https://www.brainspan.org/rnaseq/search/index.html) - `atlasplot` generates bar plots of gene expression for each brain structure across donors (prenatal through young adult).  Data is stored in [`brspdata`](https://github.com/AllenInstitute/brspdata).  
+4. [NIH Blueprint NHP Atlas](https://www.blueprintnhpatlas.org/) -`atlasplot` generates several plots showing gene expression in non-human primate brain (spanning multiple brain regions and pre- and post-natal time points), as shown in [Bakken et al 2016](https://www.nature.com/articles/nature18637).  Data is stored in [`nhpdata`](https://github.com/AllenInstitute/nhpdata).  
+5. [Allen Mouse Brain Atlas](https://mouse.brain-map.org/) - `atlasplot` generates bar plots of gene expression in the adult mouse brain by querying the Allen Institute API.  
+6. [Allen Developing Mouse Brain Atlas](https://developingmouse.brain-map.org/) - `atlasplot` generates bar plots of gene expression in the developing mouse brain by querying the Allen Institute API.  
+  
+  
+# Setup
+  
+First, install `atlasplot` and the associated data packages, if needed.  
+  
+```{r install packages, eval=FALSE}
+# Install devtools package
+install.package("devtools")
+
+# Install atlasplot (with this vignette)
+devtools::install_github("AllenInstitute/atlasplot", build_vignettes = TRUE)
+
+# Install data packages (note, these are big files!)
+devtools::install_github("AllenInstitute/hbadata")
+devtools::install_github("AllenInstitute/fetdata")
+devtools::install_github("AllenInstitute/brspdata")
+devtools::install_github("AllenInstitute/nhpdata")
+```
+
+  
+Next, load `atlasplot` library.  The dependencies should be loaded automatically.  
+  
 ```{r setup}
 library(atlasplot)
 ```
+  
+  
+Finally, change your working directory, if needed.  By default most functions save plots as pdf files in your working directory (which ensures they retain the optimal height and width), but can be directed to the standard output if desired.  
 
-# TEST
+
+# Generate some plots
+  
+The remainder of this vignette shows you how to generate plots for each of the six atlases described above, using some intersting genes as examples.  This R library uses caching, which means that functions may run extremely slowly the first time you call them, but should run relatively more quickly in subsequent function calls.  
+  
+  
+### Allen Human Brain Atlas
+  
+The Allen Human Brain Atlas includes a study that measures gene expression on several hundred brain locations across 6 donors using bulk and microdissected tissue.  The function `hba_subregions_plot` generates bar plots of gene expression for each brain structure in adult human brain.  This can be used to visualize gene expression across the brain.  For this example, let's look at *PROX1*, which is one of the best markers for hippocampus dentate gyrus (DG) granule cells in mouse.  
+  
+```{r}
+hba_subregions_plot("PROX1")
+```
+  
+This code should put a file called "PROX1_HBA_subregionsPlot.pdf" in your working directory.  In this file each plot represents gene expression in a single brain (6 total), and each bar within a plot represents the set of microarray samples collected from the brain region listed below the bar.  Brain regions correspond to the abbreviations from the [Human Brain Reference Atlas](http://atlas.brain-map.org/atlas?atlas=265297125&structure=12891#atlas=265297125&structure=12891&resolution=125.97&x=35456.87181122449&y=48161.08896683674&zoom=-7&plate=112360771).  As expected, PROX1 has higher expression in DG than in other hippocampus brain regions (adjacent red bars), along with some thalamic structures (orange bars a bit to the right).  
+  
+  
+### BrainSpan Atlas of the Developing Human Brain
+  
+This library generates plots for two separate studies within the BrainSpan project.  The first is the Prenatal LMD microarray, which is a study similar in design to (and using the same microarray as) the Allen Human Brain Atlas.  It looks at a couple hundred brain structures across four brains in prenatal (15-21 postconceptual weeks, or PCW) human.  The second is the Developmental Transcriptome study, which uses RNA-seq and exon arrays to study 16 brain regions across prenatal and postnatal development (through young adulthood).
+
+BrainSpan: [Prenatal LMD microarray](https://www.brainspan.org/lcm/search/index.html) - `atlasplot` generates several plots showing gene expression in prenatal (15-21 PCW) human brain
+  
+  
+  
+  
+  
+  
+BrainSpan: [Developmental Transcriptome](https://www.brainspan.org/rnaseq/search/index.html) - `atlasplot` generates bar plots of gene expression for each brain structure across donors (prenatal through young adult).  Data is stored in [`brspdata`](https://github.com/AllenInstitute/brspdata).    
+  
+  
