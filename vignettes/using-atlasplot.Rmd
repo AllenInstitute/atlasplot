@@ -65,7 +65,7 @@ The remainder of this vignette shows you how to generate plots for each of the s
   
 The Allen Human Brain Atlas includes a study that measures gene expression on several hundred brain locations across 6 donors using bulk and microdissected tissue.  The function `hba_subregions_plot` generates bar plots of gene expression for each brain structure in adult human brain.  This can be used to visualize gene expression across the brain.  For this example, let's look at *PROX1*, which is one of the best markers for hippocampus dentate gyrus (DG) granule cells in mouse.  
   
-```{r}
+```{r HBA, eval=FALSE}
 hba_subregions_plot("PROX1")
 ```
   
@@ -75,14 +75,123 @@ This code should put a file called "PROX1_HBA_subregionsPlot.pdf" in your workin
 ### BrainSpan Atlas of the Developing Human Brain
   
 This library generates plots for two separate studies within the BrainSpan project.  The first is the Prenatal LMD microarray, which is a study similar in design to (and using the same microarray as) the Allen Human Brain Atlas.  It looks at a couple hundred brain structures across four brains in prenatal (15-21 postconceptual weeks, or PCW) human.  The second is the Developmental Transcriptome study, which uses RNA-seq and exon arrays to study 16 brain regions across prenatal and postnatal development (through young adulthood).
+  
+  
+#### Prenatal LMD microarray
+  
+In this study, let's focus on *FOXP2*, which is a transcription factor implicated in the specialization of language areas, and which is found in deep layer neurons in adult cortex.  Using `fet_brain_location_expression_plot` and `fet_cortex_expression2D_plot`, we can reproduce a version of the figure shown in Extended Data Figure 10 from Miller et al 2014.  
+  
+```{r prenatal 1, eval=FALSE}
+fet_cortex_expression2D_plot("FOXP2")
+fet_brain_location_expression_plot("FOXP2")
+```
+  
+"FOXP2_fetalHuman_2DPlotInNeocortex.pdf" shows a two dimensional heatmap of expression, one per brain, where the rows corresponds to prenatal cortical layers and the columns correspond to brain structures.  From this we can see that FOXP2 shows differences across layer and region, with high expression in progenitor cell layers (SZ/VZ) in frontal cortex, and in deep cortical layers (CPi/SP) in the other three cortical lobes.  The second plot ("FOXP2_fetalHuman_BrainLocationExpressionPlotsForEachLayer.pdf") shows the same information in a different way, with each row of plots corresponding to cortical layers and each column corresponding to different brains.  Within a plot the position of the dots correspond to the centroid of the brain region shown in the context of an image of the brain, and the color and size of the dots correspond to expression in that region.  **Note: we are aware of an issue that in some versions of R the background image is offset.**  
+  
+There is also a function (`fet_subregions_plot`) which can plot barplots in the same format as for the adult human.  Let's see whether *PROX1* is expressed in DG and thalamus in prenatal cortex.  
+  
+```{r prenatal 2, eval=FALSE}
+fet_subregions_plot("PROX1")
+```
+  
+As shown above in adult, we can see in "PROX1_fetalHuman_structureBarPlotAll.pdf" that *PROX1* has a similar expression pattern already by 15 PCW.
+  
+  
+#### Developmental Transcriptome  
+  
+The function `brsp_subregions_plot` generates bar plots of gene expression for each brain structure across donors (prenatal through young adult), outputting one plot sorted first by brain region and one sorted first by age.  In this example, let's plot *SLC17A7*, which is a canonical marker for cortical neurons to see what brain region it is expressed in and at which ages the gene is expressed.  
+  
+```{r developing human, eval=FALSE}
+# The default is to show exon array data
+brsp_subregions_plot("SLC17A7")
+# We can also plot the RNA-seq data (but see note below)
+brsp_subregions_plot("SLC17A7","rna",log_transform=TRUE)
+```
+  
+We can see from the top plot that *SLC17A7* is expressed in cortex, cerebellum and amygdala but not striatum or thalamus. In addition, expression levels of this gene increase from low to high levels around late prenatal or perinatal development. **Note: there is another known issue that the RNA-seq data is scaled incorrectly so if technique='rna', then log_transform=TRUE needs to be set.**  
+  
+  
+### NIH Blueprint Non-Human Primate Atlas
+  
+The NIH Blueprint NHP Atlas contains a map gene expression it rhesus monkey at [high spatial and temporal resolution](http://www.blueprintnhpatlas.org/microarray/search).  Specifically, microarrays were used to measure gene expression on laser microdissected sections from every available cortical layer in two cortical areas (along with other select structures in neocortex, hippocampus, striatum, amygdala, and thalamus) across six prenatal and four postnatal time points.  
+  
+`atlasplot` provides three functions for displaying gene expression in neocortex.  For illustrative purposes, let's focus on two genes presented in Bakken et al 2015: *EOMES* (also called *TBR2*), which is a marker for intermediate progenitors, and *MOBP*, which is a marker for a mature oligodendrocytes.
+  
+```{r nhp, eval=FALSE}
+## Plots for EOMES
+nhp_cortex_expression2D_small_plot("EOMES", log_transform = TRUE)
+nhp_cortex_expression2D_plot("EOMES", log_transform = TRUE)
+nhp_cortex_series_plot("EOMES")
 
-BrainSpan: [Prenatal LMD microarray](https://www.brainspan.org/lcm/search/index.html) - `atlasplot` generates several plots showing gene expression in prenatal (15-21 PCW) human brain
+## Plots for MOBP
+nhp_cortex_expression2D_small_plot("MOBP", log_transform = TRUE)
+nhp_cortex_expression2D_plot("MOBP", log_transform = TRUE)
+nhp_cortex_series_plot("MOBP")
+```
+  
+Both expression2D plots show gene expression summaries with rows corresponding to cortical layer and columns corresponding to age.  The difference is the small plot shows expression averaged across all cortical structures, while the main function shows individual points for each region.  From these plots we can see that *EOMES* is most highly expressed at E90 and before in progenitor layers (particularly SZ), while *MOBP* is  expressed postnatally across all layers with highest expression in the white matter (WM) and adjacent L6.  Finally, `nhp_cortex_series_plot` outputs line plots focused on comparing gene expression across cortical areas.  Each box is a layer, with lines corresponding to brain regions and points corresponding to the time series.  For example, we can see that at in L5 and L6 of V1, *MOBP* expression levels have reached their peak in E0, while in ACG they don't reach their peak until E3.  In contrast, expression levels of *EOMES* start declining in ACG at earlier prenatal stages than in V1. These results recapitulate prior observations on differing rates of neurogenesis and circuit maturation in different cortical areas. **Note: these data are also scaled only for the 2D plot functions so log_transform=TRUE needs to be set.  We also need to set signif = 5 or so. Also need fix man file for nhp_cortex_series_plot and fix the gene name showing up twice in the file name.**  
+
+  
+## Allen Mouse Brain Atlases
+  
+While the primary focus of `atlasplot` is to present gene expression plots of the Allen Brain Map microarray and RNA-seq data sets that represent the data in more biologically relevant contexts than the default 1-dimensional heatmap used at brain-map.org, we also provide some functions for plotting average expression energy in the developing and adult mouse.  These plots pull data directly from the [Allen Brain Atlas API](https://help.brain-map.org/display/api/Allen+Brain+Atlas+API) and then plot the results using bar plots of the formats described above.  Recall that if this is your first time using this function, the function calls may be quite slow until cache is established.  
+  
+#### Adult mouse
+  
+The function `mouse_subregions_plot` makes these plots.  For adult, set `atlas="Mouse"`.  This function has two additional important parameters.  The `experiment` parameter will allow you to directly specify which Experiment ID to pull data from, which is particularly relevant for genes with more than one experiment (e.g., genes with both saggital and coronal sections).  If this is left blank you'll be given choices to type in later.  The `struct_depth` parameter let's you pull at a specific level of the ontology.  Higher numbers mean smaller, more specific brain regions while lower numbers are larger brain areas.  In it often useful to make plots at multiple depths since the ontology has different depths in different parts of the brain.  
+  
+For this example, let's revisit *Prox1* to see whether the expression in mouse matches the expression in human (dentate gyrus + thalamus).  
+  
+```{r adult mouse 1, eval=FALSE}
+mouse_subregions_plot(
+  "Prox1",
+  atlas = "Mouse",  
+  struct_depth = 3
+)
+```
+  
+Here I chose the coronal section (73520980), but the structure depth was too low, as seen in the file `Prox1_Mouse_3_brainRegionBarplot_ExpressionEnergies.pdf` in your working directory.  Let's try again at higher depth, and with the experiment specified in advance.  We also need to adjust the image width so all the labels show.  
+
+```{r adult mouse 2, eval=FALSE}
+mouse_subregions_plot(
+  "Prox1",
+  atlas = "Mouse",  # Or "DevMouse"
+  experiment = 73520980,
+  struct_depth = 7,
+  im_width = 60
+)
+```
+  
+As expected, the highest bar corresponds to dentate gyrus.  
   
   
+#### Developing mouse
+  
+The same function is used to pull gene expression in developing mouse, with the expection that the experiment ID does not need to be specified (all experiments for a given gene are used), and we need to set `atlas = "DevMouse"`.  In this example, let's see how *Eomes* looks across mouse development.  
+  
+```{r adult mouse 1, eval=FALSE}
+mouse_subregions_plot(
+  "Eomes",
+  atlas = "DevMouse",
+  struct_depth = 5
+)
+```
+  
+The anatolical terms are hard to interpret, but as in NHP, the highest expression of this gene is found prenatally rather than postnatally. 
   
   
+### Developmental time series comparison
   
+The final plotting function is `species_expression_series_plot`, which plots neocortical gene expression values for a time series of ages for human, non-human primate, mouse, and rat for the subset of genes in which data for at least two species is available.  Use UPPER CASE gene symbols (as in human) for this function.  For this example, let's take two canonical marker genes for GABAergic interneurons: *PVALB* and *VIP*  
+   
+```{r cross species, eval=FALSE}
+species_expression_series_plot("PVALB")
+species_expression_series_plot("VIP")
+```  
   
-BrainSpan: [Developmental Transcriptome](https://www.brainspan.org/rnaseq/search/index.html) - `atlasplot` generates bar plots of gene expression for each brain structure across donors (prenatal through young adult).  Data is stored in [`brspdata`](https://github.com/AllenInstitute/brspdata).    
+The output of this plot is a series of points and associated best fit curves for up to four of the species.  The x-axis is escore, which is a metric of age that aligns significant developmental milestones across species, following the algorithm for [translating time](http://translatingtime.org) developed by Barbara Finlay and colleagues.  The y-axis is a normalized metric for gene expression.  Thus a plot where two lines overlap would indicate that a gene shows comparable temporal patterning across species. In this case, *VIP* shows a relatively comparable rate of progression from low to high expression across development across species, whereas *PVALB* shows a slower, later increase in primate than in rodent species, with expression in human still increasing into postnatal development (escore > 1).  
   
+```{r sessionInfo}
+sessionInfo()
+```
   
