@@ -331,6 +331,8 @@ nhp_cortex_expression2D_small_plot <- function(gene, col_vec = c("white", "red")
     # isolate the expression value and create a named vector
     if (log_transform) {
         expr_value <- log(geneDat$value, b = 2)
+    } else {
+        expr_value <- geneDat$value
     }
     names(expr_value) <- geneDat$id_string
 

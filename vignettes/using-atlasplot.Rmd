@@ -104,11 +104,11 @@ The function `brsp_subregions_plot` generates bar plots of gene expression for e
 ```{r developing human, eval=FALSE}
 # The default is to show exon array data
 brsp_subregions_plot("SLC17A7")
-# We can also plot the RNA-seq data (but see note below)
-brsp_subregions_plot("SLC17A7","rna",log_transform=TRUE)
+# We can also plot the RNA-seq data 
+brsp_subregions_plot("SLC17A7","rna")
 ```
   
-We can see from the top plot that *SLC17A7* is expressed in cortex, cerebellum and amygdala but not striatum or thalamus. In addition, expression levels of this gene increase from low to high levels around late prenatal or perinatal development. **Note: there is another known issue that the RNA-seq data is scaled incorrectly so if technique='rna', then log_transform=TRUE needs to be set.**  
+We can see from the top plot that *SLC17A7* is expressed in cortex, cerebellum and amygdala but not striatum or thalamus. In addition, expression levels of this gene increase from low to high levels around late prenatal or perinatal development.  
   
   
 ### NIH Blueprint Non-Human Primate Atlas
@@ -119,17 +119,17 @@ The NIH Blueprint NHP Atlas contains a map gene expression it rhesus monkey at [
   
 ```{r nhp, eval=FALSE}
 ## Plots for EOMES
-nhp_cortex_expression2D_small_plot("EOMES", log_transform = TRUE)
-nhp_cortex_expression2D_plot("EOMES", log_transform = TRUE)
+nhp_cortex_expression2D_small_plot("EOMES")
+nhp_cortex_expression2D_plot("EOMES")
 nhp_cortex_series_plot("EOMES")
 
 ## Plots for MOBP
-nhp_cortex_expression2D_small_plot("MOBP", log_transform = TRUE)
-nhp_cortex_expression2D_plot("MOBP", log_transform = TRUE)
+nhp_cortex_expression2D_small_plot("MOBP")
+nhp_cortex_expression2D_plot("MOBP")
 nhp_cortex_series_plot("MOBP")
 ```
   
-Both expression2D plots show gene expression summaries with rows corresponding to cortical layer and columns corresponding to age.  The difference is the small plot shows expression averaged across all cortical structures, while the main function shows individual points for each region.  From these plots we can see that *EOMES* is most highly expressed at E90 and before in progenitor layers (particularly SZ), while *MOBP* is  expressed postnatally across all layers with highest expression in the white matter (WM) and adjacent L6.  Finally, `nhp_cortex_series_plot` outputs line plots focused on comparing gene expression across cortical areas.  Each box is a layer, with lines corresponding to brain regions and points corresponding to the time series.  For example, we can see that at in L5 and L6 of V1, *MOBP* expression levels have reached their peak in E0, while in ACG they don't reach their peak until E3.  In contrast, expression levels of *EOMES* start declining in ACG at earlier prenatal stages than in V1. These results recapitulate prior observations on differing rates of neurogenesis and circuit maturation in different cortical areas. **Note: these data are also scaled only for the 2D plot functions so log_transform=TRUE needs to be set.  We also need to set signif = 5 or so. Also need fix man file for nhp_cortex_series_plot and fix the gene name showing up twice in the file name.**  
+Both expression2D plots show gene expression summaries with rows corresponding to cortical layer and columns corresponding to age.  The difference is the small plot shows expression averaged across all cortical structures, while the main function shows individual points for each region.  From these plots we can see that *EOMES* is most highly expressed at E90 and before in progenitor layers (particularly SZ), while *MOBP* is  expressed postnatally across all layers with highest expression in the white matter (WM) and adjacent L6.  Finally, `nhp_cortex_series_plot` outputs line plots focused on comparing gene expression across cortical areas.  Each box is a layer, with lines corresponding to brain regions and points corresponding to the time series.  For example, we can see that at in L5 and L6 of V1, *MOBP* expression levels have reached their peak in E0, while in ACG they don't reach their peak until E3.  In contrast, expression levels of *EOMES* start declining in ACG at earlier prenatal stages than in V1. These results recapitulate prior observations on differing rates of neurogenesis and circuit maturation in different cortical areas.   
 
   
 ## Allen Mouse Brain Atlases

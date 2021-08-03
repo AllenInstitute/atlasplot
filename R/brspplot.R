@@ -15,11 +15,11 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #' brsp_subregions_plot
-#' 
-#' 
+#'
+#'
 #' Plot subregion expression levels for the human brainspan atlas. Provides
 #' coloring by both age and ontology in a single plot.
-#' 
+#'
 #' @export
 #' @param gene Gene in the `brspdata` package
 #' @param technique Either `rna`, for RNAseq, or `array`, for MicroArray
@@ -85,11 +85,17 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     # set some plot universal features
     ymax <- quantile(data$value, 0.995)
     title <- .create_title(gene, group, technique)
-    
-    # data is log transformed so restore to linear scale if needed
-    if (!log_transform) {
+
+    # array data is log transformed so restore to linear scale if needed
+    if (!log_transform)&(technique=="array") {
         data$value <- 2 ^ data$value
         ymax <- 2 ^ ymax
+    }
+
+    # rna data is in linear space so log transform if needed
+    if (log_transform)&(technique=="rna") {
+        data$value <- log2(data$value+1)
+        ymax <- log2(ymax+1)
     }
 
     # plot; tryCatch is to ensure proper closing of resources
