@@ -169,7 +169,7 @@ As expected, the highest bar corresponds to dentate gyrus.
   
 The same function is used to pull gene expression in developing mouse, with the expection that the experiment ID does not need to be specified (all experiments for a given gene are used), and we need to set `atlas = "DevMouse"`.  In this example, let's see how *Eomes* looks across mouse development.  
   
-```{r adult mouse 1, eval=FALSE}
+```{r developing mouse, eval=FALSE}
 mouse_subregions_plot(
   "Eomes",
   atlas = "DevMouse",
