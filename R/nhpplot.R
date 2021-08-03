@@ -18,7 +18,7 @@
 #'
 #' Plot times series for a single gene in the non-human primate brain atlas from the Allen
 #' institute. This function relies on the nhpdata package, located at (GITHUB GOES HERE).
-#' 
+#'
 #' @export
 #' @param gene Gene in the `nhpdata::exprl2` data set; character string
 #' @param im_height PDF image height
@@ -78,7 +78,7 @@ nhp_cortex_series_plot <- function(gene, log_transform = FALSE, im_height = 12,
     exprl2.subset <- droplevels(exprl2.subset)
 
     f.name <- paste(m.gene, m.ortho, m.id, m.probe, sep = "_")
-    
+
     if (log_transform) {
         exprl2.subset$expr <- log(exprl2.subset$expr, b = 2)
     }
@@ -110,18 +110,18 @@ nhp_cortex_series_plot <- function(gene, log_transform = FALSE, im_height = 12,
         ggplot2::ggsave(plot = p1, file = paste0(f.name, ".pdf"), width = im_width,
                         height = im_height)
     } else {
-        p1   
+        p1
     }
 }
 
 
 
 #' species_expression_series_plot
-#' 
+#'
 #' Plot gene expression values for a time series of ages for human, non-human primate, mouse,
 #' and rat. Will only include data that is present in plots. This function requires the
 #' nhpdata package (GITHUB GOES HERE)/
-#' 
+#'
 #' @export
 #' @param gene Gene in the `nhpdata::dev.expr2` data set; character string
 #' @param colormap Color pallete used to choose plot colors; default rainbow
@@ -132,7 +132,7 @@ nhp_cortex_series_plot <- function(gene, log_transform = FALSE, im_height = 12,
 #' @examples
 #' # call on a given gene
 #' species_expression_series_plot("EMX2")
-#' 
+#'
 #' # call on new gene with a different color map
 #' species_expression_series_plot("DAD1", col_map = heat.colors))
 #'
@@ -157,7 +157,7 @@ species_expression_series_plot <- function(Gene, col_map = rainbow, im_width = 1
         loaded <- FALSE
         library("nhpdata")  # technically breaking the rules
     }
-    
+
     if ( !(Gene %in% dev.expr2$gene) ) {
         msg <- paste(Gene, "is not available for more than one species or has not analog in other species")
         stop(msg, call. = FALSE)
@@ -171,7 +171,7 @@ species_expression_series_plot <- function(Gene, col_map = rainbow, im_width = 1
 
     # Reorder levels to change panel arrangement
     pal1 <- col_map(5)[c(1, 5, 2:4)]
-    
+
     g3 <- ggplot2::ggplot(dev.expr2.subset, ggplot2::aes(x = escore, y = exprz,
                         shape = species, col = species, fill = species)) +
         ggplot2::geom_point(alpha = 0.5) +
@@ -185,12 +185,12 @@ species_expression_series_plot <- function(Gene, col_map = rainbow, im_width = 1
     if (!loaded){
         detach("package:nhpdata", unload = TRUE)
     }
-    
+
     if (save_pdf) {
         ggplot2::ggsave(g3, file = paste0(Gene, "_comparison_time_series.pdf"),
                         width = im_height, height = im_width)
     } else {
-        g3        
+        g3
     }
 }
 
@@ -198,8 +198,8 @@ species_expression_series_plot <- function(Gene, col_map = rainbow, im_width = 1
 #' nhp_cortex_expression2D_plot
 #'
 #' Creates a boxed heatmap of the expression values for a single gene in the non-human
-#' primate atlas. 
-#' 
+#' primate atlas.
+#'
 #' @export
 #' @param gene Gene in the `nhpdata::datNHP` data set; character string
 #' @param col_vec List of colors to create linear color map; c("white", "red") default
@@ -241,7 +241,7 @@ nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
 
     # log the expression and create a named vector
     if (log_transform) {
-        expr_value <- log(geneDat$value, b = 2)    
+        expr_value <- log(geneDat$value, b = 2)
     } else {
         expr_value <- geneDat$value
     }
@@ -254,7 +254,7 @@ nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
 
     # create label name
     label_id <- strsplit(as.character(geneDat$id_string[[1]]), "_")[[1]][[3]]
-    
+
     # tryCatch to ensure proper resource handling
     tryCatch({
         fn <- paste(gene, "_NHP_2Dexpression.pdf", sep = "")
@@ -264,8 +264,9 @@ nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
         .plotMacaqueCortex(expr_value, NULL, layer, subregions, age,
                            layerPositions, regionPositions, ageOffsets,
                            paste(gene, label_id, sep = " - "),
+                           linearOrLog = "log",
                            quantileScale = c(0.1, 0.95), colVec = col_vec)
-    
+
     }, error = function(e) {
         msg <- "Overflow error. Please plot this gene on log scale (log_transform = TRUE)"
         stop(msg, call. = FALSE)
@@ -287,7 +288,7 @@ nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
 #'
 #' Creates a boxed heatmap of the expression values for a single gene in the non-human
 #' primate atlas. This plot is limited to only the V1 region.
-#' 
+#'
 #' @export
 #' @param gene Gene in the `nhpdata::datNHP` data set; character string
 #' @param col_vec List of colors to create linear color map; c("white", "red") default
@@ -300,7 +301,7 @@ nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
 #' # call on a given gene
 #' nhp_cortex_expression2D_plot("PAX6", c("green", "skyblue"))
 #'
-nhp_cortex_expression2D_small_plot <- function(gene, col_vec = c("white", "red"), 
+nhp_cortex_expression2D_small_plot <- function(gene, col_vec = c("white", "red"),
                                                 log_transform = FALSE, im_height = 7,
                                                 im_width = 7, save_pdf = TRUE) {
 
@@ -356,7 +357,7 @@ nhp_cortex_expression2D_small_plot <- function(gene, col_vec = c("white", "red")
                             agePositionsS, paste(gene, label_id, sep = " - "),
                             isLog2 = TRUE, combineFn = ".meanNA",
                             quantileScale = c(0.1, 0.95),
-                            linearOrLog = "linear", bgPar = "grey95",
+                            linearOrLog = "log", bgPar = "grey95",
                             displayLayers = FALSE, legendPos = legendPos,
                             colVec = col_vec)
         abline(v = c(0, 6, 10), lwd = 2)
