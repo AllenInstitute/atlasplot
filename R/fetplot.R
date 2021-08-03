@@ -288,6 +288,7 @@ fet_brain_location_expression_plot <- function(gene) {
             mar <- rep(2, 4)
         }
         par(cex = 1.5, mar = mar, las = 1)
+        op <- par(mar = rep(0, 4)) # we want it to fill the file
         suppressWarnings( x <- .construct_image() )
         pixmap::plot(x)
         lays <- c("MZ", "CPo", "CPi", "SP", "IZ", "SZo", "SZi", "VZ")
