@@ -1,7 +1,7 @@
 # atlasplot
 Simple Reproducible Plots for the Allen Institute's Brain Atlases
 
-This package aims to simplify the process of producing graphics for the expression data available in the Allen Institute's Brain Atlases. Additionally, it will be coupled with individual data packages, allowing anyone to easily access this vast data resource.
+This package aims to simplify the process of producing graphics for the expression data available in the Allen Institute's Brain Atlases. Additionally, it will be coupled with individual data packages, allowing anyone to easily access this vast data resource.  
 
 ## Install
 To install the `atlasplot` package it is recommended to use the 
@@ -50,3 +50,22 @@ Additionally, caching can be turned off by selecting a size of `FALSE`.
 
 `clear_cache` deletes all current files in the users cache. It is called with no arguments
 and is only inteneded to be used when updated data has been added to the API.
+
+
+## License
+
+The license for this package is available on Github at: https://github.com/AllenInstitute/atlasplot/blob/master/LICENSE
+
+
+## Level of Support
+
+We do not plan any updates of this tool at this time.  However, please contact Jeremy Miller (jeremym *at* alleninstitute *dot* org) with any questions, concerns, or if you have suggestions for additions to the package.  We do plan to correct errors, so if you notice one, please email or submit an "Issue".
+
+
+## Contribution Agreement
+
+If you contribute code to this repository through pull requests or other mechanisms, you are subject to the Allen Institute Contribution Agreement, which is available in full at: https://github.com/AllenInstitute/atlasplot/blob/master/CONTRIBUTING.md
+
+## Citation
+
+This package was developed by Charlie Edelson in 2017 based off previous plots created by Jeremy Miller.  It is currently unpublished, but we would encourage linkage to this GitHub repo as well as citation of the underlying [Allen Brain Map](https://portal.brain-map.org/) data sets as described in the [Citation Policy](https://alleninstitute.org/legal/citation-policy/).
