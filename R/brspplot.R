@@ -87,13 +87,13 @@ brsp_subregions_plot <- function(gene, technique = "array", cmp = heat.colors,
     title <- .create_title(gene, group, technique)
 
     # array data is log transformed so restore to linear scale if needed
-    if (!log_transform)&(technique=="array") {
+    if ((!log_transform)&(technique=="array")){
         data$value <- 2 ^ data$value
         ymax <- 2 ^ ymax
     }
 
     # rna data is in linear space so log transform if needed
-    if (log_transform)&(technique=="rna") {
+    if ((log_transform)&(technique=="rna")) {
         data$value <- log2(data$value+1)
         ymax <- log2(ymax+1)
     }
