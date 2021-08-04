@@ -28,8 +28,8 @@ Creates a new plot of the gene in the current working directory; label as `GENE_
 }
 \description{
 Plot gene expression values for each structure in each donor. This function
-requires the hbadata package (GITHUB GOES HERE), and is a thin wrapper
-around a modified version of WGCNA's verboseBarplot
+requires the hbadata package (https://github.com/AllenInstitute/hbadata), and
+is a thin wrapper around a modified version of WGCNA's verboseBarplot
 }
 \examples{
 # call on a given gene

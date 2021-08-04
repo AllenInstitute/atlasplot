@@ -17,7 +17,8 @@
 #' nhp_cortex_series_plot
 #'
 #' Plot times series for a single gene in the non-human primate brain atlas from the Allen
-#' institute. This function relies on the nhpdata package, located at (GITHUB GOES HERE).
+#' institute. This function relies on the nhpdata package, located at
+#' https://github.com/AllenInstitute/nhpdata.
 #'
 #' @export
 #' @param gene Gene in the `nhpdata::exprl2` data set; character string
@@ -120,7 +121,7 @@ nhp_cortex_series_plot <- function(gene, log_transform = FALSE, im_height = 12,
 #'
 #' Plot gene expression values for a time series of ages for human, non-human primate, mouse,
 #' and rat. Will only include data that is present in plots. This function requires the
-#' nhpdata package (GITHUB GOES HERE)/
+#' nhpdata package https://github.com/AllenInstitute/nhpdata
 #'
 #' @export
 #' @param gene Gene in the `nhpdata::dev.expr2` data set; character string
@@ -198,7 +199,9 @@ species_expression_series_plot <- function(Gene, col_map = rainbow, im_width = 1
 #' nhp_cortex_expression2D_plot
 #'
 #' Creates a boxed heatmap of the expression values for a single gene in the non-human
-#' primate atlas.
+#' primate atlas (requires https://github.com/AllenInstitute/nhpdata).  This provides
+#' a useful view of gene expression by layer, brain region, and developmental stage
+#' all together.
 #'
 #' @export
 #' @param gene Gene in the `nhpdata::datNHP` data set; character string
@@ -287,7 +290,9 @@ nhp_cortex_expression2D_plot <- function(gene, col_vec = c("white", "red"),
 #' nhp_cortex_expression2D_small_plot
 #'
 #' Creates a boxed heatmap of the expression values for a single gene in the non-human
-#' primate atlas. This plot is limited to only the V1 region.
+#' primate atlas (requires https://github.com/AllenInstitute/nhpdata).  This provides
+#' a useful view of gene expression by layer and developmental stage, and is limited
+#' to data from primary visual cortex (V1).
 #'
 #' @export
 #' @param gene Gene in the `nhpdata::datNHP` data set; character string

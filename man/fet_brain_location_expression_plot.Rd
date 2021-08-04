@@ -14,7 +14,9 @@ Creates a new plot of the gene in the current working directory; label as `GENE_
 }
 \description{
 Creates a matrix of brain images. Each column corresponds to a brain in the fetal human
-brain atlas, while each row is a specific brain layer.
+brain atlas, while each row is a specific brain layer.  Each point shows gene expression
+for a particular cortical region in it's approximate anatomical centroid in the background
+brain image.  Requires data from https://github.com/AllenInstitute/fetdata.
 }
 \examples{
 # call on a given gene

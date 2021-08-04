@@ -15,27 +15,27 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #' mouse_subreginos_plot
-#' 
-#' 
+#'
+#'
 #' Plot gene expression values for strucutures at a given ontology depth for
 #' the mouse or developing mouse atlas. This function pull the mean expression
-#' energies directly from the Allen institute API. Utilizes WGCNAs 
+#' energies directly from the Allen institute API. Utilizes WGCNA's
 #' verboseBarplot function for visualization.
-#' 
+#'
 #' @export
 #' @param gene Gene in the Allen Mouse or Developing Mouse atlas; character string
 #' @param atlas Atlas to plot the gene for; either "DevMouse" or "Mouse"
 #' @param log_transform Boolean for log vs linear data
 #' @param experiment Experiment ID string; Experiment ID for the adult mouse atlas. The devmouse uses all experiments, so the ID is ignored. If not ID is provided, the program will ask you to choose one from a list.
-#' @param struct_depth ontology structure depth; default of 3
-#' @param im_width Output image width; optional
+#' @param struct_depth ontology structure depth; default of 3.  It is often useful creating multiple plots with different structure depths for comparison.
+#' @param im_width Output image width; optional.  Note that if the plot is too narrow, not all brain structure names will show up.
 #' @param im_height Output image height; optional
 #' @param save_pdf Save plot to disk as pdf or return to console
 #' @return Creates a new plot of the gene in the current working directory
 #' @examples
 #' # call on a given gene
 #' mouse_structureplot("Scarf1", atlas="Mouse")
-#' 
+#'
 #' # call a given gene with a specific experiment
 #' mouse_structureplot("Shh", atlas="DevMouse", struct_depth = 4, im_width = 25)
 mouse_subregions_plot <- function(gene, atlas, log_transform = FALSE, experiment=NULL,
@@ -110,7 +110,7 @@ mouse_subregions_plot <- function(gene, atlas, log_transform = FALSE, experiment
     # exlude objects that are not at our structure depth
     include  <- onto_str$depth == struct_depth
     onto_str <- onto_str[include, ]
-    
+
     if (log_transform) {
         onto_str$expression_energy <- log(onto_str$expression_energy, base = 2)
     }

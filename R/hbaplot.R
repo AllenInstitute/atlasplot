@@ -15,11 +15,11 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #' hba_subregions_plot
-#' 
+#'
 #' Plot gene expression values for each structure in each donor. This function
-#' requires the hbadata package (GITHUB GOES HERE), and is a thin wrapper
-#' around a modified version of WGCNA's verboseBarplot
-#' 
+#' requires the hbadata package (https://github.com/AllenInstitute/hbadata), and
+#' is a thin wrapper around a modified version of WGCNA's verboseBarplot
+#'
 #' @export
 #' @param gene Gene in the `hbadata::datHBA` data set; character string
 #' @param log_transform Boolean for plotting of linear or log data
@@ -66,7 +66,7 @@ hba_subregions_plot <- function(gene, log_transform = FALSE, im_height = 20,
     if (!log_transform) {
         ylim <- c(0, 2 ^ max(vlim))
     } else {
-        ylim <- c(0, max(vlim))        
+        ylim <- c(0, max(vlim))
     }
 
     # tryCatch block to ensure the pdf is closed for unexpected errors
@@ -85,11 +85,11 @@ hba_subregions_plot <- function(gene, log_transform = FALSE, im_height = 20,
         i <- 1
         for (d in donor_framesHBA) {
             brain <- get(d)
-            
+
             if (!log_transform) {
                 brain$value <- 2 ^ brain$value
             }
-            
+
             bool_select <- (gene == brain$gene)
             .verboseBarplot2(brain$value[bool_select],
                             factor(brain$brain_structure[bool_select],

@@ -31,7 +31,9 @@ Creates a new plot of the gene in the current working directory
 }
 \description{
 Creates a boxed heatmap of the expression values for a single gene in the non-human
-primate atlas. This plot is limited to only the V1 region.
+primate atlas (requires https://github.com/AllenInstitute/nhpdata).  This provides
+a useful view of gene expression by layer and developmental stage, and is limited
+to data from primary visual cortex (V1).
 }
 \examples{
 # call on a given gene

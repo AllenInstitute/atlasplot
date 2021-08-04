@@ -30,8 +30,9 @@ fet_cortex_expression2D_plot(
 Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_2DPlotInNeocortex.pdf.pdf`
 }
 \description{
-Plot a 2D heatmap for cortex layers and structures in each donor in the fetal human brain atlas. This function
-requires the fetdata package, available at (GITHUB GOES HERE).
+Plot a 2D heatmap for cortex layers and structures in each donor in the
+fetal human brain atlas. This function requires the fetdata package,
+available at (https://github.com/AllenInstitute/fetdata).
 }
 \examples{
 # call on a given gene

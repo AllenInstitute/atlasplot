@@ -26,7 +26,8 @@ Creates a new plot of the gene in the current working directory
 }
 \description{
 Plot times series for a single gene in the non-human primate brain atlas from the Allen
-institute. This function relies on the nhpdata package, located at (GITHUB GOES HERE).
+institute. This function relies on the nhpdata package, located at
+https://github.com/AllenInstitute/nhpdata.
 }
 \examples{
 # call on a given gene

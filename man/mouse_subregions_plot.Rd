@@ -24,9 +24,9 @@ mouse_subregions_plot(
 
 \item{experiment}{Experiment ID string; Experiment ID for the adult mouse atlas. The devmouse uses all experiments, so the ID is ignored. If not ID is provided, the program will ask you to choose one from a list.}
 
-\item{struct_depth}{ontology structure depth; default of 3}
+\item{struct_depth}{ontology structure depth; default of 3.  It is often useful creating multiple plots with different structure depths for comparison.}
 
-\item{im_width}{Output image width; optional}
+\item{im_width}{Output image width; optional.  Note that if the plot is too narrow, not all brain structure names will show up.}
 
 \item{im_height}{Output image height; optional}
 
@@ -38,7 +38,7 @@ Creates a new plot of the gene in the current working directory
 \description{
 Plot gene expression values for strucutures at a given ontology depth for
 the mouse or developing mouse atlas. This function pull the mean expression
-energies directly from the Allen institute API. Utilizes WGCNAs 
+energies directly from the Allen institute API. Utilizes WGCNA's
 verboseBarplot function for visualization.
 }
 \examples{

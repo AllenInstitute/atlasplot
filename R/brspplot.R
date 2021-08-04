@@ -18,13 +18,13 @@
 #'
 #'
 #' Plot subregion expression levels for the human brainspan atlas. Provides
-#' coloring by both age and ontology in a single plot.
+#' coloring by both donor age and brain structure in a single plot.
 #'
 #' @export
-#' @param gene Gene in the `brspdata` package
-#' @param technique Either `rna`, for RNAseq, or `array`, for MicroArray
+#' @param gene Gene in the `brspdata` package (https://github.com/AllenInstitute/brspdata)
+#' @param technique Either `rna`, for RNAseq, or `array`, for exon microArray
 #' @param cmp R color-map function for ages; default heat.colors
-#' @param log_transform Boolean for plotting of linear or log data
+#' @param log_transform Boolean for plotting of linear or log2-normalized data
 #' @param im_height PDF image height
 #' @param im_width PDF image width
 #' @param save_pdf Save PDF or output to console

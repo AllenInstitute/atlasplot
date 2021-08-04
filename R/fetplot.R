@@ -16,9 +16,10 @@
 
 #' fet_subregions_plot
 #'
-#' Plot gene expression values for each structure in each donor for the fetal human brain atlas. This function
-#' requires the fetdata package (GITHUB GOES HERE), and is a thin wrapper
-#' around a modified version of WGCNA's verboseBarplot
+#' Plot gene expression values for each structure in each donor for the fetal
+#' human brain atlas. This function requires the fetdata package
+#' (https://github.com/AllenInstitute/fetdata), and is a thin wrapper
+#' around a modified version of WGCNA's verboseBarplot.
 #'
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
@@ -120,8 +121,9 @@ fet_subregions_plot <- function(gene, log_transform = FALSE, im_height = 10,
 
 #' fet_cortex_expression_2D_plot
 #'
-#' Plot a 2D heatmap for cortex layers and structures in each donor in the fetal human brain atlas. This function
-#' requires the fetdata package, available at (GITHUB GOES HERE).
+#' Plot a 2D heatmap for cortex layers and structures in each donor in the
+#' fetal human brain atlas. This function requires the fetdata package,
+#' available at (https://github.com/AllenInstitute/fetdata).
 #'
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string
@@ -235,7 +237,9 @@ fet_cortex_expression2D_plot <- function(gene, colbox="red", log_transform = FAL
 #' fet_brain_location_expression_plot
 #'
 #' Creates a matrix of brain images. Each column corresponds to a brain in the fetal human
-#' brain atlas, while each row is a specific brain layer.
+#' brain atlas, while each row is a specific brain layer.  Each point shows gene expression
+#' for a particular cortical region in it's approximate anatomical centroid in the background
+#' brain image.  Requires data from https://github.com/AllenInstitute/fetdata.
 #'
 #' @export
 #' @param gene Gene in the `fetdata::datFET` data set; character string

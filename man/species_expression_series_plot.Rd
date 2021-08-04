@@ -29,7 +29,7 @@ Creates a new plot of the gene in the current working directory
 \description{
 Plot gene expression values for a time series of ages for human, non-human primate, mouse,
 and rat. Will only include data that is present in plots. This function requires the
-nhpdata package (GITHUB GOES HERE)/
+nhpdata package https://github.com/AllenInstitute/nhpdata
 }
 \examples{
 # call on a given gene

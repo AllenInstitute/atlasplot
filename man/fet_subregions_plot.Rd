@@ -27,9 +27,10 @@ fet_subregions_plot(
 Creates a new plot of the gene in the current working directory; label as `GENE_fetalHuman_structureBarPlotAll.pdf`
 }
 \description{
-Plot gene expression values for each structure in each donor for the fetal human brain atlas. This function
-requires the fetdata package (GITHUB GOES HERE), and is a thin wrapper
-around a modified version of WGCNA's verboseBarplot
+Plot gene expression values for each structure in each donor for the fetal
+human brain atlas. This function requires the fetdata package
+(https://github.com/AllenInstitute/fetdata), and is a thin wrapper
+around a modified version of WGCNA's verboseBarplot.
 }
 \examples{
 # call on a given gene
